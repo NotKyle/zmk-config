@@ -1,5 +1,15 @@
-&nice_view_spi {
-    cs-gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;    // CS on P0.06
-    dc-gpios = <&gpio0 17 GPIO_ACTIVE_LOW>;   // DC on P0.17
-    reset-gpios = <&gpio0 20 GPIO_ACTIVE_LOW>; // RST on P0.20
+&i2c1 {
+    status = "okay";
+    sda-pin = <2>;  /* P0.02 */
+    scl-pin = <3>;  /* P0.03 */
+    
+    ssd1306@3c {
+        compatible = "solomon,ssd1306fb";
+        reg = <0x3c>;
+        label = "SSD1306";
+        width = <128>;
+        height = <64>;
+        rotation = <180>;
+        reset-gpios = <&gpio0 20 GPIO_ACTIVE_LOW>;
+    };
 };
