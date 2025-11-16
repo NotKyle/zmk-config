@@ -20,6 +20,6 @@
 ---
 include:
   - board: nice_nano_v2
-    shield: urchin_left nice_view_adapter  nice_view
+    shield: settings_reset urchin_left nice_view_adapter  nice_view
   - board: nice_nano_v2
-    shield: urchin_right nice_view_adapter nice_view_custom #custom shield
+    shield: settings_reset urchin_right nice_view_adapter nice_view_custom #custom shield
