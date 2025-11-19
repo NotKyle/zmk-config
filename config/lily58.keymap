@@ -80,7 +80,7 @@
         };
     };
 
-    / {
+    {
       combos {
         compatible = "zmk,combos";
     
