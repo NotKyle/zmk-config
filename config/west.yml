@@ -10,7 +10,7 @@ manifest:
     - name: zmk
       remote: zmkfirmware
       import: app/west.yml
-   - name: zmk-raw-hid
+    - name: zmk-raw-hid
       remote: zzeneg
       revision: main
   self:
