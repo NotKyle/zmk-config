@@ -8,6 +8,8 @@ manifest:
       url-base: https://github.com/zzeneg
     - name: m165437 #new entry
       url-base: https://github.com/M165437 #new entry
+    - name: mctechnology17
+      url-base: https://github.com/mctechnology17
   projects:
     - name: zmk
       remote: zmkfirmware
@@ -18,5 +20,8 @@ manifest:
     - name: nice-view-gem #new entry
       remote: m165437 #new entry
       revision: main #new entry
+    - name: zmk-dongle-display-view
+      remote: mctechnology17
+      revision: main
   self:
     path: config
