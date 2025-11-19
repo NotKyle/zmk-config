@@ -20,8 +20,8 @@
 ---
 include:
   - board: nice_nano_v2
-    shield: lily58_left nice_view_adapter raw_hid_adapter nice_view_gem dongle_display_view_pro_micro
+    shield: lily58_left nice_view_adapter raw_hid_adapter dongle_display_view_pro_micro
   - board: nice_nano_v2
-    shield: lily58_right nice_view_adapter raw_hid_adapter nice_view_gem dongle_display_view_pro_micro
+    shield: lily58_right nice_view_adapter raw_hid_adapter dongle_display_view_pro_micro
   - board: nice_nano_v2
     shield: settings_reset
