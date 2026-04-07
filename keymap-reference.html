@@ -253,10 +253,10 @@ code { color:var(--accent); font-family:var(--font); }
     </div>
     <div class="row">
       <div class="k">H</div>
-      <div class="k">J<span class="mb ms">⇧</span></div>
-      <div class="k">K<span class="mb mc">⌃</span></div>
-      <div class="k">L<span class="mb ma">⌥</span></div>
-      <div class="k">;<span class="mb mg">⌘</span></div>
+      <div class="k">J</div>
+      <div class="k">K</div>
+      <div class="k">L</div>
+      <div class="k">;</div>
       <div class="k">'</div>
     </div>
     <div class="row">
@@ -274,13 +274,14 @@ code { color:var(--accent); font-family:var(--font); }
 
   <!-- Legend -->
   <div class="legend">
-    <div class="legend-title">Mod key colors</div>
+    <div class="legend-title">Left-hand mods only</div>
     <div class="legend-row"><span class="pill pg">⌘</span><span>GUI / Super</span></div>
     <div class="legend-row"><span class="pill pa">⌥</span><span>Alt / Option</span></div>
     <div class="legend-row"><span class="pill pc">⌃</span><span>Ctrl</span></div>
     <div class="legend-row"><span class="pill ps">⇧</span><span>Shift</span></div>
     <div style="margin-top:6px;font-size:8px;color:var(--tx-dim);line-height:1.8">
-      Tap → letter<br>Hold → modifier<br>
+      Tap → letter · Hold → mod<br>
+      <span style="color:var(--l3)">J K L ;</span> plain (Neovim safe)<br>
       <span style="color:var(--accent2)">CW</span> = Caps Word<br>
       <span style="color:var(--l3)">[L3]</span> = Nav layer<br>
       <span style="color:var(--l2)">[L2]</span> = Num+Fn layer
@@ -416,10 +417,7 @@ code { color:var(--accent); font-family:var(--font); }
       <tr><td><span class="kc">S</span></td><td><span class="sym sa">⌥</span> LALT</td></tr>
       <tr><td><span class="kc">D</span></td><td><span class="sym sc">⌃</span> LCTRL</td></tr>
       <tr><td><span class="kc">F</span></td><td><span class="sym ss">⇧</span> LSHIFT</td></tr>
-      <tr><td><span class="kc">J</span></td><td><span class="sym ss">⇧</span> RSHIFT</td></tr>
-      <tr><td><span class="kc">K</span></td><td><span class="sym sc">⌃</span> RCTRL</td></tr>
-      <tr><td><span class="kc">L</span></td><td><span class="sym sa">⌥</span> RALT</td></tr>
-      <tr><td><span class="kc">;</span></td><td><span class="sym sg">⌘</span> RGUI</td></tr>
+      <tr><td><span class="kc" style="color:var(--tx-dim)">J K L ;</span></td><td style="color:var(--tx-dim)">plain keys — Neovim safe</td></tr>
       <tr><td><span class="kc">ENT</span></td><td style="color:var(--l1)">▶ Layer 1 (Symbols)</td></tr>
       <tr><td><span class="kc" style="color:var(--l3)">[L3]</span></td><td style="color:var(--l3)">▶ Layer 3 (Navigation)</td></tr>
       <tr><td><span class="kc" style="color:var(--l2)">[L2]</span></td><td style="color:var(--l2)">▶ Layer 2 (Numbers+Fn)</td></tr>

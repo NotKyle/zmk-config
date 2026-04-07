@@ -1,7 +1,7 @@
 # Lily58 Keymap Reference
 
 > **Nice Nano v2** — ZMK Firmware  
-> 4 layers · Home Row Mods · Caps Word · Nav Layer
+> 4 layers · Home Row Mods (left hand) · Caps Word · Nav Layer
 
 ---
 
@@ -24,7 +24,7 @@
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
 │ TAB  │  Q  │  W  │  E  │  R  │  T  │                 │  Y  │  U  │  I  │  O  │  P  │  -   │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-│ CAPS │ ⌘/A │ ⌥/S │ ⌃/D │ ⇧/F │  G  │                 │  H  │ ⇧/J │ ⌃/K │ ⌥/L │ ⌘/; │  '   │
+│ CAPS │ ⌘/A │ ⌥/S │ ⌃/D │ ⇧/F │  G  │                 │  H  │  J  │  K  │  L  │  ;  │  '   │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
 │ CTRL │  Z  │  X  │  C  │  V  │  B  │ [L3] │   │ [L2] │  N  │  M  │  ,  │  .  │  /  │ SHFT │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
@@ -39,25 +39,30 @@
 
 ---
 
-## Home Row Mods
+## Home Row Mods — Left Hand Only
 
-Hold any home row key for its modifier. Tap for the letter.  
+Hold to activate modifier. Tap for the letter.  
 Trigger threshold: **200ms** · Prior idle required: **150ms**
 
 ```
-Left hand                        Right hand
-┌──────┬──────┬───────┬───────┐  ┌────────┬────────┬──────┬──────┐
-│  ⌘   │  ⌥   │   ⌃   │   ⇧   │  │   ⇧    │   ⌃    │  ⌥   │  ⌘   │
-│  A   │  S   │   D   │   F   │  │   J    │   K    │  L   │  ;   │
-└──────┴──────┴───────┴───────┘  └────────┴────────┴──────┴──────┘
- LGUI   LALT   LCTRL   LSHIFT     RSHIFT   RCTRL   RALT   RGUI
+Left hand only
+┌──────┬──────┬───────┬───────┐
+│  ⌘   │  ⌥   │   ⌃   │   ⇧   │
+│  A   │  S   │   D   │   F   │
+└──────┴──────┴───────┴───────┘
+ LGUI   LALT   LCTRL   LSHIFT
 ```
 
+Right-hand home row (`H J K L ;`) are plain keys — no hold behaviour — so Neovim navigation works without interference.
+
+**For shortcuts:** use the left-hand mod and reach with your right hand, e.g.:
+- `⌃W` (split navigation): hold `D`, tap `W`
+- `⌘S` (save): hold `A`, tap `S`
+- `⇧` when typing: hold `F`, or use outer-right `SHFT` pinky key
+
 **Tips:**
-- Rest your fingers on home row — mods won't fire unless you *hold*
-- If mods misfire while typing fast, you need more `require-prior-idle-ms`
+- If mods misfire while typing fast, increase `require-prior-idle-ms`
 - If mods feel slow to trigger, lower `tapping-term-ms` (try 180)
-- For shortcuts like `⌘C`: hold S (⌥) or D (⌃) with right hand, tap letter with left
 
 ---
 
@@ -85,7 +90,7 @@ Left hand                        Right hand
 
 ## Layer 2 — Numbers + Fn
 
-*Access: `SPC` + `ENT` combo (50ms) · or hold inner-right `[L2]` key*
+*Access: `SPC` + `ENT` combo (75ms) · or hold inner-right `[L2]` key*
 
 ```
 ┌──────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬──────┐
@@ -146,15 +151,15 @@ DEFAULT THUMB CLUSTER
 └─────┴─────┴─────┴─────┘   └──────────┴─────┴─────┴─────┘
 
 KEY                TAP         HOLD
-──────────────────────────────────────
+──────────────────────────────────────────────────────
 A                  a           ⌘ (LGUI)
 S                  s           ⌥ (LALT)
 D                  d           ⌃ (LCTRL)
 F                  f           ⇧ (LSHIFT)
-J                  j           ⇧ (RSHIFT)
-K                  k           ⌃ (RCTRL)
-L                  l           ⌥ (RALT)
-;                  ;           ⌘ (RGUI)
+J                  j           j  (plain — Neovim safe)
+K                  k           k  (plain — Neovim safe)
+L                  l           l  (plain — Neovim safe)
+;                  ;           ;  (plain — Neovim safe)
 Right ENT          Enter       Layer 1 (Symbols)
 Inner-left [L3]    —           Layer 3 (Navigation)
 Inner-right [L2]   —           Layer 2 (Numbers+Fn)
