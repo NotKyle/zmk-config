@@ -44,7 +44,7 @@
             // ---------------------------------------------------------------------------------------------------------------
             // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
             // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-            // | CAPS  |GUI/A|ALT/S|CTL/D |SHF/F |  G   |                   |  H   |SHF/J  |CTL/K  |ALT/L |GUI/;  |   '   |
+            // | CAPS  |GUI/A|ALT/S|CTL/D |SHF/F |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
             // | CTRL  |  Z  |  X  |  C   |  V   |  B   | NAV  |  RAISE    |  N   |  M    |  ,    |  .   |   /   | SHIFT |
             //                           | GUI  | RET  | LALT | SPACE |   | LT1/ENT | BSPC | DEL | RGUI |
             // ---------------------------------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@
             bindings = <
 &kp ESC    &kp N1      &kp N2      &kp N3       &kp N4       &kp N5                         &kp N6  &kp N7       &kp N8       &kp N9      &kp N0        &kp GRAVE
 &kp TAB    &kp Q       &kp W       &kp E        &kp R        &kp T                          &kp Y   &kp U        &kp I        &kp O       &kp P         &kp MINUS
-&caps_word &hm LGUI A  &hm LALT S  &hm LCTRL D  &hm LSHFT F  &kp G                          &kp H   &hm RSHFT J  &hm RCTRL K  &hm RALT L  &hm RGUI SEMI &kp SQT
+&caps_word &hm LGUI A  &hm LALT S  &hm LCTRL D  &hm LSHFT F  &kp G                          &kp H   &kp J        &kp K        &kp L       &kp SEMI      &kp SQT
 &kp LCTRL  &kp Z       &kp X       &kp C        &kp V        &kp B   &mo 3      &mo 2       &kp N   &kp M        &kp COMMA    &kp DOT     &kp FSLH      &kp RSHFT
                                    &kp LGUI     &kp RET      &kp LALT &kp SPACE  &lt 1 RET  &kp BSPC &kp DEL    &kp RGUI
             >;
