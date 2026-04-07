@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lily58 Keymap Reference</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg:       #0f1117;
+  --bg2:      #131720;
+  --bg3:      #1a2030;
+  --key-bg:   #1c2238;
+  --key-b:    #2a3458;
+  --key-sh:   #070a12;
+  --tx:       #c9d1e0;
+  --tx-dim:   #5a6a88;
+  --border:   #1e2d48;
+  --accent:   #4fc3f7;
+  --accent2:  #00e5ff;
+  --gui:   #4fc3f7;
+  --alt:   #ce93d8;
+  --ctrl:  #81c784;
+  --shft:  #ffb74d;
+  --l1:    #f06292;
+  --l2:    #aed581;
+  --l3:    #ffb74d;
+  --font:  'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --ks: 34px;
+  --kg: 3px;
+  --kr: 5px;
+  --cks: 20px;
+  --ckg: 2px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--tx);
+  font-size: 10px;
+  line-height: 1.4;
+  padding: 14px 18px 10px;
+}
+
+/* ─── title ─── */
+.hd {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.hd h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.5px;
+}
+.hd small {
+  font-size: 9px;
+  color: var(--tx-dim);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+/* ─── section label ─── */
+.sl {
+  font-size: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--tx-dim);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sl::after { content:''; flex:1; height:1px; background:var(--border); }
+.sl span { color: var(--accent); }
+
+/* ─── main keyboard ─── */
+.kb { display:flex; gap:16px; align-items:flex-start; margin-bottom: 10px; }
+.half { display:flex; flex-direction:column; gap:var(--kg); }
+.row { display:flex; gap:var(--kg); }
+
+/* keys */
+.k {
+  width: var(--ks);
+  height: var(--ks);
+  background: var(--key-bg);
+  border: 1px solid var(--key-b);
+  border-radius: var(--kr);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--tx);
+  position: relative;
+  box-shadow: 0 3px 0 var(--key-sh), 0 4px 8px rgba(0,0,0,.5);
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.k.w { width: calc(var(--ks)*1.5 + var(--kg)); font-size: 8.5px; }
+.k.dim { background:#111520; border-color:#1a2035; color:var(--tx-dim); box-shadow:0 2px 0 #04050a; }
+.k.cw { background:#0d1f30; border-color:#1a4060; color:var(--accent2); font-size:8px; font-weight:600; }
+.k.lk { background:#0d1a0d; border-color:#1a3a1a; color:var(--l2); font-size:8px; font-weight:700; }
+.k.lk3 { background:#1f1409; border-color:#3a2a12; color:var(--l3); font-size:8px; font-weight:700; }
+.k.ent { background:#0a1828; border-color:var(--accent); color:var(--accent); }
+
+/* mod badge */
+.mb {
+  position:absolute; bottom:1px; left:50%; transform:translateX(-50%);
+  font-size:6.5px; font-weight:700; padding:0 3px; border-radius:2px; line-height:1.5;
+  white-space:nowrap; pointer-events:none;
+}
+.mg { background:rgba(79,195,247,.18); color:var(--gui); }
+.ma { background:rgba(206,147,216,.18); color:var(--alt); }
+.mc { background:rgba(129,199,132,.18); color:var(--ctrl); }
+.ms { background:rgba(255,183,77,.18); color:var(--shft); }
+
+/* thumb clusters */
+.thumbs { display:flex; gap:var(--kg); margin-top:2px; }
+.tl { margin-left: calc(var(--ks)*1.5 + var(--kg)*3); }
+
+/* separator */
+.sep { display:flex; align-items:center; justify-content:center; padding-top:12px; color:var(--border); font-size:22px; width:14px; }
+
+/* mod legend */
+.legend { display:flex; flex-direction:column; gap:4px; justify-content:center; padding-top:4px; margin-left:12px; }
+.legend-title { font-size:7.5px; color:var(--tx-dim); text-transform:uppercase; letter-spacing:1px; margin-bottom:1px; }
+.legend-row { display:flex; align-items:center; gap:5px; }
+.legend-row span { font-size:7.5px; color:var(--tx-dim); }
+.pill { font-size:7px; font-weight:700; padding:1px 5px; border-radius:3px; }
+.pg { background:rgba(79,195,247,.2); color:var(--gui); }
+.pa { background:rgba(206,147,216,.2); color:var(--alt); }
+.pc { background:rgba(129,199,132,.2); color:var(--ctrl); }
+.ps { background:rgba(255,183,77,.2); color:var(--shft); }
+
+/* ─── compact layers ─── */
+.cl-row { display:flex; gap:12px; margin-bottom:10px; }
+.cl-box {
+  flex:1; background:var(--bg2); border:1px solid var(--border);
+  border-radius:6px; padding:7px 9px;
+}
+.cl-title { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:5px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+.cl-kb { display:flex; gap:10px; }
+.cl-half { display:flex; flex-direction:column; gap:var(--ckg); }
+.cl-row2 { display:flex; gap:var(--ckg); }
+
+/* compact keys */
+.ck {
+  width:var(--cks); height:var(--cks); background:var(--key-bg);
+  border:1px solid var(--key-b); border-radius:3px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:7px; font-weight:500; color:var(--tx);
+  box-shadow:0 2px 0 var(--key-sh); flex-shrink:0;
+}
+.ck.off { background:#0c0f18; border-color:#141820; color:#222840; box-shadow:none; }
+.ck.sy { background:#1a0d2e; border-color:#3d1f6b; color:var(--alt); font-weight:600; }
+.ck.nm { background:#0d1f0d; border-color:#1a3520; color:var(--l2); font-weight:600; }
+.ck.nv { background:#1f180a; border-color:#3a2e14; color:var(--l3); font-weight:600; }
+.ck.bt { background:#1a0d15; border-color:#3a1a28; color:var(--l1); font-size:5.5px; font-weight:600; }
+.ck.fn { background:#0d1828; border-color:#1a3050; color:var(--accent); font-size:6px; font-weight:600; }
+.ck.wc { width:calc(var(--cks)*1.6 + var(--ckg)); font-size:5.5px; }
+
+/* ─── quick ref ─── */
+.qr { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.qr-box { background:var(--bg2); border:1px solid var(--border); border-radius:6px; padding:7px 9px; }
+.qr-box h3 { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--tx-dim); margin-bottom:5px; padding-bottom:4px; border-bottom:1px solid var(--border); }
+
+.ht { width:100%; border-collapse:collapse; }
+.ht td { padding:1.5px 4px; font-size:9px; vertical-align:middle; }
+.ht td:first-child { min-width:46px; }
+.kc {
+  display:inline-block; background:var(--key-bg); border:1px solid var(--key-b);
+  padding:0 5px; border-radius:3px; font-family:var(--font); font-size:8.5px;
+  font-weight:600; box-shadow:0 2px 0 var(--key-sh); color:var(--tx);
+}
+.sym { display:inline-block; padding:0 4px; border-radius:3px; font-size:9px; font-weight:700; line-height:1.6; }
+.sg { background:rgba(79,195,247,.15); color:var(--gui); }
+.sa { background:rgba(206,147,216,.15); color:var(--alt); }
+.sc { background:rgba(129,199,132,.15); color:var(--ctrl); }
+.ss { background:rgba(255,183,77,.15); color:var(--shft); }
+
+.cr { display:flex; align-items:center; gap:4px; margin:2.5px 0; font-size:9px; }
+.ck2 { background:var(--key-bg); border:1px solid var(--key-b); padding:1px 5px; border-radius:3px; font-size:8.5px; font-weight:700; box-shadow:0 2px 0 var(--key-sh); }
+.ca { color:var(--tx-dim); }
+.hint { font-size:8px; color:var(--tx-dim); margin-top:5px; padding-top:5px; border-top:1px solid var(--border); line-height:1.8; }
+code { color:var(--accent); font-family:var(--font); }
+
+/* ─── print ─── */
+@media print {
+  @page { size: A4 landscape; margin: 8mm 10mm; }
+  body { background:#fff !important; color:#111 !important; font-size:8.5px; padding:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .k, .ck, .ck2, .kc { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="hd">
+  <h1>Lily58 Keymap</h1>
+  <small>ZMK · Nice Nano v2 · 4 Layers</small>
+</div>
+
+<!-- Layer 0 — Default -->
+<div class="sl"><span>L0</span> Default Layer</div>
+<div class="kb">
+
+  <!-- LEFT -->
+  <div class="half">
+    <div class="row">
+      <div class="k w">ESC</div><div class="k">1</div><div class="k">2</div><div class="k">3</div><div class="k">4</div><div class="k">5</div>
+    </div>
+    <div class="row">
+      <div class="k w">TAB</div><div class="k">Q</div><div class="k">W</div><div class="k">E</div><div class="k">R</div><div class="k">T</div>
+    </div>
+    <div class="row">
+      <div class="k cw">CW</div>
+      <div class="k">A<span class="mb mg">⌘</span></div>
+      <div class="k">S<span class="mb ma">⌥</span></div>
+      <div class="k">D<span class="mb mc">⌃</span></div>
+      <div class="k">F<span class="mb ms">⇧</span></div>
+      <div class="k">G</div>
+    </div>
+    <div class="row">
+      <div class="k w" style="font-size:8.5px">CTRL</div><div class="k">Z</div><div class="k">X</div><div class="k">C</div><div class="k">V</div><div class="k">B</div>
+      <div class="k lk3">[L3]</div>
+    </div>
+    <div class="thumbs tl">
+      <div class="k dim" style="font-size:8.5px">GUI</div>
+      <div class="k dim">RET</div>
+      <div class="k dim" style="font-size:8.5px">ALT</div>
+      <div class="k dim" style="font-size:8.5px">SPC</div>
+    </div>
+  </div>
+
+  <div class="sep">·</div>
+
+  <!-- RIGHT -->
+  <div class="half">
+    <div class="row">
+      <div class="k">6</div><div class="k">7</div><div class="k">8</div><div class="k">9</div><div class="k">0</div><div class="k">`</div>
+    </div>
+    <div class="row">
+      <div class="k">Y</div><div class="k">U</div><div class="k">I</div><div class="k">O</div><div class="k">P</div><div class="k">-</div>
+    </div>
+    <div class="row">
+      <div class="k">H</div>
+      <div class="k">J<span class="mb ms">⇧</span></div>
+      <div class="k">K<span class="mb mc">⌃</span></div>
+      <div class="k">L<span class="mb ma">⌥</span></div>
+      <div class="k">;<span class="mb mg">⌘</span></div>
+      <div class="k">'</div>
+    </div>
+    <div class="row">
+      <div class="k lk">[L2]</div>
+      <div class="k">N</div><div class="k">M</div><div class="k">,</div><div class="k">.</div><div class="k">/</div>
+      <div class="k w" style="font-size:8.5px">SHFT</div>
+    </div>
+    <div class="thumbs">
+      <div class="k ent" style="font-size:8px">ENT<br><span style="font-size:6px;opacity:.7">▼L1</span></div>
+      <div class="k dim" style="font-size:8.5px">BSP</div>
+      <div class="k dim" style="font-size:8.5px">DEL</div>
+      <div class="k dim" style="font-size:8.5px">GUI</div>
+    </div>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-title">Mod key colors</div>
+    <div class="legend-row"><span class="pill pg">⌘</span><span>GUI / Super</span></div>
+    <div class="legend-row"><span class="pill pa">⌥</span><span>Alt / Option</span></div>
+    <div class="legend-row"><span class="pill pc">⌃</span><span>Ctrl</span></div>
+    <div class="legend-row"><span class="pill ps">⇧</span><span>Shift</span></div>
+    <div style="margin-top:6px;font-size:8px;color:var(--tx-dim);line-height:1.8">
+      Tap → letter<br>Hold → modifier<br>
+      <span style="color:var(--accent2)">CW</span> = Caps Word<br>
+      <span style="color:var(--l3)">[L3]</span> = Nav layer<br>
+      <span style="color:var(--l2)">[L2]</span> = Num+Fn layer
+    </div>
+  </div>
+</div>
+
+<!-- Compact layer trio -->
+<div class="cl-row">
+
+  <!-- L1 Symbols -->
+  <div class="cl-box">
+    <div class="cl-title" style="color:var(--l1)">L1 — Symbols &nbsp;<span style="color:var(--tx-dim);font-weight:400;font-size:7.5px">hold right ENT</span></div>
+    <div class="cl-kb">
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck bt wc">BTCLR</div><div class="ck bt wc">BT0</div><div class="ck bt wc">BT1</div><div class="ck bt wc">BT2</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off wc">—</div>
+          <div class="ck sy">!</div><div class="ck sy">@</div><div class="ck sy">#</div><div class="ck sy">$</div><div class="ck sy">%</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck sy">`</div>
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+      </div>
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck bt wc">BT3</div><div class="ck bt wc">BT4</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck sy">^</div><div class="ck sy">&amp;</div><div class="ck sy">*</div><div class="ck sy">(</div><div class="ck sy">)</div><div class="ck sy">~</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck sy">_</div><div class="ck sy">+</div><div class="ck sy">{</div><div class="ck sy">}</div><div class="ck sy">|</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck sy">-</div><div class="ck sy">=</div><div class="ck sy">[</div><div class="ck sy">]</div><div class="ck sy">\</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L2 Numbers+Fn -->
+  <div class="cl-box">
+    <div class="cl-title" style="color:var(--l2)">L2 — Numbers + Fn &nbsp;<span style="color:var(--tx-dim);font-weight:400;font-size:7.5px">SPC+ENT or [L2]</span></div>
+    <div class="cl-kb">
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck off wc">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck nm">`</div><div class="ck nm">1</div><div class="ck nm">2</div><div class="ck nm">3</div><div class="ck nm">4</div><div class="ck nm">5</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck fn">F1</div><div class="ck fn">F2</div><div class="ck fn">F3</div><div class="ck fn">F4</div><div class="ck fn">F5</div><div class="ck fn">F6</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+      </div>
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck nm">6</div><div class="ck nm">7</div><div class="ck nm">8</div><div class="ck nm">9</div><div class="ck nm">0</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck fn">F7</div><div class="ck fn">F8</div><div class="ck fn">F9</div><div class="ck fn" style="font-size:5.5px">F10</div><div class="ck fn" style="font-size:5.5px">F11</div><div class="ck fn" style="font-size:5.5px">F12</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- L3 Nav -->
+  <div class="cl-box">
+    <div class="cl-title" style="color:var(--l3)">L3 — Navigation &nbsp;<span style="color:var(--tx-dim);font-weight:400;font-size:7.5px">hold [L3]</span></div>
+    <div class="cl-kb">
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck off wc">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+      </div>
+      <div class="cl-half">
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck nv" style="font-size:5.5px">HOM</div>
+          <div class="ck nv" style="font-size:5.5px">PGD</div>
+          <div class="ck nv" style="font-size:5.5px">PGU</div>
+          <div class="ck nv" style="font-size:5.5px">END</div>
+          <div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck nv">←</div><div class="ck nv">↓</div><div class="ck nv">↑</div><div class="ck nv">→</div>
+          <div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+        <div class="cl-row2">
+          <div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div><div class="ck off">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Quick reference -->
+<div class="sl">Quick Reference</div>
+<div class="qr">
+
+  <div class="qr-box">
+    <h3>Hold to Activate</h3>
+    <table class="ht">
+      <tr><td><span class="kc">A</span></td><td><span class="sym sg">⌘</span> LGUI</td></tr>
+      <tr><td><span class="kc">S</span></td><td><span class="sym sa">⌥</span> LALT</td></tr>
+      <tr><td><span class="kc">D</span></td><td><span class="sym sc">⌃</span> LCTRL</td></tr>
+      <tr><td><span class="kc">F</span></td><td><span class="sym ss">⇧</span> LSHIFT</td></tr>
+      <tr><td><span class="kc">J</span></td><td><span class="sym ss">⇧</span> RSHIFT</td></tr>
+      <tr><td><span class="kc">K</span></td><td><span class="sym sc">⌃</span> RCTRL</td></tr>
+      <tr><td><span class="kc">L</span></td><td><span class="sym sa">⌥</span> RALT</td></tr>
+      <tr><td><span class="kc">;</span></td><td><span class="sym sg">⌘</span> RGUI</td></tr>
+      <tr><td><span class="kc">ENT</span></td><td style="color:var(--l1)">▶ Layer 1 (Symbols)</td></tr>
+      <tr><td><span class="kc" style="color:var(--l3)">[L3]</span></td><td style="color:var(--l3)">▶ Layer 3 (Navigation)</td></tr>
+      <tr><td><span class="kc" style="color:var(--l2)">[L2]</span></td><td style="color:var(--l2)">▶ Layer 2 (Numbers+Fn)</td></tr>
+    </table>
+  </div>
+
+  <div class="qr-box">
+    <h3>Combos &amp; Special</h3>
+    <div class="cr">
+      <span class="ck2" style="color:var(--accent)">SPC</span>
+      <span class="ca">+</span>
+      <span class="ck2" style="color:var(--accent)">ENT</span>
+      <span class="ca">→</span>
+      <span style="color:var(--l2)">Layer 2 (Numbers+Fn)</span>
+    </div>
+    <div class="cr">
+      <span class="ck2" style="color:var(--accent2)">CW</span>
+      <span class="ca">→</span>
+      <span>Caps Word — ALL_CAPS until space/symbol</span>
+    </div>
+    <div class="cr">
+      <span class="ck2" style="color:var(--l1)">BTCLR</span>
+      <span class="ca">→</span>
+      <span>Clear current BT pairing</span>
+    </div>
+    <div class="cr">
+      <span class="ck2" style="color:var(--l1)">BT0–4</span>
+      <span class="ca">→</span>
+      <span>Switch BT device (L1, top row)</span>
+    </div>
+    <div class="hint">
+      <strong style="color:var(--tx)">HRM timing:</strong> hold &gt;200ms triggers modifier · idle 150ms required<br>
+      Misfiring?  ↑ <code>require-prior-idle-ms</code> (try 200)<br>
+      Too slow?   ↓ <code>tapping-term-ms</code> (try 180)<br>
+      Nav keys mirror vim: H←  J↓  K↑  L→  · Y=HOME  U=PGDN  I=PGUP  O=END
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
