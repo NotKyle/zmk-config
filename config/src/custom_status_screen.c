@@ -80,6 +80,9 @@ static lv_obj_t *bat_bar    = NULL; /* lv_bar 0-100                           */
 static lv_obj_t *bat_lbl    = NULL; /* "87%"                                  */
 static lv_obj_t *wpm_lbl    = NULL; /* "42 wpm"                              */
 
+/* ── Forward declarations ─────────────────────────────────────────────────── */
+static void refresh_conn(void);
+
 /* ── Helpers ─────────────────────────────────────────────────────────────── */
 
 static void style_remove_defaults(lv_obj_t *obj) {
