@@ -51,6 +51,10 @@
 #  include <zmk/events/ble_active_profile_changed.h>
 #endif
 
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#  include <zmk/events/split_peripheral_status_changed.h>
+#endif
+
 #if IS_ENABLED(CONFIG_ZMK_WPM)
 #  include <zmk/wpm.h>
 #  include <zmk/events/wpm_state_changed.h>
@@ -178,6 +182,8 @@ static void update_cb(lv_timer_t *t) {
 
 static void mark_dirty(void) { atomic_set(&a_dirty, 1); }
 
+/* Layer tracking is central-only; peripheral has no keymap API. */
+#if !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
 static int on_layer_changed(const zmk_event_t *eh) {
     /* Walk down from highest layer; first active one wins. */
     uint8_t top = 0;
@@ -190,6 +196,7 @@ static int on_layer_changed(const zmk_event_t *eh) {
 }
 ZMK_LISTENER(css_layer, on_layer_changed);
 ZMK_SUBSCRIPTION(css_layer, zmk_layer_state_changed);
+#endif /* !CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL */
 
 #if IS_ENABLED(CONFIG_ZMK_BATTERY)
 static int on_battery_changed(const zmk_event_t *eh) {
@@ -212,25 +219,30 @@ ZMK_SUBSCRIPTION(css_wpm, zmk_wpm_state_changed);
 #endif
 
 static void refresh_conn(void) {
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+    /* Peripheral: connection state is driven by on_periph_status_changed; nothing to poll. */
+    return;
+#else
     int s = 0;
-#if !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL) && IS_ENABLED(CONFIG_USB_DEVICE_STACK)
+#  if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
     switch (zmk_usb_get_conn_state()) {
     case ZMK_USB_CONN_HID:     s = 2; break;
     case ZMK_USB_CONN_POWERED: s = 1; break;
     default:
-#if IS_ENABLED(CONFIG_ZMK_BLE)
+#    if IS_ENABLED(CONFIG_ZMK_BLE)
         s = zmk_ble_active_profile_is_connected() ? 2 : 0;
-#endif
+#    endif
         break;
     }
-#elif IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL) && IS_ENABLED(CONFIG_ZMK_BLE)
+#  elif IS_ENABLED(CONFIG_ZMK_BLE)
     s = zmk_ble_active_profile_is_connected() ? 2 : 0;
-#endif
+#  endif
     /* Only mark dirty on change to avoid forcing a redraw every 500 ms */
     if ((int)atomic_get(&a_conn) != s) {
         atomic_set(&a_conn, s);
         mark_dirty();
     }
+#endif /* !CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL */
 }
 
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
@@ -241,13 +253,31 @@ ZMK_LISTENER(css_usb, on_usb_changed);
 ZMK_SUBSCRIPTION(css_usb, zmk_usb_conn_state_changed);
 #endif
 
-#if IS_ENABLED(CONFIG_ZMK_BLE)
+/* BLE active-profile event only exists on the central side. */
+#if IS_ENABLED(CONFIG_ZMK_BLE) && !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
 static int on_ble_changed(const zmk_event_t *eh) {
     refresh_conn(); return ZMK_EV_EVENT_BUBBLE;
 }
 ZMK_LISTENER(css_ble, on_ble_changed);
 ZMK_SUBSCRIPTION(css_ble, zmk_ble_active_profile_changed);
 #endif
+
+/* Peripheral: track connection to the central via split peripheral status event. */
+#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+static int on_periph_status_changed(const zmk_event_t *eh) {
+    struct zmk_split_peripheral_status_changed *ev = as_zmk_split_peripheral_status_changed(eh);
+    if (ev) {
+        int s = ev->connected ? 2 : 0;
+        if ((int)atomic_get(&a_conn) != s) {
+            atomic_set(&a_conn, s);
+            mark_dirty();
+        }
+    }
+    return ZMK_EV_EVENT_BUBBLE;
+}
+ZMK_LISTENER(css_periph, on_periph_status_changed);
+ZMK_SUBSCRIPTION(css_periph, zmk_split_peripheral_status_changed);
+#endif /* CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL */
 
 /* ── Screen constructor ──────────────────────────────────────────────────── */
 lv_obj_t *zmk_display_status_screen(void) {
