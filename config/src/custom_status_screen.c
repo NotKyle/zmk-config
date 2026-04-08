@@ -70,19 +70,23 @@ static const char *const LAYER_NAMES[] = {
 #define N_LAYERS ARRAY_SIZE(LAYER_NAMES)
 
 /* ── Atomic state (written by event handlers, read by LVGL timer) ─────────── */
-static atomic_t a_layer   = ATOMIC_INIT(0);   /* active layer index          */
-static atomic_t a_battery = ATOMIC_INIT(100); /* state-of-charge 0-100       */
+static atomic_t a_layer   = ATOMIC_INIT(0);
+static atomic_t a_battery = ATOMIC_INIT(100);
 static atomic_t a_conn    = ATOMIC_INIT(0);   /* 0=none 1=partial 2=full     */
-static atomic_t a_wpm     = ATOMIC_INIT(0);   /* words per minute            */
-static atomic_t a_dirty   = ATOMIC_INIT(1);   /* set to 1 to trigger redraw  */
+#if IS_ENABLED(CONFIG_ZMK_WPM)
+static atomic_t a_wpm     = ATOMIC_INIT(0);
+#endif
+static atomic_t a_dirty   = ATOMIC_INIT(1);
 
 /* ── LVGL widget handles ──────────────────────────────────────────────────── */
-static lv_obj_t *layer_lbl  = NULL; /* large layer name                      */
-static lv_obj_t *conn_lbl   = NULL; /* "HID" / "BLE" / "USB" text            */
-static lv_obj_t *conn_dot   = NULL; /* small filled/outlined circle           */
-static lv_obj_t *bat_bar    = NULL; /* lv_bar 0-100                           */
-static lv_obj_t *bat_lbl    = NULL; /* "87%"                                  */
-static lv_obj_t *wpm_lbl    = NULL; /* "42 wpm"                              */
+static lv_obj_t *layer_lbl  = NULL;
+static lv_obj_t *conn_lbl   = NULL;
+static lv_obj_t *conn_dot   = NULL;
+static lv_obj_t *bat_bar    = NULL;
+static lv_obj_t *bat_lbl    = NULL;
+#if IS_ENABLED(CONFIG_ZMK_WPM)
+static lv_obj_t *wpm_lbl    = NULL;
+#endif
 
 /* ── Forward declarations ─────────────────────────────────────────────────── */
 static void refresh_conn(void);
@@ -279,7 +283,7 @@ ZMK_LISTENER(css_periph, on_periph_status_changed);
 ZMK_SUBSCRIPTION(css_periph, zmk_split_peripheral_status_changed);
 #endif /* CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL */
 
-/* ── Screen constructor ──────────────────────────────────────────────────── */
+/* ── Screen constructor (portrait layout: 68 × 160 px after 90° rotation) ── */
 lv_obj_t *zmk_display_status_screen(void) {
     lv_obj_t *scr = lv_obj_create(NULL);
     style_remove_defaults(scr);
@@ -287,24 +291,79 @@ lv_obj_t *zmk_display_status_screen(void) {
     lv_obj_set_style_bg_opa(scr, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(scr, lv_color_white(), 0);
 
-    /* ── Row 0: layer name (left) + connection (right) ─────────────────── */
+    /* ── Header: layer name (central) or keyboard name (peripheral) ─────── */
+#ifdef CONFIG_ZMK_SPLIT_ROLE_CENTRAL
     layer_lbl = lv_label_create(scr);
     style_remove_defaults(layer_lbl);
     lv_label_set_text(layer_lbl, "DEFAULT");
+    lv_label_set_long_mode(layer_lbl, LV_LABEL_LONG_CLIP);
+    lv_obj_set_width(layer_lbl, LV_HOR_RES - 8);
     lv_obj_set_style_text_font(layer_lbl, &lv_font_montserrat_14, 0);
     lv_obj_set_style_text_color(layer_lbl, lv_color_black(), 0);
-    lv_obj_align(layer_lbl, LV_ALIGN_TOP_LEFT, 4, 3);
+    lv_obj_set_style_text_align(layer_lbl, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(layer_lbl, LV_ALIGN_TOP_MID, 0, 4);
+#else
+    lv_obj_t *title_lbl = lv_label_create(scr);
+    style_remove_defaults(title_lbl);
+    lv_label_set_text(title_lbl, "LILY58");
+    lv_obj_set_width(title_lbl, LV_HOR_RES - 8);
+    lv_obj_set_style_text_font(title_lbl, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_color(title_lbl, lv_color_black(), 0);
+    lv_obj_set_style_text_align(title_lbl, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(title_lbl, LV_ALIGN_TOP_MID, 0, 4);
+#endif
 
-    /* Connection label ("HID", "BLE", "USB") */
+    /* ── Separator ─────────────────────────────────────────────────────── */
+    lv_obj_t *sep = lv_obj_create(scr);
+    style_remove_defaults(sep);
+    lv_obj_set_size(sep, LV_HOR_RES - 8, 1);
+    lv_obj_set_style_bg_opa(sep, LV_OPA_COVER, 0);
+    lv_obj_set_style_bg_color(sep, lv_color_black(), 0);
+    lv_obj_align(sep, LV_ALIGN_TOP_LEFT, 4, 26);
+
+    /* ── Battery bar (full width) ─────────────────────────────────────── */
+    bat_bar = lv_bar_create(scr);
+    lv_obj_set_size(bat_bar, LV_HOR_RES - 8, 12);
+    lv_bar_set_range(bat_bar, 0, 100);
+    lv_bar_set_value(bat_bar, 100, LV_ANIM_OFF);
+    lv_obj_set_style_bg_opa(bat_bar, LV_OPA_COVER, LV_PART_MAIN);
+    lv_obj_set_style_bg_color(bat_bar, lv_color_white(), LV_PART_MAIN);
+    lv_obj_set_style_border_color(bat_bar, lv_color_black(), LV_PART_MAIN);
+    lv_obj_set_style_border_width(bat_bar, 1, LV_PART_MAIN);
+    lv_obj_set_style_radius(bat_bar, 2, LV_PART_MAIN);
+    lv_obj_set_style_pad_all(bat_bar, 1, LV_PART_MAIN);
+    lv_obj_set_style_bg_opa(bat_bar, LV_OPA_COVER, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(bat_bar, lv_color_black(), LV_PART_INDICATOR);
+    lv_obj_set_style_radius(bat_bar, 1, LV_PART_INDICATOR);
+    lv_obj_align(bat_bar, LV_ALIGN_TOP_LEFT, 4, 32);
+
+    /* Battery percentage, centred below the bar */
+    bat_lbl = lv_label_create(scr);
+    style_remove_defaults(bat_lbl);
+    lv_label_set_text(bat_lbl, "100%");
+    lv_obj_set_style_text_font(bat_lbl, &lv_font_montserrat_10, 0);
+    lv_obj_set_style_text_color(bat_lbl, lv_color_black(), 0);
+    lv_obj_align_to(bat_lbl, bat_bar, LV_ALIGN_OUT_BOTTOM_MID, 0, 4);
+
+    /* ── WPM (central only) ─────────────────────────────────────────────── */
+#if IS_ENABLED(CONFIG_ZMK_WPM)
+    wpm_lbl = lv_label_create(scr);
+    style_remove_defaults(wpm_lbl);
+    lv_label_set_text(wpm_lbl, "0 wpm");
+    lv_obj_set_style_text_font(wpm_lbl, &lv_font_montserrat_10, 0);
+    lv_obj_set_style_text_color(wpm_lbl, lv_color_black(), 0);
+    lv_obj_align(wpm_lbl, LV_ALIGN_TOP_MID, 0, 62);
+#endif
+
+    /* ── Connection: label (bottom-left) + dot (bottom-right) ──────────── */
     conn_lbl = lv_label_create(scr);
     style_remove_defaults(conn_lbl);
     lv_label_set_text(conn_lbl, "HID");
     lv_obj_set_style_text_font(conn_lbl, &lv_font_montserrat_10, 0);
     lv_obj_set_style_text_color(conn_lbl, lv_color_black(), 0);
-    lv_obj_align(conn_lbl, LV_ALIGN_TOP_RIGHT, -14, 5);
+    lv_obj_align(conn_lbl, LV_ALIGN_BOTTOM_LEFT, 4, -5);
     lv_obj_add_flag(conn_lbl, LV_OBJ_FLAG_HIDDEN);
 
-    /* Connection dot: 7×7 filled circle */
     conn_dot = lv_obj_create(scr);
     style_remove_defaults(conn_dot);
     lv_obj_set_size(conn_dot, 7, 7);
@@ -313,51 +372,8 @@ lv_obj_t *zmk_display_status_screen(void) {
     lv_obj_set_style_border_width(conn_dot, 1, 0);
     lv_obj_set_style_border_opa(conn_dot, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_opa(conn_dot, LV_OPA_TRANSP, 0);
-    lv_obj_align(conn_dot, LV_ALIGN_TOP_RIGHT, -3, 5);
+    lv_obj_align(conn_dot, LV_ALIGN_BOTTOM_RIGHT, -4, -5);
     lv_obj_add_flag(conn_dot, LV_OBJ_FLAG_HIDDEN);
-
-    /* ── Separator ─────────────────────────────────────────────────────── */
-    lv_obj_t *sep = lv_obj_create(scr);
-    style_remove_defaults(sep);
-    lv_obj_set_size(sep, LV_HOR_RES - 8, 1);
-    lv_obj_set_style_bg_opa(sep, LV_OPA_COVER, 0);
-    lv_obj_set_style_bg_color(sep, lv_color_black(), 0);
-    lv_obj_align(sep, LV_ALIGN_TOP_LEFT, 4, 23);
-
-    /* ── Row 1: battery bar + percentage ──────────────────────────────── */
-    bat_bar = lv_bar_create(scr);
-    lv_obj_set_size(bat_bar, LV_HOR_RES - 52, 10);
-    lv_bar_set_range(bat_bar, 0, 100);
-    lv_bar_set_value(bat_bar, 100, LV_ANIM_OFF);
-    /* Bar track */
-    lv_obj_set_style_bg_opa(bat_bar, LV_OPA_COVER, LV_PART_MAIN);
-    lv_obj_set_style_bg_color(bat_bar, lv_color_white(), LV_PART_MAIN);
-    lv_obj_set_style_border_color(bat_bar, lv_color_black(), LV_PART_MAIN);
-    lv_obj_set_style_border_width(bat_bar, 1, LV_PART_MAIN);
-    lv_obj_set_style_radius(bat_bar, 2, LV_PART_MAIN);
-    lv_obj_set_style_pad_all(bat_bar, 1, LV_PART_MAIN);
-    /* Bar fill */
-    lv_obj_set_style_bg_opa(bat_bar, LV_OPA_COVER, LV_PART_INDICATOR);
-    lv_obj_set_style_bg_color(bat_bar, lv_color_black(), LV_PART_INDICATOR);
-    lv_obj_set_style_radius(bat_bar, 1, LV_PART_INDICATOR);
-    lv_obj_align(bat_bar, LV_ALIGN_TOP_LEFT, 4, 30);
-
-    bat_lbl = lv_label_create(scr);
-    style_remove_defaults(bat_lbl);
-    lv_label_set_text(bat_lbl, "100%");
-    lv_obj_set_style_text_font(bat_lbl, &lv_font_montserrat_10, 0);
-    lv_obj_set_style_text_color(bat_lbl, lv_color_black(), 0);
-    lv_obj_align_to(bat_lbl, bat_bar, LV_ALIGN_OUT_RIGHT_MID, 4, 0);
-
-    /* ── Row 2: WPM ────────────────────────────────────────────────────── */
-#if IS_ENABLED(CONFIG_ZMK_WPM)
-    wpm_lbl = lv_label_create(scr);
-    style_remove_defaults(wpm_lbl);
-    lv_label_set_text(wpm_lbl, "0 wpm");
-    lv_obj_set_style_text_font(wpm_lbl, &lv_font_montserrat_10, 0);
-    lv_obj_set_style_text_color(wpm_lbl, lv_color_black(), 0);
-    lv_obj_align(wpm_lbl, LV_ALIGN_TOP_LEFT, 4, 50);
-#endif
 
     /* Poll / redraw every 500 ms inside the LVGL thread */
     lv_timer_create(update_cb, 500, NULL);
