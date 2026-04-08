@@ -1,0 +1,206 @@
+<h2>HUD Design — Full Keyboard Mode</h2>
+<p class="subtitle">Three states: idle, key pressed, layer active. Click to select if this looks right.</p>
+
+<div class="cards">
+
+  <!-- STATE 1: Idle -->
+  <div class="card" data-choice="approve" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:8px;border-radius:6px">
+      <p class="label" style="margin-bottom:6px;color:#444">State 1 — Idle</p>
+      <div id="hud1" style="background:#0a0c12;border:1px solid #1e2d48;border-radius:8px;padding:8px 10px;width:fit-content;font-family:'JetBrains Mono',monospace">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-size:8px;color:#4fc3f7;font-weight:700;letter-spacing:2px">L0 · DEFAULT</span>
+          <div style="display:flex;gap:3px;align-items:center">
+            <span style="font-size:7px;color:#2a3a50;padding:1px 3px;border:1px solid #1e2d48;border-radius:2px">■■</span>
+            <span style="font-size:7px;color:#2a3a50">⚙</span>
+          </div>
+        </div>
+        <!-- keyboard rows inline -->
+        <div style="display:flex;gap:8px">
+          <!-- LEFT -->
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">ESC</div><div class="k">1</div><div class="k">2</div><div class="k">3</div><div class="k">4</div><div class="k">5</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">TAB</div><div class="k">Q</div><div class="k">W</div><div class="k">E</div><div class="k">R</div><div class="k">T</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k cw">CW</div>
+              <div class="k hm">A<span class="mb" style="color:#4fc3f7">⌘</span></div>
+              <div class="k hm">S<span class="mb" style="color:#ce93d8">⌥</span></div>
+              <div class="k hm">D<span class="mb" style="color:#81c784">⌃</span></div>
+              <div class="k hm">F<span class="mb" style="color:#ffb74d">⇧</span></div>
+              <div class="k">G</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">CTRL</div><div class="k">Z</div><div class="k">X</div><div class="k">C</div><div class="k">V</div><div class="k">B</div><div class="k lk3">L3</div>
+            </div>
+            <div style="display:flex;gap:1.5px;margin-left:20px">
+              <div class="k th">GUI</div><div class="k th">RET</div><div class="k th">ALT</div><div class="k th">SPC</div>
+            </div>
+          </div>
+          <!-- RIGHT -->
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k">6</div><div class="k">7</div><div class="k">8</div><div class="k">9</div><div class="k">0</div><div class="k">`</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k">Y</div><div class="k">U</div><div class="k">I</div><div class="k">O</div><div class="k">P</div><div class="k">-</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k">H</div><div class="k">J</div><div class="k">K</div><div class="k">L</div><div class="k">;</div><div class="k">'</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k lk2">L2</div><div class="k">N</div><div class="k">M</div><div class="k">,</div><div class="k">.</div><div class="k">/</div><div class="k w">SHF</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k ent">ENT<span style="display:block;font-size:4.5px;opacity:.6">▼L1</span></div><div class="k th">BSP</div><div class="k th">DEL</div><div class="k th">GUI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Idle state</h3>
+      <p>Muted, unobtrusive. Layer shown top-left. Mode indicator + settings icon top-right.</p>
+    </div>
+  </div>
+
+  <!-- STATE 2: Key pressed -->
+  <div class="card" data-choice="approve2" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:8px;border-radius:6px">
+      <p class="label" style="margin-bottom:6px;color:#444">State 2 — Key pressed (T)</p>
+      <div style="background:#0a0c12;border:1px solid #1e2d48;border-radius:8px;padding:8px 10px;width:fit-content;font-family:'JetBrains Mono',monospace">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-size:8px;color:#4fc3f7;font-weight:700;letter-spacing:2px">L0 · DEFAULT</span>
+          <div style="display:flex;gap:3px;align-items:center">
+            <span style="font-size:7px;color:#2a3a50;padding:1px 3px;border:1px solid #1e2d48;border-radius:2px">■■</span>
+            <span style="font-size:7px;color:#2a3a50">⚙</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">ESC</div><div class="k">1</div><div class="k">2</div><div class="k">3</div><div class="k">4</div><div class="k">5</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">TAB</div><div class="k">Q</div><div class="k">W</div><div class="k">E</div><div class="k">R</div><div class="k active">T</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k cw">CW</div>
+              <div class="k hm">A<span class="mb" style="color:#4fc3f7">⌘</span></div>
+              <div class="k hm">S<span class="mb" style="color:#ce93d8">⌥</span></div>
+              <div class="k hm">D<span class="mb" style="color:#81c784">⌃</span></div>
+              <div class="k hm">F<span class="mb" style="color:#ffb74d">⇧</span></div>
+              <div class="k">G</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w">CTRL</div><div class="k">Z</div><div class="k">X</div><div class="k">C</div><div class="k">V</div><div class="k">B</div><div class="k lk3">L3</div>
+            </div>
+            <div style="display:flex;gap:1.5px;margin-left:20px">
+              <div class="k th">GUI</div><div class="k th">RET</div><div class="k th">ALT</div><div class="k th">SPC</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k">6</div><div class="k">7</div><div class="k">8</div><div class="k">9</div><div class="k">0</div><div class="k">`</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k">Y</div><div class="k">U</div><div class="k">I</div><div class="k">O</div><div class="k">P</div><div class="k">-</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k">H</div><div class="k">J</div><div class="k">K</div><div class="k">L</div><div class="k">;</div><div class="k">'</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k lk2">L2</div><div class="k">N</div><div class="k">M</div><div class="k">,</div><div class="k">.</div><div class="k">/</div><div class="k w">SHF</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k ent">ENT<span style="display:block;font-size:4.5px;opacity:.6">▼L1</span></div><div class="k th">BSP</div><div class="k th">DEL</div><div class="k th">GUI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Key pressed</h3>
+      <p>Last pressed key lights up blue. Fades back after ~600ms.</p>
+    </div>
+  </div>
+
+  <!-- STATE 3: Layer 1 active -->
+  <div class="card" data-choice="approve3" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#111;padding:8px;border-radius:6px">
+      <p class="label" style="margin-bottom:6px;color:#444">State 3 — L1 inferred (typed "{")</p>
+      <div style="background:#0a0c12;border:1px solid #1e2d48;border-radius:8px;padding:8px 10px;width:fit-content;font-family:'JetBrains Mono',monospace">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+          <span style="font-size:8px;color:#f06292;font-weight:700;letter-spacing:2px">L1 · SYMBOLS</span>
+          <div style="display:flex;gap:3px;align-items:center">
+            <span style="font-size:7px;color:#2a3a50;padding:1px 3px;border:1px solid #1e2d48;border-radius:2px">■■</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k w sym">BTCLR</div><div class="k sym" style="font-size:5.5px">BT0</div><div class="k sym" style="font-size:5.5px">BT1</div><div class="k sym" style="font-size:5.5px">BT2</div><div class="k sym" style="font-size:5.5px">BT3</div><div class="k sym" style="font-size:5.5px">BT4</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w off">—</div><div class="k sym">!</div><div class="k sym">@</div><div class="k sym">#</div><div class="k sym">$</div><div class="k sym">%</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k sym">`</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k w off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k lk3">L3</div>
+            </div>
+            <div style="display:flex;gap:1.5px;margin-left:20px">
+              <div class="k th">—</div><div class="k th">—</div><div class="k th">—</div><div class="k th">—</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;gap:1.5px">
+              <div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div><div class="k off">—</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k sym">^</div><div class="k sym">&amp;</div><div class="k sym">*</div><div class="k sym">(</div><div class="k sym">)</div><div class="k sym">~</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k off">—</div><div class="k sym">_</div><div class="k sym">+</div><div class="k active sym">{</div><div class="k sym">}</div><div class="k sym">|</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k lk2">L2</div><div class="k off">—</div><div class="k sym">-</div><div class="k sym">=</div><div class="k sym">[</div><div class="k sym">]</div><div class="k w sym">\</div>
+            </div>
+            <div style="display:flex;gap:1.5px">
+              <div class="k ent">ENT<span style="display:block;font-size:4.5px;opacity:.6">▼L1</span></div><div class="k th">—</div><div class="k th">—</div><div class="k th">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Layer inferred</h3>
+      <p>Typing "{" triggers L1 display — all symbol bindings visible, pressed key highlighted. Returns to L0 after 2s of no layer-specific keys.</p>
+    </div>
+  </div>
+
+</div>
+
+<style>
+.k {
+  width:13px;height:13px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;
+  font-size:6.5px;color:#c9d1e0;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;flex-shrink:0;position:relative;
+}
+.k.w { width:20px;font-size:5.5px; }
+.k.th { background:#111a2a;color:#3a4a68; }
+.k.hm { position:relative; }
+.mb { position:absolute;bottom:0px;left:50%;transform:translateX(-50%);font-size:4px;line-height:1; }
+.k.cw { background:#0d1f30;border-color:#1a4060;color:#00e5ff;font-size:5.5px; }
+.k.lk2 { background:#0d1a0d;border-color:#1a3a1a;color:#aed581;font-size:5.5px;font-weight:700; }
+.k.lk3 { background:#1f1409;border-color:#3a2a12;color:#ffb74d;font-size:5.5px;font-weight:700; }
+.k.ent { background:#0a1828;border:1px solid #4fc3f7;color:#4fc3f7;font-size:6px;text-align:center;width:15px;height:13px; }
+.k.active { background:#243058;border-color:#4fc3f7;color:#4fc3f7;font-weight:700; }
+.k.sym { background:#1a0d2e;border-color:#3d1f6b;color:#ce93d8; }
+.k.active.sym { background:#3d1a60;border-color:#9c4dcc;color:#fff; }
+.k.off { background:#0c0f18;border-color:#141820;color:#1e2540; }
+</style>

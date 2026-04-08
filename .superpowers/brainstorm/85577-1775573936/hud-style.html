@@ -1,0 +1,169 @@
+<h2>What should the HUD show?</h2>
+<p class="subtitle">Three different levels of detail — all in the bottom-right corner</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="full-keyboard" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0c12;padding:10px 12px;border-radius:8px;border:1px solid #1e2d48">
+      <!-- Layer indicator -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+        <span style="font-family:monospace;font-size:9px;color:#4fc3f7;font-weight:700;letter-spacing:2px">L0 · DEFAULT</span>
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88">lily58</span>
+      </div>
+      <!-- Mini keyboard: left half -->
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:14px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:6px;color:#5a6a88;display:flex;align-items:center;justify-content:center">ESC</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:14px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">Q</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">W</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">E</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">R</div>
+            <div style="width:10px;height:12px;background:#243058;border:1px solid #4fc3f7;border-radius:2px;font-family:monospace;font-size:7px;color:#4fc3f7;display:flex;align-items:center;justify-content:center">T</div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:14px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#00e5ff;display:flex;align-items:center;justify-content:center">CW</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center;position:relative">A<span style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:4px;color:#4fc3f7">⌘</span></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center;position:relative">S<span style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:4px;color:#ce93d8">⌥</span></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center;position:relative">D<span style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:4px;color:#81c784">⌃</span></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center;position:relative">F<span style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:4px;color:#ffb74d">⇧</span></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">G</div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:14px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">Z</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">X</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">C</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">V</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">B</div>
+          </div>
+          <!-- thumbs -->
+          <div style="display:flex;gap:2px;margin-left:18px">
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">GUI</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">RET</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">ALT</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">SPC</div>
+          </div>
+        </div>
+        <!-- right half -->
+        <div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">Y</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">U</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">I</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">O</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">P</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">H</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">J</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">K</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">L</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">;</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+          </div>
+          <div style="display:flex;gap:2px;margin-bottom:2px">
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">N</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">M</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">,</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">.</div>
+            <div style="width:10px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:7px;color:#c9d1e0;display:flex;align-items:center;justify-content:center">/</div>
+            <div style="width:14px;height:12px;background:#1c2238;border:1px solid #2a3458;border-radius:2px"></div>
+          </div>
+          <!-- thumbs -->
+          <div style="display:flex;gap:2px">
+            <div style="width:12px;height:11px;background:#0a1828;border:1px solid #4fc3f7;border-radius:2px;font-family:monospace;font-size:5px;color:#4fc3f7;display:flex;align-items:center;justify-content:center">ENT</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">BSP</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">DEL</div>
+            <div style="width:10px;height:11px;background:#131a2a;border:1px solid #2a3458;border-radius:2px;font-family:monospace;font-size:5.5px;color:#5a6a88;display:flex;align-items:center;justify-content:center">GUI</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Full keyboard</h3>
+      <p>Both halves always visible. Blue = last key pressed. Layer switches show all new bindings at once. Mod badges on home row. Most context, slightly larger.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="layer-diff" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0c12;padding:10px 12px;border-radius:8px;border:1px solid #1e2d48;min-height:130px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-family:monospace;font-size:9px;color:#f06292;font-weight:700;letter-spacing:2px">L1 · SYMBOLS</span>
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88">hold ENT</span>
+      </div>
+      <!-- Just show the changed keys as a grid -->
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:2px;max-width:160px">
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">!</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">@</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">#</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">$</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">%</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">^</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">&amp;</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">*</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">(</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">)</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">{</div>
+        <div style="height:16px;background:#1a0d2e;border:1px solid #3d1f6b;border-radius:2px;font-family:monospace;font-size:7px;color:#ce93d8;display:flex;align-items:center;justify-content:center">}</div>
+      </div>
+      <div style="margin-top:6px;font-family:monospace;font-size:8px;color:#5a6a88">showing active layer keys only</div>
+    </div>
+    <div class="card-body">
+      <h3>Layer diff view</h3>
+      <p>On default: shows just the home row mods + thumb keys. On layer switch: shows only the keys that changed. Compact, focused on what's new.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="status-strip" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0c12;padding:10px 12px;border-radius:8px;border:1px solid #1e2d48;min-height:130px;display:flex;flex-direction:column;gap:8px">
+      <!-- last key -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88;text-transform:uppercase;letter-spacing:1px;width:60px">Last key</span>
+        <div style="background:#243058;border:1px solid #4fc3f7;border-radius:4px;padding:2px 8px;font-family:monospace;font-size:14px;color:#4fc3f7;font-weight:700">T</div>
+      </div>
+      <!-- layer -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88;text-transform:uppercase;letter-spacing:1px;width:60px">Layer</span>
+        <span style="font-family:monospace;font-size:11px;color:#c9d1e0;font-weight:600">L0 · Default</span>
+      </div>
+      <!-- mod state -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88;text-transform:uppercase;letter-spacing:1px;width:60px">Mods</span>
+        <div style="display:flex;gap:3px">
+          <span style="background:rgba(79,195,247,.15);color:#4fc3f7;font-family:monospace;font-size:9px;padding:1px 4px;border-radius:2px;opacity:0.3">⌘</span>
+          <span style="background:rgba(206,147,216,.15);color:#ce93d8;font-family:monospace;font-size:9px;padding:1px 4px;border-radius:2px;opacity:0.3">⌥</span>
+          <span style="background:rgba(129,199,132,.3);color:#81c784;font-family:monospace;font-size:9px;padding:1px 4px;border-radius:2px">⌃</span>
+          <span style="background:rgba(255,183,77,.15);color:#ffb74d;font-family:monospace;font-size:9px;padding:1px 4px;border-radius:2px;opacity:0.3">⇧</span>
+        </div>
+      </div>
+      <!-- hint -->
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:monospace;font-size:8px;color:#5a6a88;text-transform:uppercase;letter-spacing:1px;width:60px">Hint</span>
+        <span style="font-family:monospace;font-size:8px;color:#81c784">hold D → ⌃ active</span>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>Status strip</h3>
+      <p>No keyboard diagram — just last key, current layer, active mods, and a contextual hint. Smallest footprint. Better for when you already know the layout.</p>
+    </div>
+  </div>
+
+</div>
