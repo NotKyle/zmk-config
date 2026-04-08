@@ -140,7 +140,11 @@ local function startSidecar()
     print("[lily58-hud] sidecar not found at " .. sidecarPath)
     return
   end
-  M.sidecarTask = hs.task.new("/usr/bin/python3", function(code, out, err)
+  local python = hs.configdir .. "/hid-venv/bin/python3"
+  if not hs.fs.attributes(python) then
+    python = "/usr/bin/python3"  -- fallback if venv not set up
+  end
+  M.sidecarTask = hs.task.new(python, function(code, out, err)
     print(string.format("[lily58-hud] sidecar exited (code %d) — restarting in 5s", code))
     hs.timer.doAfter(5, startSidecar)
   end, {sidecarPath})

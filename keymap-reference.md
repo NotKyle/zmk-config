@@ -1,7 +1,7 @@
 # Lily58 Keymap Reference
 
 > **Nice Nano v2** — ZMK Firmware
-> 4 layers · Home Row Mods (left hand) · Caps Word · Nav Layer
+> 4 layers · Home Row Mods (left hand) · Caps Word on F hold · Nav Layer
 
 ---
 
@@ -24,16 +24,17 @@
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
 │ TAB  │  Q  │  W  │  E  │  R  │  T  │                 │  Y  │  U  │  I  │  O  │  P  │  -   │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-│ CAPS │ ⌘/A │ ⌥/S │ ⌃/D │ ⇧/F │  G  │                 │  H  │  J  │  K  │  L  │  ;  │  '   │
+│ LSFT │ ⌘/A │ ⌥/S │ ⌃/D │CW/F │  G  │                 │  H  │  J  │  K  │  L  │  ;  │  '   │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
-│ CTRL │  Z  │  X  │  C  │  V  │  B  │ [L3] │   │ [L2] │  N  │  M  │  ,  │  .  │  /  │ SHFT │
+│ CTRL │  Z  │  X  │  C  │  V  │  B  │ [L3] │   │ [L2] │  N  │  M  │  ,  │  .  │  /  │ RSFT │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
                        │ GUI │ RET │ ALT │ SPC │   │ ENT │ BSP │ DEL │ GUI │
                        └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
-                                                     └L1 hold┘
+                                                     └L1 hold┘└L3 hold┘
 ```
 
-> **CAPS** key = `Caps Word` — type a word in ALL_CAPS then auto-disables on space/symbol
+> **LSFT** = left shift (outer left homerow, muscle-memory position)
+> **CW/F** = tap F · hold Caps Word — intentional caps_word, no accidental triggers while typing camelCase
 > **[L3]** = hold for Nav layer · **[L2]** = hold for Numbers+Fn layer
 > **ENT** (right thumb) = tap Enter, hold for Symbols layer
 
@@ -46,18 +47,20 @@ Trigger threshold: **200ms** · Prior idle required: **150ms**
 
 ```
 Left hand only
-┌──────┬──────┬───────┬───────┐
-│  ⌘   │  ⌥   │   ⌃   │   ⇧   │
-│  A   │  S   │   D   │   F   │
-└──────┴──────┴───────┴───────┘
- LGUI   LALT   LCTRL   LSHIFT ```
+┌──────┬──────┬───────┬──────────┐
+│  ⌘   │  ⌥   │   ⌃   │  CapsWrd │
+│  A   │  S   │   D   │    F     │
+└──────┴──────┴───────┴──────────┘
+ LGUI   LALT   LCTRL   caps_word (hold)
+```
 
 Right-hand home row (`H J K L ;`) are plain keys — no hold behaviour — so Neovim navigation works without interference.
 
 **For shortcuts:** use the left-hand mod and reach with your right hand, e.g.:
 - `⌃W` (split navigation): hold `D`, tap `W`
 - `⌘S` (save): hold `A`, tap `S`
-- `⇧` when typing: hold `F`, or use outer-right `SHFT` pinky key
+- Shift when typing: outer-left `LSFT` pinky key (restored)
+- Caps Word (whole word): hold `F`
 
 **Tips:**
 - If mods misfire while typing fast, increase `require-prior-idle-ms`
@@ -69,18 +72,30 @@ Right-hand home row (`H J K L ;`) are plain keys — no hold behaviour — so Ne
 
 *Access: hold right-thumb `ENT`*
 
+Brackets are **paired by finger position** — opening on left hand, closing on right hand at the same finger.
+
 ```
 ┌───────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬──────┐
 │ BT CLR│ BT0 │ BT1 │ BT2 │ BT3 │ BT4 │                 │     │     │     │     │     │      │
 ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-│       │  !  │  @  │  #  │  $  │  %  │                 │  ^  │  &  │  *  │  (  │  )  │  ~   │
+│       │  !  │  @  │  #  │  $  │  %  │                 │  ^  │  &  │  *  │  +  │  =  │  ~   │
 ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-│   `   │     │     │     │     │     │                 │     │  _  │  +  │  {  │  }  │  |   │
+│       │  `  │  [  │  {  │  (  │  <  │                 │  >  │  )  │  }  │  ]  │  /  │  \   │
 ├───────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
-│       │     │     │     │     │     │      │   │      │     │  -  │  =  │  [  │  ]  │  \   │
+│       │  ~  │  |  │  _  │  -  │  :  │      │   │      │     │     │     │     │     │      │
 └───────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
                         │     │     │     │ L2  │   │ L1  │     │     │     │
                         └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
+```
+
+**Bracket pairs (same finger, mirrored):**
+```
+Left F → (    Right J → )    ← index finger
+Left D → {    Right K → }    ← middle finger
+Left S → [    Right L → ]    ← ring finger
+Left G → <    Right H → >    ← inner index
+Left A → `    Right ; → /
+              Right ' → \
 ```
 
 **Bluetooth:** `BT CLR` clears current device · `BT0–BT4` selects paired device
@@ -154,14 +169,11 @@ KEY                TAP         HOLD
 A                  a           ⌘ (LGUI)
 S                  s           ⌥ (LALT)
 D                  d           ⌃ (LCTRL)
-F                  f           ⇧ (LSHIFT)
-J                  j           j  (plain — Neovim safe)
-K                  k           k  (plain — Neovim safe)
-L                  l           l  (plain — Neovim safe)
-;                  ;           ;  (plain — Neovim safe)
+F                  f           Caps Word
+LSFT position      Shift       Shift (outer left pinky, restored)
 Right ENT          Enter       Layer 1 (Symbols)
+Right BSP          Backspace   Layer 3 (Navigation)  ← one-handed nav
 Inner-left [L3]    —           Layer 3 (Navigation)
 Inner-right [L2]   —           Layer 2 (Numbers+Fn)
-CAPS position      Caps Word   —
 SPC + ENT combo    —           Layer 2 (Numbers+Fn)
 ```
