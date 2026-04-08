@@ -7,8 +7,9 @@ if _G._lily58hud then
   pcall(function() _G._lily58hud.tap:stop() end)
   pcall(function() _G._lily58hud.modTap:stop() end)
   pcall(function() _G._lily58hud.wv:delete() end)
-  pcall(function() _G._lily58hud.layerTimer:stop() end)
+  pcall(function() _G._lily58hud.layerWatcher:stop() end)
   pcall(function() _G._lily58hud.pending:stop() end)
+  pcall(function() _G._lily58hud.sidecarTask:terminate() end)
 end
 _G._lily58hud = {}
 local M = _G._lily58hud
@@ -17,6 +18,7 @@ local M = _G._lily58hud
 local SETTINGS_MODE = "lily58hud.viewMode"
 local SETTINGS_POS  = "lily58hud.position"
 local HUD_W, HUD_H  = 340, 138
+local LAYER_FILE    = "/tmp/.lily58-layer"
 
 -- ─── Settings helpers ─────────────────────────────────────────────────────────
 local function getMode() return hs.settings.get(SETTINGS_MODE) or "full" end
@@ -26,7 +28,6 @@ local function setPos(x,y) hs.settings.set(SETTINGS_POS, {x=x, y=y}) end
 
 -- ─── Keycode → DOM position ───────────────────────────────────────────────────
 -- IDs: k-{L|R}-{row|T}-{col}   rows 0-3, thumbs = T, cols 0-6
--- For L2/L3 keys, maps to their physical ZMK position (not standard QWERTY pos)
 local KEY_POS = {
   -- Row 0
   [53]="k-L-0-0",[18]="k-L-0-1",[19]="k-L-0-2",[20]="k-L-0-3",[21]="k-L-0-4",[23]="k-L-0-5",
@@ -43,43 +44,16 @@ local KEY_POS = {
   -- Thumbs
   [55]="k-L-T-0",[36]="k-R-T-0",[58]="k-L-T-2",[49]="k-L-T-3",
   [51]="k-R-T-1",[117]="k-R-T-2",
-  -- L1-only keys → their physical L1 positions
+  -- Layer-specific keys at their physical positions
   [33]="k-R-3-4",[30]="k-R-3-5",[42]="k-R-3-6",[24]="k-R-3-3",
-  -- L2: F-keys → ZMK physical positions (home row)
   [122]="k-L-2-0",[120]="k-L-2-1",[99]="k-L-2-2",[118]="k-L-2-3",[96]="k-L-2-4",[97]="k-L-2-5",
   [98]="k-R-2-0", [100]="k-R-2-1",[101]="k-R-2-2",[109]="k-R-2-3",[103]="k-R-2-4",[111]="k-R-2-5",
-  -- L3: nav keys → ZMK physical positions (YUIO row + HJKL row)
   [115]="k-R-1-0",[121]="k-R-1-1",[116]="k-R-1-2",[119]="k-R-1-3",
   [123]="k-R-2-0",[125]="k-R-2-1",[126]="k-R-2-2",[124]="k-R-2-3",
 }
 
--- Key sets for layer inference
-local FKEYS = {[122]=true,[120]=true,[99]=true,[118]=true,[96]=true,[97]=true,
-               [98]=true,[100]=true,[101]=true,[109]=true,[103]=true,[111]=true}
-local NAVKEYS = {[123]=true,[124]=true,[125]=true,[126]=true,
-                 [115]=true,[119]=true,[116]=true,[121]=true}
-local L1KEYS  = {[33]=true,[30]=true,[42]=true,[24]=true}
-
--- ─── Layer inference ──────────────────────────────────────────────────────────
+-- ─── Layer state (set by HID sidecar, not inferred) ──────────────────────────
 M.currentLayer = 0
-
-local function inferLayer(kc)
-  if FKEYS[kc]  then return 2 end
-  if NAVKEYS[kc] then return 3 end
-  if L1KEYS[kc]  then return 1 end
-  return 0
-end
-
-local function resetLayerAfterTimeout()
-  if M.layerTimer then M.layerTimer:stop() end
-  M.layerTimer = hs.timer.doAfter(2.0, function()
-    M.currentLayer = 0
-    M.layerTimer = nil
-    if M.wv then
-      M.wv:evaluateJavaScript("hud.setLayer(0)", function() end)
-    end
-  end)
-end
 
 -- ─── Debounced JS update ──────────────────────────────────────────────────────
 local function scheduleUpdate(keyID, layer, mode)
@@ -151,24 +125,63 @@ end
 
 M.wv = createWebView()
 
+-- ─── HID sidecar ─────────────────────────────────────────────────────────────
+-- Launches lily58-hid-sidecar.py in the background. It reads 32-byte raw HID
+-- packets from the keyboard and writes the active layer to LAYER_FILE.
+-- Auto-restarts if the process exits (e.g. keyboard unplugged).
+
+local sidecarPath = hs.configdir .. "/lily58-hid-sidecar.py"
+
+local function startSidecar()
+  if M.sidecarTask then
+    pcall(function() M.sidecarTask:terminate() end)
+  end
+  if not hs.fs.attributes(sidecarPath) then
+    print("[lily58-hud] sidecar not found at " .. sidecarPath)
+    return
+  end
+  M.sidecarTask = hs.task.new("/usr/bin/python3", function(code, out, err)
+    print(string.format("[lily58-hud] sidecar exited (code %d) — restarting in 5s", code))
+    hs.timer.doAfter(5, startSidecar)
+  end, {sidecarPath})
+  M.sidecarTask:start()
+  print("[lily58-hud] sidecar started (pid " .. tostring(M.sidecarTask:pid()) .. ")")
+end
+
+startSidecar()
+
+-- ─── Layer file watcher ───────────────────────────────────────────────────────
+-- Fires whenever the sidecar updates /tmp/.lily58-layer.
+
+M.layerWatcher = hs.pathwatcher.new(LAYER_FILE, function()
+  local f = io.open(LAYER_FILE, "r")
+  if not f then return end
+  local layer = tonumber(f:read("*l")) or 0
+  f:close()
+
+  if layer == M.currentLayer then return end
+  M.currentLayer = layer
+
+  if M.wv then
+    M.wv:evaluateJavaScript(
+      string.format("hud.setLayer(%d)", layer),
+      function() end
+    )
+  end
+end)
+M.layerWatcher:start()
+
 -- ─── Key event watcher ────────────────────────────────────────────────────────
+-- Highlights the pressed key in the HUD. Layer is now tracked via HID,
+-- so we just pass M.currentLayer through unchanged.
+
 M.tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
   local kc    = event:getKeyCode()
   local keyID = KEY_POS[kc]
   if not keyID then return false end
-
-  local layer = inferLayer(kc)
-  if layer ~= 0 then
-    M.currentLayer = layer
-    resetLayerAfterTimeout()
-  elseif M.currentLayer ~= 0 and not M.layerTimer then
-    M.currentLayer = 0
-  end
-
   scheduleUpdate(keyID, M.currentLayer, getMode())
   return false
 end)
-
 M.tap:start()
 
 -- ─── Modifier state watcher ───────────────────────────────────────────────────
@@ -188,4 +201,4 @@ M.modTap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function(even
 end)
 M.modTap:start()
 
-print("[lily58-hud] loaded — press any key to activate")
+print("[lily58-hud] loaded — layer tracking via raw HID")
