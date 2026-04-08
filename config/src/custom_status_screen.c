@@ -51,7 +51,7 @@
 #  include <zmk/events/ble_active_profile_changed.h>
 #endif
 
-#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#ifdef CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL
 #  include <zmk/events/split_peripheral_status_changed.h>
 #endif
 
@@ -136,7 +136,7 @@ static void update_cb(lv_timer_t *t) {
     if (conn_lbl) {
         switch (conn) {
         case 2:
-#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#ifdef CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL
             lv_label_set_text(conn_lbl, "BLE");
 #else
             /* Central: prefer to show transport type */
@@ -183,7 +183,7 @@ static void update_cb(lv_timer_t *t) {
 static void mark_dirty(void) { atomic_set(&a_dirty, 1); }
 
 /* Layer tracking is central-only; peripheral has no keymap API. */
-#if !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#ifndef CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL
 static int on_layer_changed(const zmk_event_t *eh) {
     /* Walk down from highest layer; first active one wins. */
     uint8_t top = 0;
@@ -219,7 +219,7 @@ ZMK_SUBSCRIPTION(css_wpm, zmk_wpm_state_changed);
 #endif
 
 static void refresh_conn(void) {
-#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#ifdef CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL
     /* Peripheral: connection state is driven by on_periph_status_changed; nothing to poll. */
     return;
 #else
@@ -254,7 +254,7 @@ ZMK_SUBSCRIPTION(css_usb, zmk_usb_conn_state_changed);
 #endif
 
 /* BLE active-profile event only exists on the central side. */
-#if IS_ENABLED(CONFIG_ZMK_BLE) && !IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#if IS_ENABLED(CONFIG_ZMK_BLE) && !defined(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
 static int on_ble_changed(const zmk_event_t *eh) {
     refresh_conn(); return ZMK_EV_EVENT_BUBBLE;
 }
@@ -263,7 +263,7 @@ ZMK_SUBSCRIPTION(css_ble, zmk_ble_active_profile_changed);
 #endif
 
 /* Peripheral: track connection to the central via split peripheral status event. */
-#if IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL)
+#ifdef CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL
 static int on_periph_status_changed(const zmk_event_t *eh) {
     struct zmk_split_peripheral_status_changed *ev = as_zmk_split_peripheral_status_changed(eh);
     if (ev) {
