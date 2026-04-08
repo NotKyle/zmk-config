@@ -154,17 +154,15 @@ static void draw_display(void) {
     lv_canvas_draw_text(canvas_mid, 0, 36, CS, &lbl, wpm_str);
 #  endif
 
-    /* Connection type */
+    /* Connection type — only show when there's an actual input connection */
     int conn = (int)atomic_get(&a_conn);
     const char *conn_str = NULL;
     if (conn == 2) {
 #  if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-        conn_str = zmk_usb_is_hid_ready() ? "HID" : "USB";
+        conn_str = zmk_usb_is_hid_ready() ? "HID" : "BLE";
 #  else
         conn_str = "BLE";
 #  endif
-    } else if (conn == 1) {
-        conn_str = "USB";
     }
     if (conn_str) {
 #  if IS_ENABLED(CONFIG_ZMK_WPM)
@@ -247,18 +245,16 @@ static void refresh_conn(void) {
     return;
 #else
     int s = 0;
+    /* USB HID takes priority; USB-powered-only falls through to BLE check. */
 #  if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
-    switch (zmk_usb_get_conn_state()) {
-    case ZMK_USB_CONN_HID:     s = 2; break;
-    case ZMK_USB_CONN_POWERED: s = 1; break;
-    default:
-#    if IS_ENABLED(CONFIG_ZMK_BLE)
-        s = zmk_ble_active_profile_is_connected() ? 2 : 0;
-#    endif
-        break;
+    if (zmk_usb_get_conn_state() == ZMK_USB_CONN_HID) {
+        s = 2;
     }
-#  elif IS_ENABLED(CONFIG_ZMK_BLE)
-    s = zmk_ble_active_profile_is_connected() ? 2 : 0;
+#  endif
+#  if IS_ENABLED(CONFIG_ZMK_BLE)
+    if (s == 0 && zmk_ble_active_profile_is_connected()) {
+        s = 2;
+    }
 #  endif
     if ((int)atomic_get(&a_conn) != s) {
         atomic_set(&a_conn, s);
