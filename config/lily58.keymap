@@ -21,6 +21,18 @@
       flavor = "tap-preferred";
       bindings = <&kp>, <&kp>;
     };
+
+    // Layer-tap for thumb keys: activates layer the moment a second key is
+    // pressed while held, rather than waiting the full tapping-term-ms.
+    // Double-tap repeats the tap keycode (quick-tap-ms).
+    lt_bal: layer_tap_balanced {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      tapping-term-ms = <200>;
+      quick-tap-ms = <125>;
+      flavor = "balanced";
+      bindings = <&mo>, <&kp>;
+    };
   };
 
   combos {
@@ -32,11 +44,6 @@
       bindings = <&mo 2>;       // Raise layer
     };
 
-    combo_raise_enter_space_left {
-      timeout-ms = <75>;
-      key-positions = <51 53>;  // left-Enter + Space
-      bindings = <&mo 2>;       // Raise layer
-    };
   };
 };
 
@@ -52,7 +59,7 @@
             // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
             // | CAPS  |GUI/A|ALT/S|CTL/D |SHF/F |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
             // | CTRL  |  Z  |  X  |  C   |  V   |  B   | NAV  |  RAISE    |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //                           | GUI  | LT1/ENT | LALT | SPACE |   | LT1/ENT | BSPC | DEL | RGUI |
+            //                           | GUI  | RET  | LALT | SPACE |   | LT1/ENT | BSPC | DEL | RGUI |
             // ---------------------------------------------------------------------------------------------------------------
 
             bindings = <
@@ -60,7 +67,7 @@
 &kp TAB    &kp Q       &kp W       &kp E        &kp R        &kp T                          &kp Y   &kp U        &kp I        &kp O       &kp P         &kp MINUS
 &caps_word &hm LGUI A  &hm LALT S  &hm LCTRL D  &hm LSHFT F  &kp G                          &kp H   &kp J        &kp K        &kp L       &kp SEMI      &kp SQT
 &kp LCTRL  &kp Z       &kp X       &kp C        &kp V        &kp B   &mo 3      &mo 2       &kp N   &kp M        &kp COMMA    &kp DOT     &kp FSLH      &kp RSHFT
-                                   &kp LGUI     &lt 1 RET   &kp LALT &kp SPACE  &lt 1 RET  &kp BSPC &kp DEL    &kp RGUI
+                                   &kp LGUI     &kp RET      &kp LALT &kp SPACE  &lt_bal 1 RET  &kp BSPC &kp DEL    &kp RGUI
             >;
 
             sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
