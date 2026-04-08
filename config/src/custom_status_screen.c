@@ -285,6 +285,14 @@ ZMK_SUBSCRIPTION(css_periph, zmk_split_peripheral_status_changed);
 
 /* ── Screen constructor (portrait layout: 68 × 160 px after 90° rotation) ── */
 lv_obj_t *zmk_display_status_screen(void) {
+    /* Rotate display 90° so the nice!view sits portrait (tall) rather than
+     * landscape. LV_DISP_ROT_90 = clockwise 90°; use LV_DISP_ROT_270 if the
+     * image appears upside-down. */
+    lv_disp_t *disp = lv_disp_get_default();
+    if (disp != NULL) {
+        lv_disp_set_rotation(disp, LV_DISP_ROT_90);
+    }
+
     lv_obj_t *scr = lv_obj_create(NULL);
     style_remove_defaults(scr);
     lv_obj_set_size(scr, LV_HOR_RES, LV_VER_RES);
