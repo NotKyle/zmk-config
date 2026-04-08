@@ -12,7 +12,7 @@
  */
 
 /* Raw HID is only available on the central (left) half. */
-#if IS_ENABLED(CONFIG_RAW_HID)
+#ifdef CONFIG_RAW_HID
 
 #include <zephyr/kernel.h>
 #include <zmk/event_manager.h>
@@ -56,4 +56,4 @@ static int layer_state_changed_handler(const zmk_event_t *eh) {
 ZMK_LISTENER(layer_hid_reporter, layer_state_changed_handler);
 ZMK_SUBSCRIPTION(layer_hid_reporter, zmk_layer_state_changed);
 
-#endif /* IS_ENABLED(CONFIG_RAW_HID) */
+#endif /* CONFIG_RAW_HID */
