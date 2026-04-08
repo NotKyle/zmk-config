@@ -129,7 +129,7 @@ html, body {
 .k.cw  { background:#0d1f30; border-color:#1a4060; color:#00e5ff; font-size:5.5px; }
 .k.lk  { background:#0d1a0d; border-color:#1a3a1a; color:var(--l2c); font-size:5px; font-weight:700; }
 .k.lk3 { background:#1f1409; border-color:#3a2a12; color:var(--l3c); font-size:5px; font-weight:700; }
-.k.lk1 { background:#0a1828; border-color:var(--l0c); color:var(--l0c); font-size:5px; }
+.k.lk1 { background:#0d1520; border-color:#1e3a50; color:#5a8fa8; font-size:5px; }
 .k.th  { background:#111820; border-color:#1e2840; color:var(--tx-dim); }
 
 /* Modifier badge */
@@ -209,7 +209,7 @@ html, body {
 
   <!-- Header -->
   <div id="header">
-    <span id="layer-label">L0 · DEFAULT</span>
+    <span id="layer-label" title="Click to pin layer" onclick="pinLayer()">L0 · DEFAULT</span>
     <div id="controls">
       <button id="mode-btn" onclick="cycleMode()">FULL</button>
     </div>
@@ -431,6 +431,7 @@ let currentLayer = 0;
 let currentMode  = 'full';
 let activeKey    = null;
 let fadeTimer    = null;
+let pinnedLayer  = null;  // null = auto-infer; 0-3 = user-pinned
 
 // ─── Core update function (called from Lua) ───────────────────────────────────
 window.hud = {
@@ -438,8 +439,9 @@ window.hud = {
     // Mode change
     if (mode !== currentMode) applyMode(mode);
 
-    // Layer change
-    if (layerIdx !== currentLayer) applyLayer(layerIdx);
+    // Layer change (skip if user has pinned a layer)
+    const effectiveLayer = pinnedLayer !== null ? pinnedLayer : layerIdx;
+    if (effectiveLayer !== currentLayer) applyLayer(effectiveLayer);
 
     // Key highlight
     if (activeKey) activeKey.classList.remove('active');
@@ -462,9 +464,25 @@ window.hud = {
   },
 
   setLayer(layerIdx) {
-    if (layerIdx !== currentLayer) applyLayer(layerIdx);
+    if (pinnedLayer === null && layerIdx !== currentLayer) applyLayer(layerIdx);
   }
 };
+
+function pinLayer() {
+  const next = pinnedLayer !== null ? (pinnedLayer + 1) % 4 : 1;
+  pinnedLayer = next === 0 ? null : next;  // cycling past L3 returns to auto
+  applyLayer(pinnedLayer !== null ? pinnedLayer : 0);
+  const lbl = document.getElementById('layer-label');
+  if (lbl) {
+    if (pinnedLayer !== null) {
+      lbl.style.textDecoration = 'underline';
+      lbl.title = 'Layer pinned — click to advance, hold to release';
+    } else {
+      lbl.style.textDecoration = '';
+      lbl.title = 'Click to pin layer';
+    }
+  }
+}
 
 function applyLayer(idx) {
   currentLayer = idx;
