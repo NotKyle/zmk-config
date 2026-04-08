@@ -94,6 +94,8 @@ static void style_remove_defaults(lv_obj_t *obj) {
 
 /* ── LVGL timer: apply atomic state to widgets ───────────────────────────── */
 static void update_cb(lv_timer_t *t) {
+    /* Always re-poll hardware state — events may fire before display init */
+    refresh_conn();
     if (!atomic_cas(&a_dirty, 1, 0)) return;
 
     /* Layer label */
@@ -221,8 +223,11 @@ static void refresh_conn(void) {
 #elif IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_PERIPHERAL) && IS_ENABLED(CONFIG_ZMK_BLE)
     s = zmk_ble_active_profile_is_connected() ? 2 : 0;
 #endif
-    atomic_set(&a_conn, s);
-    mark_dirty();
+    /* Only mark dirty on change to avoid forcing a redraw every 500 ms */
+    if ((int)atomic_get(&a_conn) != s) {
+        atomic_set(&a_conn, s);
+        mark_dirty();
+    }
 }
 
 #if IS_ENABLED(CONFIG_USB_DEVICE_STACK)
