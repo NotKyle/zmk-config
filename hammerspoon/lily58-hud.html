@@ -147,6 +147,15 @@ html, body {
   box-shadow: 0 0 6px rgba(79,195,247,.3) !important;
 }
 
+/* Home row mod held */
+.k.mod-cmd   { background:#0d1e2e; border-color:#4fc3f7; box-shadow:0 0 5px rgba(79,195,247,.35); }
+.k.mod-alt   { background:#1a0d24; border-color:#ce93d8; box-shadow:0 0 5px rgba(206,147,216,.35); }
+.k.mod-ctrl  { background:#0d1e0d; border-color:#81c784; box-shadow:0 0 5px rgba(129,199,132,.35); }
+.k.mod-shift { background:#1e1808; border-color:#ffb74d; box-shadow:0 0 5px rgba(255,183,77,.35); }
+.k.mod-cmd .mb, .k.mod-alt .mb, .k.mod-ctrl .mb, .k.mod-shift .mb {
+  font-size: 5px; opacity: 1;
+}
+
 /* ── View modes ── */
 
 /* diff: hide keys that are same as L0 */
@@ -465,6 +474,19 @@ window.hud = {
 
   setLayer(layerIdx) {
     if (pinnedLayer === null && layerIdx !== currentLayer) applyLayer(layerIdx);
+  },
+
+  setMods(cmd, alt, ctrl, shift) {
+    const map = [
+      ['k-L-2-1', 'mod-cmd',   cmd],
+      ['k-L-2-2', 'mod-alt',   alt],
+      ['k-L-2-3', 'mod-ctrl',  ctrl],
+      ['k-L-2-4', 'mod-shift', shift],
+    ];
+    map.forEach(([id, cls, on]) => {
+      const el = allKeys[id];
+      if (el) el.classList.toggle(cls, !!on);
+    });
   }
 };
 

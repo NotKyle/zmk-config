@@ -5,6 +5,7 @@
 -- ─── Teardown guard (safe on reload) ─────────────────────────────────────────
 if _G._lily58hud then
   pcall(function() _G._lily58hud.tap:stop() end)
+  pcall(function() _G._lily58hud.modTap:stop() end)
   pcall(function() _G._lily58hud.wv:delete() end)
   pcall(function() _G._lily58hud.layerTimer:stop() end)
   pcall(function() _G._lily58hud.pending:stop() end)
@@ -169,4 +170,22 @@ M.tap = hs.eventtap.new({hs.eventtap.event.types.keyDown}, function(event)
 end)
 
 M.tap:start()
+
+-- ─── Modifier state watcher ───────────────────────────────────────────────────
+M.modTap = hs.eventtap.new({hs.eventtap.event.types.flagsChanged}, function(event)
+  local f = event:getFlags()
+  if M.wv then
+    M.wv:evaluateJavaScript(
+      string.format("hud.setMods(%d,%d,%d,%d)",
+        f.cmd   and 1 or 0,
+        f.alt   and 1 or 0,
+        f.ctrl  and 1 or 0,
+        f.shift and 1 or 0),
+      function() end
+    )
+  end
+  return false
+end)
+M.modTap:start()
+
 print("[lily58-hud] loaded — press any key to activate")
