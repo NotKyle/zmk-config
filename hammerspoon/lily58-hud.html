@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+:root {
+  --bg:      #0a0c12;
+  --bg2:     #111520;
+  --key:     #1c2238;
+  --key-b:   #2a3458;
+  --key-sh:  #060810;
+  --tx:      #c9d1e0;
+  --tx-dim:  #2a3a58;
+  --tx-off:  #1a2035;
+  --border:  #151d30;
+  --acc:     #4fc3f7;
+  --l0c:     #4fc3f7;
+  --l1c:     #f06292;
+  --l2c:     #aed581;
+  --l3c:     #ffb74d;
+  --mod-gui: #4fc3f7;
+  --mod-alt: #ce93d8;
+  --mod-ctl: #81c784;
+  --mod-sft: #ffb74d;
+  --font:    'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  --ks: 15px;
+  --kg: 2px;
+  --kr: 3px;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: transparent;
+  font-family: var(--font);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#hud {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 9px 8px;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: default;
+  box-shadow: 0 8px 32px rgba(0,0,0,.7);
+}
+
+/* ── Header ── */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#layer-label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--l0c);
+  transition: color 0.15s;
+}
+
+#controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#mode-btn {
+  font-size: 8px;
+  color: var(--tx-dim);
+  cursor: pointer;
+  padding: 1px 4px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  transition: color 0.15s, border-color 0.15s;
+  background: none;
+}
+#mode-btn:hover { color: var(--acc); border-color: var(--acc); }
+
+/* ── Keyboard ── */
+#kb {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+
+.half {
+  display: flex;
+  flex-direction: column;
+  gap: var(--kg);
+}
+
+.row {
+  display: flex;
+  gap: var(--kg);
+}
+
+/* Keys */
+.k {
+  width: var(--ks);
+  height: var(--ks);
+  background: var(--key);
+  border: 1px solid var(--key-b);
+  border-radius: var(--kr);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 6px;
+  font-weight: 500;
+  color: var(--tx);
+  position: relative;
+  box-shadow: 0 2px 0 var(--key-sh);
+  flex-shrink: 0;
+  transition: background 0.08s, border-color 0.08s, color 0.08s;
+  overflow: hidden;
+}
+
+.k.w  { width: calc(var(--ks)*1.4 + var(--kg)); font-size: 5.5px; }
+.k.w2 { width: calc(var(--ks)*1.7 + var(--kg)); font-size: 5px; }
+.k.off { background:#0c0e18; border-color:var(--tx-off); color:var(--tx-off); box-shadow:none; }
+.k.bt  { background:#160d1a; border-color:#2a1a30; color:#ce93d8; font-size:5px; }
+.k.cw  { background:#0d1f30; border-color:#1a4060; color:#00e5ff; font-size:5.5px; }
+.k.lk  { background:#0d1a0d; border-color:#1a3a1a; color:var(--l2c); font-size:5px; font-weight:700; }
+.k.lk3 { background:#1f1409; border-color:#3a2a12; color:var(--l3c); font-size:5px; font-weight:700; }
+.k.lk1 { background:#0a1828; border-color:var(--l0c); color:var(--l0c); font-size:5px; }
+.k.th  { background:#111820; border-color:#1e2840; color:var(--tx-dim); }
+
+/* Modifier badge */
+.mb {
+  position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+  font-size:4px; font-weight:700; line-height:1.5;
+  pointer-events:none;
+}
+
+/* Active key highlight */
+.k.active {
+  background: #1e3555 !important;
+  border-color: var(--acc) !important;
+  color: var(--acc) !important;
+  box-shadow: 0 0 6px rgba(79,195,247,.3) !important;
+}
+
+/* ── View modes ── */
+
+/* diff: hide keys that are same as L0 */
+#hud.mode-diff .k.same { opacity: 0.15; }
+
+/* strip: hide keyboard, show status */
+#hud.mode-strip #kb { display: none; }
+#hud.mode-strip #strip { display: flex; }
+
+/* strip panel */
+#strip {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 2px 0;
+}
+.strip-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+}
+.strip-label {
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--tx-dim);
+  width: 42px;
+  flex-shrink: 0;
+}
+#strip-key {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--acc);
+  line-height: 1;
+  min-width: 20px;
+}
+#strip-layer { font-size: 10px; font-weight: 600; color: var(--l0c); }
+#strip-hint  { font-size: 8px; color: var(--tx-dim); }
+.strip-mods { display:flex; gap:3px; }
+.smod {
+  padding: 1px 5px; border-radius: 3px;
+  font-size: 9px; font-weight: 700;
+  opacity: 0.25; transition: opacity 0.1s;
+}
+.smod.on { opacity: 1; }
+#sm-gui { background:rgba(79,195,247,.15); color:var(--mod-gui); }
+#sm-alt { background:rgba(206,147,216,.15); color:var(--mod-alt); }
+#sm-ctl { background:rgba(129,199,132,.15); color:var(--mod-ctl); }
+#sm-sft { background:rgba(255,183,77,.15); color:var(--mod-sft); }
+
+/* drag handle */
+#hud { cursor: grab; }
+#hud:active { cursor: grabbing; }
+</style>
+</head>
+<body>
+
+<div id="hud">
+
+  <!-- Header -->
+  <div id="header">
+    <span id="layer-label">L0 · DEFAULT</span>
+    <div id="controls">
+      <button id="mode-btn" onclick="cycleMode()">FULL</button>
+    </div>
+  </div>
+
+  <!-- Strip view (mode-strip only) -->
+  <div id="strip">
+    <div class="strip-row">
+      <span class="strip-label">Last key</span>
+      <span id="strip-key">·</span>
+    </div>
+    <div class="strip-row">
+      <span class="strip-label">Layer</span>
+      <span id="strip-layer">L0 · Default</span>
+    </div>
+    <div class="strip-row">
+      <span class="strip-label">Mods</span>
+      <div class="strip-mods">
+        <span class="smod" id="sm-gui">⌘</span>
+        <span class="smod" id="sm-alt">⌥</span>
+        <span class="smod" id="sm-ctl">⌃</span>
+        <span class="smod" id="sm-sft">⇧</span>
+      </div>
+    </div>
+    <div class="strip-row">
+      <span class="strip-label">Hint</span>
+      <span id="strip-hint">Hold A–F for mods</span>
+    </div>
+  </div>
+
+  <!-- Full keyboard -->
+  <div id="kb">
+
+    <!-- LEFT HALF -->
+    <div class="half" id="half-L">
+      <!-- Row 0 -->
+      <div class="row">
+        <div class="k w"  id="k-L-0-0">ESC</div>
+        <div class="k"    id="k-L-0-1">1</div>
+        <div class="k"    id="k-L-0-2">2</div>
+        <div class="k"    id="k-L-0-3">3</div>
+        <div class="k"    id="k-L-0-4">4</div>
+        <div class="k"    id="k-L-0-5">5</div>
+      </div>
+      <!-- Row 1 -->
+      <div class="row">
+        <div class="k w"  id="k-L-1-0">TAB</div>
+        <div class="k"    id="k-L-1-1">Q</div>
+        <div class="k"    id="k-L-1-2">W</div>
+        <div class="k"    id="k-L-1-3">E</div>
+        <div class="k"    id="k-L-1-4">R</div>
+        <div class="k"    id="k-L-1-5">T</div>
+      </div>
+      <!-- Row 2 (home row) -->
+      <div class="row">
+        <div class="k cw" id="k-L-2-0">CW</div>
+        <div class="k"    id="k-L-2-1">A<span class="mb" style="color:var(--mod-gui)">⌘</span></div>
+        <div class="k"    id="k-L-2-2">S<span class="mb" style="color:var(--mod-alt)">⌥</span></div>
+        <div class="k"    id="k-L-2-3">D<span class="mb" style="color:var(--mod-ctl)">⌃</span></div>
+        <div class="k"    id="k-L-2-4">F<span class="mb" style="color:var(--mod-sft)">⇧</span></div>
+        <div class="k"    id="k-L-2-5">G</div>
+      </div>
+      <!-- Row 3 -->
+      <div class="row">
+        <div class="k w"  id="k-L-3-0">CTL</div>
+        <div class="k"    id="k-L-3-1">Z</div>
+        <div class="k"    id="k-L-3-2">X</div>
+        <div class="k"    id="k-L-3-3">C</div>
+        <div class="k"    id="k-L-3-4">V</div>
+        <div class="k"    id="k-L-3-5">B</div>
+        <div class="k lk3" id="k-L-3-6">L3</div>
+      </div>
+      <!-- Thumbs -->
+      <div class="row" style="margin-left:calc(var(--ks)*1.4 + var(--kg)*2 + 2px)">
+        <div class="k th" id="k-L-T-0">GUI</div>
+        <div class="k th" id="k-L-T-1">RET</div>
+        <div class="k th" id="k-L-T-2">ALT</div>
+        <div class="k th" id="k-L-T-3">SPC</div>
+      </div>
+    </div>
+
+    <!-- RIGHT HALF -->
+    <div class="half" id="half-R">
+      <!-- Row 0 -->
+      <div class="row">
+        <div class="k"    id="k-R-0-0">6</div>
+        <div class="k"    id="k-R-0-1">7</div>
+        <div class="k"    id="k-R-0-2">8</div>
+        <div class="k"    id="k-R-0-3">9</div>
+        <div class="k"    id="k-R-0-4">0</div>
+        <div class="k"    id="k-R-0-5">`</div>
+      </div>
+      <!-- Row 1 -->
+      <div class="row">
+        <div class="k"    id="k-R-1-0">Y</div>
+        <div class="k"    id="k-R-1-1">U</div>
+        <div class="k"    id="k-R-1-2">I</div>
+        <div class="k"    id="k-R-1-3">O</div>
+        <div class="k"    id="k-R-1-4">P</div>
+        <div class="k"    id="k-R-1-5">-</div>
+      </div>
+      <!-- Row 2 (home row) -->
+      <div class="row">
+        <div class="k"    id="k-R-2-0">H</div>
+        <div class="k"    id="k-R-2-1">J</div>
+        <div class="k"    id="k-R-2-2">K</div>
+        <div class="k"    id="k-R-2-3">L</div>
+        <div class="k"    id="k-R-2-4">;</div>
+        <div class="k"    id="k-R-2-5">'</div>
+      </div>
+      <!-- Row 3 -->
+      <div class="row">
+        <div class="k lk" id="k-R-3-0">L2</div>
+        <div class="k"    id="k-R-3-1">N</div>
+        <div class="k"    id="k-R-3-2">M</div>
+        <div class="k"    id="k-R-3-3">,</div>
+        <div class="k"    id="k-R-3-4">.</div>
+        <div class="k"    id="k-R-3-5">/</div>
+        <div class="k w"  id="k-R-3-6">SHF</div>
+      </div>
+      <!-- Thumbs -->
+      <div class="row">
+        <div class="k lk1" id="k-R-T-0" style="font-size:5px;text-align:center">ENT<br><span style="font-size:3.5px;opacity:.7">▼L1</span></div>
+        <div class="k th"  id="k-R-T-1">BSP</div>
+        <div class="k th"  id="k-R-T-2">DEL</div>
+        <div class="k th"  id="k-R-T-3">GUI</div>
+      </div>
+    </div>
+
+  </div><!-- #kb -->
+</div><!-- #hud -->
+
+<script>
+// ─── Layer data ───────────────────────────────────────────────────────────────
+// Each entry: { l: label, cls: extra CSS class, mod: badge, mc: badge color }
+// null = use L0 value (transparent / no change)
+// {dim:true} = show as dimmed/off key
+
+const DIM = {dim:true};
+const LAYERS = [
+  // ── L0 Default ──────────────────────────────────────────────────────────────
+  null, // L0 = the DOM as written; no JS update needed
+  // ── L1 Symbols ──────────────────────────────────────────────────────────────
+  {
+    "k-L-0-0":{l:"BTCLR",cls:"bt"},"k-L-0-1":{l:"BT0",cls:"bt"},"k-L-0-2":{l:"BT1",cls:"bt"},
+    "k-L-0-3":{l:"BT2",cls:"bt"}, "k-L-0-4":{l:"BT3",cls:"bt"},"k-L-0-5":{l:"BT4",cls:"bt"},
+    "k-L-1-0":DIM,
+    "k-L-1-1":{l:"!"},  "k-L-1-2":{l:"@"},  "k-L-1-3":{l:"#"},  "k-L-1-4":{l:"$"}, "k-L-1-5":{l:"%"},
+    "k-L-2-0":{l:"`"},  "k-L-2-1":DIM,      "k-L-2-2":DIM,      "k-L-2-3":DIM,     "k-L-2-4":DIM,  "k-L-2-5":DIM,
+    "k-L-3-0":DIM,      "k-L-3-1":DIM,      "k-L-3-2":DIM,      "k-L-3-3":DIM,     "k-L-3-4":DIM,  "k-L-3-5":DIM,
+    "k-L-T-0":DIM,      "k-L-T-1":DIM,      "k-L-T-2":DIM,      "k-L-T-3":{l:"L2",cls:"lk"},
+    "k-R-0-0":DIM,      "k-R-0-1":DIM,      "k-R-0-2":DIM,      "k-R-0-3":DIM,     "k-R-0-4":DIM,  "k-R-0-5":DIM,
+    "k-R-1-0":{l:"^"},  "k-R-1-1":{l:"&"},  "k-R-1-2":{l:"*"},  "k-R-1-3":{l:"("}, "k-R-1-4":{l:")"},"k-R-1-5":{l:"~"},
+    "k-R-2-0":DIM,      "k-R-2-1":{l:"_"},  "k-R-2-2":{l:"+"},  "k-R-2-3":{l:"{"}, "k-R-2-4":{l:"}"},"k-R-2-5":{l:"|"},
+    "k-R-3-0":{l:"L2",cls:"lk"},"k-R-3-1":DIM,"k-R-3-2":{l:"-"},"k-R-3-3":{l:"="},"k-R-3-4":{l:"["},"k-R-3-5":{l:"]"},"k-R-3-6":{l:"\\"},
+    "k-R-T-0":{l:"L1",cls:"lk1"},"k-R-T-1":DIM,"k-R-T-2":DIM,   "k-R-T-3":DIM,
+  },
+  // ── L2 Numbers + Fn ─────────────────────────────────────────────────────────
+  {
+    "k-L-0-0":DIM,"k-L-0-1":DIM,"k-L-0-2":DIM,"k-L-0-3":DIM,"k-L-0-4":DIM,"k-L-0-5":DIM,
+    "k-L-1-0":{l:"`"}, "k-L-1-1":{l:"1"},"k-L-1-2":{l:"2"},"k-L-1-3":{l:"3"},"k-L-1-4":{l:"4"},"k-L-1-5":{l:"5"},
+    "k-L-2-0":{l:"F1",cls:"fn"},"k-L-2-1":{l:"F2",cls:"fn"},"k-L-2-2":{l:"F3",cls:"fn"},
+    "k-L-2-3":{l:"F4",cls:"fn"},"k-L-2-4":{l:"F5",cls:"fn"},"k-L-2-5":{l:"F6",cls:"fn"},
+    "k-L-3-0":DIM,"k-L-3-1":DIM,"k-L-3-2":DIM,"k-L-3-3":DIM,"k-L-3-4":DIM,"k-L-3-5":DIM,
+    "k-L-T-0":DIM,"k-L-T-1":DIM,"k-L-T-2":DIM,"k-L-T-3":DIM,
+    "k-R-0-0":DIM,"k-R-0-1":DIM,"k-R-0-2":DIM,"k-R-0-3":DIM,"k-R-0-4":DIM,"k-R-0-5":DIM,
+    "k-R-1-0":{l:"6"}, "k-R-1-1":{l:"7"},"k-R-1-2":{l:"8"},"k-R-1-3":{l:"9"},"k-R-1-4":{l:"0"},"k-R-1-5":DIM,
+    "k-R-2-0":{l:"F7",cls:"fn"},"k-R-2-1":{l:"F8",cls:"fn"}, "k-R-2-2":{l:"F9",cls:"fn"},
+    "k-R-2-3":{l:"F10",cls:"fn"},"k-R-2-4":{l:"F11",cls:"fn"},"k-R-2-5":{l:"F12",cls:"fn"},
+    "k-R-3-0":DIM,"k-R-3-1":DIM,"k-R-3-2":DIM,"k-R-3-3":DIM,"k-R-3-4":DIM,"k-R-3-5":DIM,"k-R-3-6":DIM,
+    "k-R-T-0":DIM,"k-R-T-1":DIM,"k-R-T-2":DIM,"k-R-T-3":DIM,
+  },
+  // ── L3 Navigation ───────────────────────────────────────────────────────────
+  {
+    "k-L-0-0":DIM,"k-L-0-1":DIM,"k-L-0-2":DIM,"k-L-0-3":DIM,"k-L-0-4":DIM,"k-L-0-5":DIM,
+    "k-L-1-0":DIM,"k-L-1-1":DIM,"k-L-1-2":DIM,"k-L-1-3":DIM,"k-L-1-4":DIM,"k-L-1-5":DIM,
+    "k-L-2-0":DIM,"k-L-2-1":DIM,"k-L-2-2":DIM,"k-L-2-3":DIM,"k-L-2-4":DIM,"k-L-2-5":DIM,
+    "k-L-3-0":DIM,"k-L-3-1":DIM,"k-L-3-2":DIM,"k-L-3-3":DIM,"k-L-3-4":DIM,"k-L-3-5":DIM,
+    "k-L-T-0":DIM,"k-L-T-1":DIM,"k-L-T-2":DIM,"k-L-T-3":DIM,
+    "k-R-0-0":DIM,"k-R-0-1":DIM,"k-R-0-2":DIM,"k-R-0-3":DIM,"k-R-0-4":DIM,"k-R-0-5":DIM,
+    "k-R-1-0":{l:"HOM",cls:"nav"},"k-R-1-1":{l:"PGD",cls:"nav"},"k-R-1-2":{l:"PGU",cls:"nav"},"k-R-1-3":{l:"END",cls:"nav"},"k-R-1-4":DIM,"k-R-1-5":DIM,
+    "k-R-2-0":{l:"←",cls:"nav"}, "k-R-2-1":{l:"↓",cls:"nav"},  "k-R-2-2":{l:"↑",cls:"nav"},  "k-R-2-3":{l:"→",cls:"nav"},  "k-R-2-4":DIM,"k-R-2-5":DIM,
+    "k-R-3-0":DIM,"k-R-3-1":DIM,"k-R-3-2":DIM,"k-R-3-3":DIM,"k-R-3-4":DIM,"k-R-3-5":DIM,"k-R-3-6":DIM,
+    "k-R-T-0":DIM,"k-R-T-1":DIM,"k-R-T-2":DIM,"k-R-T-3":DIM,
+  },
+];
+
+// Extra CSS classes for layer-specific key styles (beyond base .k)
+const EXTRA_CSS = `
+.k.fn  { background:#0d1828; border-color:#1a3050; color:#4fc3f7; }
+.k.nav { background:#1f180a; border-color:#3a2e14; color:#ffb74d; font-size:7px; }
+`;
+document.head.insertAdjacentHTML('beforeend', '<style>' + EXTRA_CSS + '</style>');
+
+// ─── Layer info ───────────────────────────────────────────────────────────────
+const LAYER_META = [
+  {name:"L0 · DEFAULT", color:"var(--l0c)", strip:"L0 · Default",  hint:"Hold A–F for mods"},
+  {name:"L1 · SYMBOLS",  color:"var(--l1c)", strip:"L1 · Symbols",  hint:"! @ # $ % ^ & * ( )"},
+  {name:"L2 · NUM + FN", color:"var(--l2c)", strip:"L2 · Numbers+Fn", hint:"F-keys on home row"},
+  {name:"L3 · NAV",      color:"var(--l3c)", strip:"L3 · Navigation", hint:"HJKL=arrows  YUIO=pg"},
+];
+
+// ─── DOM cache ────────────────────────────────────────────────────────────────
+const allKeys = {};
+document.querySelectorAll('.k').forEach(el => { allKeys[el.id] = el; });
+
+// Store L0 state for each key (label + classes) for restoration
+const l0State = {};
+Object.entries(allKeys).forEach(([id, el]) => {
+  l0State[id] = {
+    label: el.textContent.trim(),
+    html:  el.innerHTML,
+    cls:   Array.from(el.classList).filter(c => c !== 'k').join(' '),
+  };
+});
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let currentLayer = 0;
+let currentMode  = 'full';
+let activeKey    = null;
+let fadeTimer    = null;
+
+// ─── Core update function (called from Lua) ───────────────────────────────────
+window.hud = {
+  update(keyID, layerIdx, mode) {
+    // Mode change
+    if (mode !== currentMode) applyMode(mode);
+
+    // Layer change
+    if (layerIdx !== currentLayer) applyLayer(layerIdx);
+
+    // Key highlight
+    if (activeKey) activeKey.classList.remove('active');
+    if (fadeTimer) clearTimeout(fadeTimer);
+
+    const el = allKeys[keyID];
+    if (el) {
+      el.classList.add('active');
+      activeKey = el;
+      fadeTimer = setTimeout(() => {
+        el.classList.remove('active');
+        activeKey = null;
+      }, 600);
+
+      // Strip: update last key display
+      const label = el.textContent.trim().replace(/▼L1/,'').trim();
+      const stripKey = document.getElementById('strip-key');
+      if (stripKey) stripKey.textContent = label || '·';
+    }
+  },
+
+  setLayer(layerIdx) {
+    if (layerIdx !== currentLayer) applyLayer(layerIdx);
+  }
+};
+
+function applyLayer(idx) {
+  currentLayer = idx;
+  const meta = LAYER_META[idx];
+  const lbl  = document.getElementById('layer-label');
+  if (lbl) { lbl.textContent = meta.name; lbl.style.color = meta.color; }
+
+  const stripLayer = document.getElementById('strip-layer');
+  if (stripLayer) { stripLayer.textContent = meta.strip; stripLayer.style.color = meta.color; }
+  const stripHint = document.getElementById('strip-hint');
+  if (stripHint) stripHint.textContent = meta.hint;
+
+  // Restore all keys to L0 first
+  Object.entries(allKeys).forEach(([id, el]) => {
+    const s = l0State[id];
+    if (!s) return;
+    el.innerHTML = s.html;
+    // Reset classes to just 'k' + original
+    el.className = 'k' + (s.cls ? ' ' + s.cls : '');
+  });
+
+  if (idx === 0) {
+    // L0: mark all as not-same for diff mode
+    Object.values(allKeys).forEach(el => el.classList.remove('same'));
+    return;
+  }
+
+  const layerData = LAYERS[idx];
+  if (!layerData) return;
+
+  Object.entries(layerData).forEach(([id, data]) => {
+    const el = allKeys[id];
+    if (!el) return;
+
+    if (data.dim) {
+      el.className = 'k off';
+      el.innerHTML = '—';
+      return;
+    }
+
+    // Apply extra class
+    const baseClass = l0State[id]?.cls || '';
+    el.className = 'k' + (data.cls ? ' ' + data.cls : (baseClass ? ' ' + baseClass : ''));
+
+    // Update label (preserve any modifier badge)
+    el.innerHTML = data.l || '';
+    if (data.mod) {
+      el.innerHTML += `<span class="mb" style="color:${data.mc||'#aaa'}">${data.mod}</span>`;
+    }
+  });
+
+  // Mark unchanged keys as 'same' for diff mode
+  if (currentMode === 'diff') {
+    Object.keys(allKeys).forEach(id => {
+      const changed = layerData[id] && !layerData[id].dim;
+      allKeys[id].classList.toggle('same', !changed);
+    });
+  }
+}
+
+function applyMode(mode) {
+  currentMode = mode;
+  const hud = document.getElementById('hud');
+  hud.classList.remove('mode-full','mode-diff','mode-strip');
+  hud.classList.add('mode-' + mode);
+
+  const btn = document.getElementById('mode-btn');
+  if (btn) btn.textContent = mode.toUpperCase();
+
+  if (mode === 'diff') {
+    const layerData = LAYERS[currentLayer] || {};
+    Object.keys(allKeys).forEach(id => {
+      const changed = layerData[id] && !layerData[id]?.dim;
+      allKeys[id].classList.toggle('same', !changed);
+    });
+  }
+}
+
+function cycleMode() {
+  const modes = ['full','diff','strip'];
+  const next = modes[(modes.indexOf(currentMode) + 1) % modes.length];
+  applyMode(next);
+  window.location = 'lily58hud://mode?mode=' + next;
+}
+
+// ─── Drag to reposition ───────────────────────────────────────────────────────
+let dragging = false, dragStartX, dragStartY, hudStartX, hudStartY;
+
+document.getElementById('hud').addEventListener('mousedown', e => {
+  if (e.target.id === 'mode-btn') return;
+  dragging = true;
+  dragStartX = e.screenX; dragStartY = e.screenY;
+  // We don't know window position from JS, so we'll track delta
+  hudStartX = 0; hudStartY = 0;
+  e.preventDefault();
+});
+
+// We use a move counter approach: on each move, send the accumulated delta
+// Lua will apply it relative to the window's current topLeft
+let lastSentX = null, lastSentY = null;
+
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const dx = e.screenX - dragStartX;
+  const dy = e.screenY - dragStartY;
+  // Only send on meaningful change
+  if (Math.abs(dx - (lastSentX||0)) > 2 || Math.abs(dy - (lastSentY||0)) > 2) {
+    lastSentX = dx; lastSentY = dy;
+    window.location = `lily58hud://drag?dx=${Math.round(dx)}&dy=${Math.round(dy)}&ox=${Math.round(dragStartX)}&oy=${Math.round(dragStartY)}`;
+  }
+});
+
+document.addEventListener('mouseup', () => {
+  dragging = false; lastSentX = null; lastSentY = null;
+});
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+applyMode('full');
+</script>
+</body>
+</html>

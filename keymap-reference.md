@@ -1,6 +1,6 @@
 # Lily58 Keymap Reference
 
-> **Nice Nano v2** — ZMK Firmware  
+> **Nice Nano v2** — ZMK Firmware
 > 4 layers · Home Row Mods (left hand) · Caps Word · Nav Layer
 
 ---
@@ -33,15 +33,15 @@
                                                      └L1 hold┘
 ```
 
-> **CAPS** key = `Caps Word` — type a word in ALL_CAPS then auto-disables on space/symbol  
-> **[L3]** = hold for Nav layer · **[L2]** = hold for Numbers+Fn layer  
+> **CAPS** key = `Caps Word` — type a word in ALL_CAPS then auto-disables on space/symbol
+> **[L3]** = hold for Nav layer · **[L2]** = hold for Numbers+Fn layer
 > **ENT** (right thumb) = tap Enter, hold for Symbols layer
 
 ---
 
 ## Home Row Mods — Left Hand Only
 
-Hold to activate modifier. Tap for the letter.  
+Hold to activate modifier. Tap for the letter.
 Trigger threshold: **200ms** · Prior idle required: **150ms**
 
 ```
@@ -50,8 +50,7 @@ Left hand only
 │  ⌘   │  ⌥   │   ⌃   │   ⇧   │
 │  A   │  S   │   D   │   F   │
 └──────┴──────┴───────┴───────┘
- LGUI   LALT   LCTRL   LSHIFT
-```
+ LGUI   LALT   LCTRL   LSHIFT ```
 
 Right-hand home row (`H J K L ;`) are plain keys — no hold behaviour — so Neovim navigation works without interference.
 

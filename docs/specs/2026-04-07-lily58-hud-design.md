@@ -1,7 +1,7 @@
 # Lily58 Keyboard HUD — Design Spec
 
-**Date:** 2026-04-07  
-**Status:** Approved  
+**Date:** 2026-04-07
+**Status:** Approved
 
 ---
 
