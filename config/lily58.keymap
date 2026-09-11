@@ -4,16 +4,37 @@
  * SPDX-License-Identifier: MIT
  */
 
+/* Mouse cursor speed. ZMK_POINTING_DEFAULT_MOVE_VAL is an #ifndef-guarded
+ * macro, not a Kconfig, so this must be defined before any include can pull in
+ * pointing.h. Stock is 600. */
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 900
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/pointing.h>
+#include <input/processors.dtsi>
 
 // Key positions (58):
 //   row0  0.. 5 |  6..11      row1 12..17 | 18..23
 //   row2 24..29 | 30..35      row3 36..42 | 43..49
 //   thumbs  50 51 52 53 | 54 55 56 57
+
+/* Cursor speed by layer. Scaling happens here rather than by rebinding the
+ * movement keys, which is why the Slow and Fast layers are entirely
+ * transparent — they fall straight through to the Mouse layer's own bindings.
+ * ponytail: <multiplier divisor>. 1 4 is a quarter speed, 2 1 is double. */
+&mmv_input_listener {
+    slow {
+        layers = <5>;
+        input-processors = <&zip_xy_scaler 1 4>;
+    };
+    fast {
+        layers = <6>;
+        input-processors = <&zip_xy_scaler 2 1>;
+    };
+};
 
 / {
   // Hold both thumb layer keys (52 + 56) -> Numbers/Fn. No timing, no combo.
@@ -122,23 +143,58 @@
       display-name = "Mouse";
 
       // Reached from Nav: hold NAV (left thumb 52) then left index home (28).
+      // Speed rides on the left half's own Shift (faster) and Ctrl (slower).
       // The left hand holds, so the whole right hand is free — fingers move and
       // scroll, thumbs click. Position 28 stays transparent here so it keeps
       // resolving to &mo 4 on the layer below.
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |     |     |     |                   |      |      |      |      |      |       |
       // |       |     |     |     |     |     |                   | SCR← | SCR↓ | SCR↑ | SCR→ |      |       |
-      // |       |     |     |     |     |     |                   | MOU← | MOU↓ | MOU↑ | MOU→ |      |       |
-      // |       |     |     |     |     |     |      |            | BACK | FWD  |      |      |      |       |
+      // | FAST  |     |     |     |held |     |                   | MOU← | MOU↓ | MOU↑ | MOU→ |      |       |
+      // | SLOW  |     |     |     |     |     |      |            | BACK | FWD  |      |      |      |       |
       //                           |      |      |      |      |   | LCLK | RCLK | MCLK |       |
       // ---------------------------------------------------------------------------------------------------------------
 
       bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans                      &trans            &trans            &trans          &trans             &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans                      &msc SCRL_LEFT    &msc SCRL_DOWN    &msc SCRL_UP    &msc SCRL_RIGHT    &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans                      &mmv MOVE_LEFT    &mmv MOVE_DOWN    &mmv MOVE_UP    &mmv MOVE_RIGHT    &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &mkp MB4          &mkp MB5          &trans          &trans             &trans  &trans
+&mo 6   &trans  &trans  &trans  &trans  &trans                      &mmv MOVE_LEFT    &mmv MOVE_DOWN    &mmv MOVE_UP    &mmv MOVE_RIGHT    &trans  &trans
+&mo 5   &trans  &trans  &trans  &trans  &trans  &trans   &trans     &mkp MB4          &mkp MB5          &trans          &trans             &trans  &trans
                         &trans  &trans  &trans  &trans   &mkp LCLK  &mkp RCLK         &mkp MCLK         &trans
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+    };
+
+    slow_layer {
+      display-name = "Slow";
+
+      // Quarter speed, for landing on a small target. Entirely transparent: the speed change is an input processor on
+      // mmv_input_listener, so every key still comes from the Mouse layer.
+
+      bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans  &trans  &trans   &trans     &trans  &trans  &trans
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+    };
+
+    fast_layer {
+      display-name = "Fast";
+
+      // Double speed, for crossing the screen. Entirely transparent: the speed change is an input processor on
+      // mmv_input_listener, so every key still comes from the Mouse layer.
+
+      bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                        &trans  &trans  &trans  &trans   &trans     &trans  &trans  &trans
       >;
 
       sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;

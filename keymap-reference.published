@@ -2,4 +2,4 @@
 # republishing the artifact. A mismatch against keymap-reference.html
 # means the published page is behind the repo.
 url    https://claude.ai/code/artifact/552bcaaf-8b03-45fd-9fdc-02be89c4ae69
-sha256 62055aad5bbb68b63e0c171afcba507eeafbc8cc70469357a468308fa1880c3a
+sha256 bb80b6b07b662a1795d32b52740df7677c079b07e9307f5e0f754905862bfa14

@@ -109,7 +109,7 @@
     backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--line-soft);
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 5px;
   }
   .tab {
@@ -297,7 +297,7 @@
   <header class="mast">
     <div class="eyebrow">Lily58 Pro · nice!nano v2 · ZMK v0.3</div>
     <h1>Lily58 Layer Map</h1>
-    <p class="standfirst">Five layers, no hold-taps on any letter. Both layer keys moved to the thumbs, so nothing waits on a tapping term to decide what you meant.</p>
+    <p class="standfirst">Seven layers, no hold-taps on any letter. Both layer keys moved to the thumbs, so nothing waits on a tapping term to decide what you meant.</p>
   </header>
 
   <div class="picker" role="tablist" aria-label="Layer"></div>
@@ -428,8 +428,8 @@
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["t:⇧","t:A","t:S","t:D","H:MOUS","t:G"],
-        ["t:⌃","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["L:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
+        ["L:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
         ["t:⌥","t:⌘","H:NAV","t:SPC"]
       ],
       right: [
@@ -438,6 +438,42 @@
         ["MOU←","MOU↓","MOU↑","MOU→","t:;","t:'"],
         ["L:NUM","BACK","FWD","t:,","t:.","t:/","t:⇧"],
         ["LCLK","RCLK","MCLK","t:⌃"]
+      ]
+    },
+    {
+      n: "L5", name: "Slow", how: "Mouse + ⇧shift key",
+      note: "Quarter speed, for landing on a small target. Every key still comes from the Mouse layer — the speed change is an input processor on the cursor itself, not a rebinding, so this layer is entirely transparent.",
+      left: [
+        ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
+        ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
+        ["t:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
+        ["H:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["t:⌥","t:⌘","H:NAV","t:SPC"]
+      ],
+      right: [
+        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:SCR←","t:SCR↓","t:SCR↑","t:SCR→","t:P","t:-"],
+        ["t:MOU←","t:MOU↓","t:MOU↑","t:MOU→","t:;","t:'"],
+        ["L:NUM","t:BACK","t:FWD","t:,","t:.","t:/","t:⇧"],
+        ["t:LCLK","t:RCLK","t:MCLK","t:⌃"]
+      ]
+    },
+    {
+      n: "L6", name: "Fast", how: "Mouse + ⌃ctrl key",
+      note: "Double speed, for crossing the screen. Transparent for the same reason as Slow. Base cursor speed is 900, up from ZMK's stock 600.",
+      left: [
+        ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
+        ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
+        ["H:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
+        ["t:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["t:⌥","t:⌘","H:NAV","t:SPC"]
+      ],
+      right: [
+        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:SCR←","t:SCR↓","t:SCR↑","t:SCR→","t:P","t:-"],
+        ["t:MOU←","t:MOU↓","t:MOU↑","t:MOU→","t:;","t:'"],
+        ["L:NUM","t:BACK","t:FWD","t:,","t:.","t:/","t:⇧"],
+        ["t:LCLK","t:RCLK","t:MCLK","t:⌃"]
       ]
     }
   ];

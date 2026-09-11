@@ -1,7 +1,7 @@
 # Lily58 Keymap Reference
 
 > **Nice Nano v2** — ZMK Firmware
-> 5 layers · no hold-taps on letters · layers on thumbs · tuned for Doom Emacs / Neovim
+> 7 layers · no hold-taps on letters · layers on thumbs · tuned for Doom Emacs / Neovim
 
 ---
 
@@ -27,6 +27,8 @@
 | 2 | Numbers + Fn | Hold **both** thumb layer keys, or inner-right `[NUM]` |
 | 3 | Navigation | Hold left-inner thumb `[NAV]` |
 | 4 | Mouse | Hold `[NAV]`, then left index home `F` |
+| 5 | Slow | On Mouse, hold the left `SHIFT` key |
+| 6 | Fast | On Mouse, hold the left `CTRL` key |
 
 Layer 2 is a **conditional layer** (`1 + 3 → 2`), not a combo. Holding both
 thumbs is unambiguous and has no timeout.
@@ -190,11 +192,28 @@ N = back       M = forward                                 ← browser navigatio
 Right thumbs   = left / right / middle click
 ```
 
+**Cursor speed.** Base speed is 900, up from ZMK's stock 600 — set by
+`#define ZMK_POINTING_DEFAULT_MOVE_VAL` at the top of the keymap. It has to be
+a define rather than a Kconfig because the `MOVE_*` macros bake the value in at
+preprocess time, and it has to come before any include that could pull in
+`pointing.h`.
+
+Two modifiers change it live, on the left half's own modifier keys:
+
+| Hold | Speed | For |
+|------|-------|-----|
+| `SHIFT` (left outer, home row) | ×2 — 1800 | crossing the screen |
+| — | 900 | normal |
+| `CTRL` (left outer, bottom row) | ÷4 — 225 | landing on a small target |
+
+These work by scaling the pointer at `mmv_input_listener`, not by rebinding the
+movement keys — which is why layers 5 and 6 are entirely transparent and every
+key still comes from the Mouse layer. Tune with the `<multiplier divisor>` pair
+on `&zip_xy_scaler` in the keymap.
+
 Mouse keys are for clicking a button, dismissing a dialog, or scrolling without
-leaving home position. They are poor at precision pointing — the trackball is
-still the right tool for that. If the cursor crawls or bolts, the knobs are
-`CONFIG_ZMK_POINTING_DEFAULT_MOVE_VAL` (600) and `_SCRL_VAL` (10) in
-`config/lily58.conf`.
+leaving home position. Even at these speeds they are poor at precision
+pointing — the trackball is still the right tool for that.
 
 ---
 
@@ -223,6 +242,7 @@ Numbers, F-keys             hold both thumbs
 Bluetooth / reset           hold both thumbs, top row
 Caps Word                   hold [SYM], left pinky
 Mouse cursor / clicks       hold [NAV] + F, right hand moves
+Mouse faster / slower       on Mouse, hold left SHIFT / CTRL
 Escape                      top-left, or inner-left index
 Delete word back            hold [NAV], Backspace
 ```
