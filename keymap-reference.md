@@ -189,6 +189,33 @@ Delete word back            hold [NAV], Backspace
 
 ---
 
+## Flashing
+
+**Getting a half into bootloader mode:** double-tap its reset button, within
+about half a second. It mounts as a USB drive called `NICENANO`. Drag the
+`.uf2` onto it — it flashes and reboots on its own and the drive disappears.
+
+Each half is a separate device. Plug in and flash one at a time.
+
+Once this firmware is on, you don't need the button: `BOOT` on the Numbers
+layer (both thumbs, top-right key) does the same thing.
+
+| # | Flash | To |
+|---|-------|-----|
+| 1 | `settings_reset` | both halves |
+| 2 | `lily58_left` | left half |
+| 3 | `lily58_right` | right half |
+
+Step 1 is not optional — see the ZMK Studio note below. `settings_reset` leaves
+the board running normally, not in bootloader, so double-tap reset again before
+step 2 or 3.
+
+After step 3 the halves re-pair with each other automatically, but the host
+pairing is gone: pick a profile on the Numbers layer top row, then pair from
+your Mac.
+
+---
+
 ## Tuning
 
 **Chatter (a key repeating or dropping).** `config/lily58.conf`:

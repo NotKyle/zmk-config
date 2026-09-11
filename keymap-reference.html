@@ -1,0 +1,517 @@
+<title>Lily58 Layer Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground:    #E9ECF2;
+    --surface:   #FFFFFF;
+    --key:       #FFFFFF;
+    --key-ghost: #DFE3EC;
+    --line:      #C2CAD9;
+    --line-soft: #D7DDE8;
+    --tx:        #131822;
+    --tx-dim:    #525D74;
+    --tx-faint:  #98A2B7;
+    --accent:    #0B6E93;
+    --accent-sf: #D6EDF7;
+    --on-accent: #FFFFFF;
+    --warn:      #9A5300;
+    --warn-sf:   #F7E7D2;
+    --shadow:    0 1px 0 rgba(19,24,34,.10), 0 1px 3px rgba(19,24,34,.07);
+    --radius:    5px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #0F1117;
+      --surface:   #151A26;
+      --key:       #1C2238;
+      --key-ghost: #161B2A;
+      --line:      #2A3458;
+      --line-soft: #202942;
+      --tx:        #C9D1E0;
+      --tx-dim:    #808DA9;
+      --tx-faint:  #4C587A;
+      --accent:    #4FC3F7;
+      --accent-sf: #12293A;
+      --on-accent: #08121A;
+      --warn:      #E8A33D;
+      --warn-sf:   #2E2314;
+      --shadow:    0 1px 0 rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground:    #0F1117;
+    --surface:   #151A26;
+    --key:       #1C2238;
+    --key-ghost: #161B2A;
+    --line:      #2A3458;
+    --line-soft: #202942;
+    --tx:        #C9D1E0;
+    --tx-dim:    #808DA9;
+    --tx-faint:  #4C587A;
+    --accent:    #4FC3F7;
+    --accent-sf: #12293A;
+    --on-accent: #08121A;
+    --warn:      #E8A33D;
+    --warn-sf:   #2E2314;
+    --shadow:    0 1px 0 rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--ground);
+    color: var(--tx);
+    font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 28px 18px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  /* ---- masthead ---- */
+  .mast { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: .13em;
+    text-transform: uppercase;
+    color: var(--tx-dim);
+  }
+  h1 {
+    margin: 0;
+    font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 8vw, 40px);
+    letter-spacing: -.015em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+  .standfirst { margin: 2px 0 0; color: var(--tx-dim); max-width: 58ch; }
+
+  /* ---- layer picker ---- */
+  .picker {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin: 0 -18px;
+    padding: 10px 18px;
+    background: color-mix(in srgb, var(--ground) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line-soft);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .tab {
+    appearance: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: 7px 6px 8px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--tx-dim);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: background .12s, border-color .12s, color .12s;
+  }
+  .tab .n {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .08em;
+    color: var(--tx-faint);
+  }
+  .tab .nm {
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--tx);
+    line-height: 1.15;
+  }
+  .tab .how { font-size: 10.5px; line-height: 1.25; }
+  .tab:hover { border-color: var(--accent); }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .tab[aria-selected="true"] {
+    background: var(--accent-sf);
+    border-color: var(--accent);
+  }
+  .tab[aria-selected="true"] .n,
+  .tab[aria-selected="true"] .how { color: var(--accent); }
+
+  /* ---- board ---- */
+  .board-wrap { display: flex; flex-direction: column; gap: 14px; }
+  .note {
+    font-size: 14px;
+    color: var(--tx-dim);
+    border-left: 2px solid var(--accent);
+    padding-left: 12px;
+    max-width: 60ch;
+  }
+  .board {
+    --u: 44px;
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+  }
+  @media (min-width: 700px) {
+    .board { --u: 46px; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+  }
+  @media (max-width: 400px) {
+    .board { --u: 40px; }
+  }
+  .half { display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: calc(var(--u) * 7 + 24px); }
+  .half-tag {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--tx-faint);
+    margin-bottom: 2px;
+  }
+  .krow { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .krow.thumbs { margin-top: 7px; }
+
+  .k {
+    aspect-ratio: 1 / .92;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--key);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    line-height: 1;
+    color: var(--tx);
+    text-align: center;
+    overflow: hidden;
+    word-break: break-word;
+  }
+  .k.long { font-size: 9.5px; letter-spacing: -.01em; }
+  .k.xlong { font-size: 8px; letter-spacing: -.02em; }
+  .k.spacer { border: 0; background: none; box-shadow: none; }
+  .k.ghost { background: var(--key-ghost); color: var(--tx-faint); border-color: var(--line-soft); box-shadow: none; font-weight: 500; }
+  .k.layer { border-color: var(--accent); color: var(--accent); background: var(--accent-sf); }
+  .k.held { border-color: var(--accent); background: var(--accent); color: var(--on-accent); box-shadow: none; }
+  .k.warn { border-color: var(--warn); background: var(--warn-sf); color: var(--warn); }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    font-size: 11.5px;
+    color: var(--tx-dim);
+    padding-top: 2px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; border: 1px solid var(--line); flex: none; }
+  .swatch.held { background: var(--accent); border-color: var(--accent); }
+  .swatch.layer { background: var(--accent-sf); border-color: var(--accent); }
+  .swatch.ghost { background: var(--key-ghost); border-color: var(--line-soft); }
+  .swatch.warn { background: var(--warn-sf); border-color: var(--warn); }
+
+  /* ---- panels ---- */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    padding: 18px 18px 20px;
+  }
+  h2 {
+    margin: 0 0 12px;
+    font-family: "IBM Plex Sans Condensed", sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+  }
+  ol.steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; counter-reset: s; }
+  ol.steps li {
+    counter-increment: s;
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 10px;
+    align-items: baseline;
+  }
+  ol.steps li::before {
+    content: counter(s);
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    text-align: center;
+    line-height: 18px;
+    height: 20px;
+  }
+  ol.steps b { font-weight: 600; }
+  ol.steps small { display: block; color: var(--tx-dim); font-size: 13px; }
+  code, kbd {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: .88em;
+    background: var(--key-ghost);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 1px 4px;
+  }
+  .lede { margin: -2px 0 14px; color: var(--tx-dim); font-size: 13.5px; max-width: 62ch; }
+  .knobs { display: flex; flex-direction: column; gap: 14px; }
+  .knob { display: flex; flex-direction: column; gap: 3px; }
+  .knob .kt { font-weight: 600; font-size: 14px; }
+  .knob p { margin: 0; color: var(--tx-dim); font-size: 13.5px; max-width: 62ch; }
+  .flag {
+    margin-top: 14px;
+    border-left: 2px solid var(--warn);
+    padding-left: 12px;
+    font-size: 13.5px;
+    color: var(--tx-dim);
+  }
+  .flag b { color: var(--warn); font-weight: 600; }
+  footer {
+    font-size: 12px;
+    color: var(--tx-faint);
+    border-top: 1px solid var(--line-soft);
+    padding-top: 14px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="page">
+
+  <header class="mast">
+    <div class="eyebrow">Lily58 Pro · nice!nano v2 · ZMK v0.3</div>
+    <h1>Lily58 Layer Map</h1>
+    <p class="standfirst">Four layers, no hold-taps on any letter. Both layer keys moved to the thumbs, so nothing waits on a tapping term to decide what you meant.</p>
+  </header>
+
+  <div class="picker" role="tablist" aria-label="Layer"></div>
+
+  <div class="board-wrap">
+    <p class="note" id="note"></p>
+    <div class="board" id="board"></div>
+    <div class="legend">
+      <span><i class="swatch held"></i>held to reach this layer</span>
+      <span><i class="swatch layer"></i>layer key</span>
+      <span><i class="swatch ghost"></i>transparent — base key still fires</span>
+      <span><i class="swatch warn"></i>destructive</span>
+    </div>
+  </div>
+
+  <section class="panel">
+    <h2>Flashing order</h2>
+    <p class="lede">To get a half into bootloader mode, <b>double-tap its reset button</b> — within about half a second. It mounts as a USB drive called <code>NICENANO</code>; drag the <code>.uf2</code> on and it flashes and reboots by itself. Each half is its own device, so plug in and flash one at a time. Once this firmware is on, <code>BOOT</code> on the Numbers layer does the same thing without the button.</p>
+    <ol class="steps">
+      <li><b><code>settings_reset</code> to both halves</b><small>Not optional. ZMK Studio is enabled with locking off, so any keymap you ever edited in Studio is saved to settings and silently overrides the <code>.keymap</code> file. Skip this and you may see no change at all.</small></li>
+      <li><b><code>lily58_left</code>, then <code>lily58_right</code></b><small>Double-tap reset again for each — <code>settings_reset</code> leaves the board running, not in bootloader. Artifacts are attached to the green Actions run on the <code>fix/keymap-chatter-and-bt-disconnect</code> branch.</small></li>
+      <li><b>Re-pair Bluetooth</b><small>The reset clears all five profiles. Pick a profile on the Numbers layer top row before pairing.</small></li>
+    </ol>
+  </section>
+
+  <section class="panel">
+    <h2>If something still feels wrong</h2>
+    <div class="knobs">
+      <div class="knob">
+        <div class="kt">A key still repeats or drops characters</div>
+        <p>Raise <code>CONFIG_ZMK_KSCAN_DEBOUNCE_RELEASE_MS</code> from 10 toward 12–15 in <code>config/lily58.conf</code>. Release debounce is the one that governs doubled letters. If it is only one or two specific keys, that is a worn switch or a cold solder joint and no config value will fix it.</p>
+      </div>
+      <div class="knob">
+        <div class="kt">The outer thumbs are a stretch</div>
+        <p>⌘ and ⌃ sit one position out from home on the right. Give it three days — thumb maps feel wrong before they feel fast. If they are still a reach after that, swapping them inward is a one-line change.</p>
+      </div>
+      <div class="knob">
+        <div class="kt">You miss having mods on the home row</div>
+        <p>Left-hand home row mods were deliberately left off: they are timing-based, and timing is what was broken. Right-hand mods can be added positionally later if the thumbs prove not to be enough.</p>
+      </div>
+    </div>
+    <p class="flag"><b>Gone for good:</b> the <kbd>SPC</kbd>+<kbd>⏎</kbd> combo. At a 75&nbsp;ms window it fired during normal typing and ate both keys, and it collided with Doom's <kbd>SPC</kbd> leader. Numbers is a conditional layer now — hold both thumbs, no timeout.</p>
+  </section>
+
+  <footer>Generated from <code>config/lily58.keymap</code>. Positions 0–57, left half first.</footer>
+</div>
+
+<script>
+(function () {
+  // Prefixes: t: transparent · L: layer key · H: held to reach here · W: destructive.
+  // Two chars, because "~" "+" "*" "!" are themselves keys on the Symbols layer.
+  var LAYERS = [
+    {
+      n: "L0", name: "Base", how: "always on",
+      note: "Every letter is a plain key — nothing here waits on a tapping term. Ctrl appears twice (left pinky, right thumb) so you can always use the hand that is not typing the letter.",
+      left: [
+        ["ESC","1","2","3","4","5"],
+        ["TAB","Q","W","E","R","T"],
+        ["⇧","A","S","D","F","G"],
+        ["⌃","Z","X","C","V","B","ESC"],
+        ["⌥","⏎","L:NAV","SPC"]
+      ],
+      right: [
+        ["6","7","8","9","0","`"],
+        ["Y","U","I","O","P","-"],
+        ["H","J","K","L",";","'"],
+        ["L:NUM","N","M",",",".","/","⇧"],
+        ["⌫","L:SYM","⌘","⌃"]
+      ]
+    },
+    {
+      n: "L1", name: "Sym", how: "hold right thumb",
+      note: "Brackets pair by finger — opening on the left hand, closing on the right at the same position. F↔J are the parens, D↔K the braces, S↔L the square brackets.",
+      left: [
+        ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
+        ["t:TAB","!","@","#","$","%"],
+        ["CAPS","`","[","{","(","<"],
+        ["t:⌃","~","|","_","-",":","t:ESC"],
+        ["t:⌥","t:⏎","L:NAV","t:SPC"]
+      ],
+      right: [
+        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["^","&","*","+","=","~"],
+        [">",")","}","]","/","\\"],
+        ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
+        ["t:⌫","H:SYM","t:⌘","t:⌃"]
+      ]
+    },
+    {
+      n: "L2", name: "Num", how: "hold both thumbs",
+      note: "Everything that can ruin your day lives behind two thumbs. BT CLR unpairs the current host — it sits alone in the bottom-left corner, as far from the profile keys as the board allows.",
+      left: [
+        ["W:BT0","W:BT1","W:BT2","W:BT3","W:BT4","t:5"],
+        ["`","1","2","3","4","5"],
+        ["F1","F2","F3","F4","F5","F6"],
+        ["W:BTCLR","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["t:⌥","t:⏎","H:NAV","t:SPC"]
+      ],
+      right: [
+        ["t:6","t:7","t:8","t:9","W:RESET","W:BOOT"],
+        ["6","7","8","9","0","t:-"],
+        ["F7","F8","F9","F10","F11","F12"],
+        ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
+        ["t:⌫","H:SYM","t:⌘","t:⌃"]
+      ]
+    },
+    {
+      n: "L3", name: "Nav", how: "hold left thumb",
+      note: "The left thumb holds, the right hand moves — same fingers as Vim's hjkl. The row below the arrows is line and word jumps; ⌥⌫ under Backspace deletes a word.",
+      left: [
+        ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
+        ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
+        ["t:⇧","t:A","t:S","t:D","t:F","t:G"],
+        ["t:⌃","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["t:⌥","t:⏎","H:NAV","t:SPC"]
+      ],
+      right: [
+        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["HOME","PGDN","PGUP","END","t:P","t:-"],
+        ["←","↓","↑","→","t:;","t:'"],
+        ["L:NUM","⌘←","⌥←","⌥→","⌘→","t:/","t:⇧"],
+        ["⌥⌫","L:SYM","DEL","t:⌃"]
+      ]
+    }
+  ];
+
+  var picker = document.querySelector(".picker");
+  var board  = document.getElementById("board");
+  var noteEl = document.getElementById("note");
+  var active = 0;
+
+  try {
+    var saved = parseInt(localStorage.getItem("lily58-layer"), 10);
+    if (saved >= 0 && saved < LAYERS.length) active = saved;
+  } catch (e) { /* private window, blocked storage — stay on L0 */ }
+
+  function key(spec) {
+    var el = document.createElement("div");
+    el.className = "k";
+    if (spec === null) { el.className = "k spacer"; return el; }
+    var m = /^([tLHW]):([\s\S]*)$/.exec(spec), label = spec;
+    if (m) {
+      el.classList.add({ t: "ghost", L: "layer", H: "held", W: "warn" }[m[1]]);
+      label = m[2];
+    }
+    if (label.length >= 5) el.classList.add("xlong");
+    else if (label.length >= 3) el.classList.add("long");
+    el.textContent = label;
+    return el;
+  }
+
+  function half(rows, side) {
+    var wrap = document.createElement("div");
+    wrap.className = "half";
+    var tag = document.createElement("div");
+    tag.className = "half-tag";
+    tag.textContent = side === "left" ? "Left half" : "Right half";
+    wrap.appendChild(tag);
+
+    rows.forEach(function (row, i) {
+      var r = document.createElement("div");
+      r.className = "krow" + (i === 4 ? " thumbs" : "");
+      var cells;
+      if (i === 4) {
+        // Thumb clusters sit toward the inner edge of each half.
+        cells = side === "left" ? [null, null, null].concat(row) : row.concat([null, null, null]);
+      } else if (i === 3) {
+        cells = row;                                    // 7 keys: the inner column key is included
+      } else {
+        cells = side === "left" ? row.concat([null]) : [null].concat(row);
+      }
+      cells.forEach(function (c) { r.appendChild(key(c)); });
+      wrap.appendChild(r);
+    });
+    return wrap;
+  }
+
+  function render() {
+    var L = LAYERS[active];
+    noteEl.textContent = L.note;
+    board.textContent = "";
+    board.appendChild(half(L.left, "left"));
+    board.appendChild(half(L.right, "right"));
+    Array.prototype.forEach.call(picker.children, function (t, i) {
+      t.setAttribute("aria-selected", i === active ? "true" : "false");
+      t.tabIndex = i === active ? 0 : -1;
+    });
+  }
+
+  LAYERS.forEach(function (L, i) {
+    var t = document.createElement("button");
+    t.className = "tab";
+    t.type = "button";
+    t.setAttribute("role", "tab");
+    t.innerHTML = '<span class="n"></span><span class="nm"></span><span class="how"></span>';
+    t.querySelector(".n").textContent = L.n;
+    t.querySelector(".nm").textContent = L.name;
+    t.querySelector(".how").textContent = L.how;
+    t.addEventListener("click", function () {
+      active = i;
+      try { localStorage.setItem("lily58-layer", String(i)); } catch (e) { /* ignore */ }
+      render();
+    });
+    t.addEventListener("keydown", function (e) {
+      var d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+      if (!d) return;
+      e.preventDefault();
+      active = (active + d + LAYERS.length) % LAYERS.length;
+      render();
+      picker.children[active].focus();
+    });
+    picker.appendChild(t);
+  });
+
+  render();
+})();
+</script>
