@@ -88,11 +88,11 @@ on the right hand at the same finger.
 ┌───────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬──────┐
 │       │     │     │     │     │     │                 │     │     │     │     │     │      │
 ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
-│       │  !  │  @  │  #  │  $  │  %  │                 │  ^  │  &  │  *  │  +  │  =  │  ~   │
+│       │     │     │     │  $  │  %  │                 │  ^  │  &  │  *  │  +  │  =  │  ~   │
 ├───────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
 │ CAPSW │  `  │  [  │  {  │  (  │  <  │                 │  >  │  )  │  }  │  ]  │  /  │  \   │
 ├───────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
-│       │  ~  │  |  │  _  │  -  │  :  │      │   │      │     │     │     │     │     │      │
+│   ~   │  |  │  !  │  @  │  #  │  _  │      │   │      │     │     │     │     │     │      │
 └───────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
                         │     │     │     │     │   │     │     │ held│     │
                         └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
@@ -107,6 +107,12 @@ Left G → <    Right H → >    ← inner index
 Left A → `    Right ; → /
               Right ' → \
 ```
+
+`!` `@` `#` sit on the bottom row's three strongest fingers — ring, middle,
+index — rather than the upper row, where `!` was on the pinky. `$` and `%` stay
+on row 1 because they already occupy that row's index positions, the easiest
+slots it has. `-` and `:` are gone from this layer: both are already on base,
+plain and shifted, so they were duplicates and their slots paid for the move.
 
 `CAPSW` = Caps Word — types the next word in caps, ends at the first space.
 It lives on the left pinky here instead of on a letter hold.

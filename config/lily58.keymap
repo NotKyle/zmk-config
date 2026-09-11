@@ -78,16 +78,16 @@
       // Brackets paired by finger: same finger position, opening on left, closing on right.
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |      |      |      |                   |      |       |       |      |       |       |
-      // |       |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  +   |   =   |   ~   |
+      // |       |     |     |      |  $   |  %   |                   |  ^   |  &    |  *    |  +   |   =   |   ~   |
       // | CAPSW |  `  |  [  |  {   |  (   |  <   |                   |  >   |  )    |  }    |  ]   |   /   |   \   |
-      // |       |  ~  |  |  |  _   |  -   |  :   |      |            |      |       |       |      |       |       |
+      // |   ~   |  |  |  !  |  @   |  #   |  _   |      |            |      |       |       |      |       |       |
       // ---------------------------------------------------------------------------------------------------------------
 
       bindings = <
 &trans      &trans       &trans       &trans       &trans       &trans                    &trans     &trans    &trans    &trans    &trans    &trans
-&trans      &kp EXCL     &kp AT       &kp HASH     &kp DOLLAR   &kp PRCNT                 &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
+&trans      &trans       &trans       &trans       &kp DOLLAR   &kp PRCNT                 &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
 &caps_word  &kp GRAVE    &kp LBKT     &kp LBRC     &kp LPAR     &kp LT                    &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
-&trans      &kp TILDE    &kp PIPE     &kp UNDER    &kp MINUS    &kp COLON &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
+&kp TILDE   &kp PIPE     &kp EXCL     &kp AT       &kp HASH     &kp UNDER &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
                                       &trans       &trans       &trans    &trans  &trans  &trans     &trans    &trans
       >;
 
