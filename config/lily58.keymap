@@ -9,155 +9,112 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/ext_power.h>
 
+// Key positions (58):
+//   row0  0.. 5 |  6..11      row1 12..17 | 18..23
+//   row2 24..29 | 30..35      row3 36..42 | 43..49
+//   thumbs  50 51 52 53 | 54 55 56 57
 
 / {
-  behaviors {
-    hm: homerow_mods {
-      compatible = "zmk,behavior-hold-tap";
-      #binding-cells = <2>;
-      tapping-term-ms = <200>;
-      quick-tap-ms = <125>;
-      require-prior-idle-ms = <150>;
-      flavor = "tap-preferred";
-      bindings = <&kp>, <&kp>;
-    };
-
-    // Layer-tap for thumb keys: activates layer the moment a second key is
-    // pressed while held, rather than waiting the full tapping-term-ms.
-    // Double-tap repeats the tap keycode (quick-tap-ms).
-    lt_bal: layer_tap_balanced {
-      compatible = "zmk,behavior-hold-tap";
-      #binding-cells = <2>;
-      tapping-term-ms = <200>;
-      quick-tap-ms = <125>;
-      flavor = "balanced";
-      bindings = <&mo>, <&kp>;
-    };
-
-    // Wraps caps_word (0 binding-cells) so hold-tap can use it as its hold
-    // binding. The dummy parameter is ignored; the macro just fires caps_word.
-    cw_macro: caps_word_macro {
-      compatible = "zmk,behavior-macro-one-param";
-      #binding-cells = <1>;
-      bindings = <&caps_word>;
-    };
-
-    // tap=key  hold=caps_word  (used on F: tap=F, hold=caps_word)
-    hm_cw: homerow_caps_word {
-      compatible = "zmk,behavior-hold-tap";
-      #binding-cells = <2>;
-      tapping-term-ms = <200>;
-      quick-tap-ms = <125>;
-      require-prior-idle-ms = <150>;
-      flavor = "tap-preferred";
-      bindings = <&cw_macro>, <&kp>;
+  // Hold both thumb layer keys (52 + 55) -> Numbers/Fn. No timing, no combo.
+  conditional_layers {
+    compatible = "zmk,conditional-layers";
+    tri_layer {
+      if-layers = <1 3>;
+      then-layer = <2>;
     };
   };
 
-  combos {
-    compatible = "zmk,combos";
+  keymap {
+    compatible = "zmk,keymap";
 
-    combo_raise_enter_space {
-      timeout-ms = <75>;
-      key-positions = <53 54>;  // Space + right-Enter
-      bindings = <&mo 2>;       // Raise layer
+    default_layer {
+      display-name = "Default";
+
+      // ---------------------------------------------------------------------------------------------------------------
+      // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
+      // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
+      // | LSHFT |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
+      // | CTRL  |  Z  |  X  |  C   |  V   |  B   | ESC  |  NUM      |  N   |  M    |  ,    |  .   |   /   | SHIFT |
+      //                           | ALT  | RET  | NAV  | SPACE |   | BSPC | SYM | RGUI | RCTRL |
+      // ---------------------------------------------------------------------------------------------------------------
+
+      bindings = <
+&kp ESC    &kp N1  &kp N2  &kp N3  &kp N4  &kp N5                     &kp N6    &kp N7  &kp N8     &kp N9   &kp N0    &kp GRAVE
+&kp TAB    &kp Q   &kp W   &kp E   &kp R   &kp T                      &kp Y     &kp U   &kp I      &kp O    &kp P     &kp MINUS
+&kp LSHFT  &kp A   &kp S   &kp D   &kp F   &kp G                      &kp H     &kp J   &kp K      &kp L    &kp SEMI  &kp SQT
+&kp LCTRL  &kp Z   &kp X   &kp C   &kp V   &kp B  &kp ESC    &mo 2    &kp N     &kp M   &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+                       &kp LALT  &kp RET  &mo 3   &kp SPACE  &kp BSPC  &mo 1   &kp RGUI  &kp RCTRL
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
     };
 
+    lower_layer {
+      display-name = "Symbols";
+
+      // Held by the RIGHT thumb (55) -> most symbols sit on the left hand.
+      // Brackets paired by finger: same finger position, opening on left, closing on right.
+      // ---------------------------------------------------------------------------------------------------------------
+      // |       |     |     |      |      |      |                   |      |       |       |      |       |       |
+      // |       |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  +   |   =   |   ~   |
+      // | CAPSW |  `  |  [  |  {   |  (   |  <   |                   |  >   |  )    |  }    |  ]   |   /   |   \   |
+      // |       |  ~  |  |  |  _   |  -   |  :   |      |            |      |       |       |      |       |       |
+      // ---------------------------------------------------------------------------------------------------------------
+
+      bindings = <
+&trans      &trans       &trans       &trans       &trans       &trans                    &trans     &trans    &trans    &trans    &trans    &trans
+&trans      &kp EXCL     &kp AT       &kp HASH     &kp DOLLAR   &kp PRCNT                 &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
+&caps_word  &kp GRAVE    &kp LBKT     &kp LBRC     &kp LPAR     &kp LT                    &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
+&trans      &kp TILDE    &kp PIPE     &kp UNDER    &kp MINUS    &kp COLON &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
+                                      &trans       &trans       &trans    &trans  &trans  &trans     &trans    &trans
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+    };
+
+    raise_layer {
+      display-name = "Numbers + Fn";
+
+      // Reached by holding BOTH thumb layer keys (52 + 55), or &mo 2 at position 43.
+      // ---------------------------------------------------------------------------------------------------------------
+      // |  BT0  | BT1 | BT2 | BT3 | BT4 |     |                   |      |      |      |      | RESET| BOOTL |
+      // |   `   |  1  |  2  |  3  |  4  |  5  |                   |  6   |  7   |  8   |  9   |  0   |       |
+      // |  F1   |  F2 |  F3 |  F4 |  F5 |  F6 |                   |  F7  |  F8  |  F9  | F10  | F11  |  F12  |
+      // | BTCLR |     |     |     |     |     |      |            |      |      |      |      |      |       |
+      // ---------------------------------------------------------------------------------------------------------------
+
+      bindings = <
+&bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4 &trans     &trans  &trans  &trans  &trans   &sys_reset &bootloader
+&kp GRAVE  &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                       &kp N6  &kp N7  &kp N8  &kp N9   &kp N0   &trans
+&kp F1     &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                       &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12
+&bt BT_CLR &trans &trans &trans  &trans  &trans    &trans   &trans    &trans  &trans  &trans  &trans   &trans   &trans
+                         &trans  &trans  &trans    &trans   &trans    &trans  &trans  &trans
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+    };
+
+    nav_layer {
+      display-name = "Navigation";
+
+      // Held by the LEFT thumb (52) -> all movement is on the right hand.
+      // ---------------------------------------------------------------------------------------------------------------
+      // |       |     |     |     |     |     |                   |      |       |       |      |      |       |
+      // |       |     |     |     |     |     |                   | HOME | PG_DN | PG_UP | END  |      |       |
+      // |       |     |     |     |     |     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
+      // |       |     |     |     |     |     |      |            | ^LFT | ~LFT  | ~RGT  | ^RGT |      |       |
+      //                           |      |      |      |      |   | ~BSP |      | DEL  |       |
+      // ---------------------------------------------------------------------------------------------------------------
+
+      bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                      &trans        &trans         &trans         &trans          &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &kp HOME      &kp PG_DN      &kp PG_UP      &kp END         &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &kp LEFT      &kp DOWN       &kp UP         &kp RIGHT       &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &kp LG(LEFT)  &kp LA(LEFT)   &kp LA(RIGHT)  &kp LG(RIGHT)   &trans  &trans
+                        &trans  &trans  &trans  &trans   &kp LA(BSPC)  &trans     &kp DEL        &trans
+      >;
+
+      sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+    };
   };
-};
-
-/ {
-    keymap {
-        compatible = "zmk,keymap";
-
-        default_layer {
-            display-name = "Default";
-
-            // ---------------------------------------------------------------------------------------------------------------
-            // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
-            // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-            // | LSHFT |  A  |  S  |  D   |CW/F  |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-            // | CTRL  |  Z  |  X  |  C   |  V   |  B   | NAV  |  RAISE    |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-            //                           | GUI  | RET  | LALT | SPACE |   | LT1/ENT | BSPC | DEL | RGUI |
-            // ---------------------------------------------------------------------------------------------------------------
-
-            bindings = <
-&kp ESC    &kp N1      &kp N2      &kp N3       &kp N4        &kp N5                         &kp N6  &kp N7       &kp N8       &kp N9      &kp N0        &kp GRAVE
-&kp TAB    &kp Q       &kp W       &kp E        &kp R         &kp T                          &kp Y   &kp U        &kp I        &kp O       &kp P         &kp MINUS
-&kp LSHFT  &kp A       &kp S       &kp D        &hm_cw 0 F   &kp G                          &kp H   &kp J        &kp K        &kp L       &kp SEMI      &kp SQT
-&kp LCTRL  &kp Z       &kp X       &kp C        &kp V         &kp B   &mo 3      &mo 2       &kp N   &kp M        &kp COMMA    &kp DOT     &kp FSLH      &kp RSHFT
-                                   &kp LGUI     &kp RET       &kp LALT &kp SPACE  &lt_bal 1 RET  &kp BSPC &lt_bal 3 DEL    &kp RGUI
-            >;
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-        };
-
-        lower_layer {
-            display-name = "Symbols";
-
-            // Brackets paired by finger: same finger position, opening on left, closing on right.
-            // ---------------------------------------------------------------------------------------------------------------
-            // | BTCLR | BT1 | BT2 | BT3  | BT4  | BT5  |                   |      |       |       |      |       |       |
-            // |       |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  +   |   =   |   ~   |
-            // |       |  `  |  [  |  {   |  (   |  <   |                   |  >   |  )    |  }    |  ]   |   /   |   \   |
-            // |       |  ~  |  |  |  _   |  -   |  :   |      |            |      |       |       |      |       |       |
-            //                           |      |      |      |      |   |       |       |       |       |
-            // ---------------------------------------------------------------------------------------------------------------
-
-            bindings = <
-&bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4               &trans     &trans    &trans    &trans    &trans    &trans
-&trans     &kp EXCL     &kp AT        &kp HASH      &kp DOLLAR   &kp PRCNT                  &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
-&trans     &kp GRAVE    &kp LBKT      &kp LBRC      &kp LPAR     &kp LT                     &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
-&trans     &kp TILDE    &kp PIPE      &kp UNDER     &kp MINUS    &kp COLON &trans  &trans   &trans     &trans    &trans    &trans    &trans    &trans
-                                      &trans        &trans       &trans    &mo 2   &mo 1    &trans     &trans    &trans
-            >;
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-        };
-
-        raise_layer {
-            display-name = "Numbers + Fn";
-
-            // ---------------------------------------------------------------------------------------------------------------
-            // |       |     |     |     |     |     |                   |      |      |      |      |      |       |
-            // |   `   |  1  |  2  |  3  |  4  |  5  |                   |  6   |  7   |  8   |  9   |  0   |       |
-            // |  F1   |  F2 |  F3 |  F4 |  F5 |  F6 |                   |  F7  |  F8  |  F9  | F10  | F11  |  F12  |
-            // |       |     |     |     |     |     |      |            |      |      |      |      |      |       |
-            //                           |      |      |      |      |   |       |      |      |       |
-            // ---------------------------------------------------------------------------------------------------------------
-
-            bindings = <
-&trans    &trans &trans &trans  &trans  &trans                       &trans  &trans  &trans  &trans   &trans   &trans
-&kp GRAVE &kp N1 &kp N2 &kp N3  &kp N4  &kp N5                       &kp N6  &kp N7  &kp N8  &kp N9   &kp N0   &trans
-&kp F1    &kp F2 &kp F3 &kp F4  &kp F5  &kp F6                       &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12
-&trans    &trans &trans &trans  &trans  &trans    &trans   &trans     &trans  &trans  &trans  &trans   &trans   &trans
-                        &trans  &trans  &trans    &trans   &trans     &trans  &trans  &trans
-            >;
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-        };
-
-        nav_layer {
-            display-name = "Navigation";
-
-            // ---------------------------------------------------------------------------------------------------------------
-            // |       |     |     |     |     |     |                   |      |       |       |      |      |       |
-            // |       |     |     |     |     |     |                   | HOME | PG_DN | PG_UP | END  |      |       |
-            // |       |     |     |     |     |     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
-            // |       |     |     |     |     |     |      |            |      |       |       |      |      |       |
-            //                           |      |      |      |      |   |       |      |      |       |
-            // ---------------------------------------------------------------------------------------------------------------
-
-            bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans                      &trans    &trans    &trans    &trans     &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans                      &kp HOME  &kp PG_DN &kp PG_UP &kp END    &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans                      &kp LEFT  &kp DOWN  &kp UP    &kp RIGHT  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &trans    &trans    &trans    &trans     &trans  &trans
-                        &trans  &trans  &trans  &trans   &trans     &trans    &trans    &trans
-            >;
-
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
-        };
-    };
-
 };
