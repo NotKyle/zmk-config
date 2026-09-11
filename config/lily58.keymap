@@ -29,7 +29,7 @@
     compatible = "zmk,keymap";
 
     default_layer {
-      display-name = "Default";
+      display-name = "Base";
 
       // ---------------------------------------------------------------------------------------------------------------
       // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
@@ -74,7 +74,7 @@
     };
 
     raise_layer {
-      display-name = "Numbers + Fn";
+      display-name = "Numbers";
 
       // Reached by holding BOTH thumb layer keys (52 + 56), or &mo 2 at position 43.
       // ---------------------------------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@
     };
 
     nav_layer {
-      display-name = "Navigation";
+      display-name = "Nav";
 
       // Held by the LEFT thumb (52) -> all movement is on the right hand.
       // ---------------------------------------------------------------------------------------------------------------

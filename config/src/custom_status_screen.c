@@ -13,8 +13,11 @@
  *   top canvas  (LV_ALIGN_TOP_RIGHT,      0, 0)  → portrait y=0..67
  *   mid canvas  (LV_ALIGN_TOP_LEFT,  +24, 0, 0)  → portrait y=68..135
  *
- * Left  half (central):  layer name · battery · WPM · connection type
- * Right half (peripheral): LILY58 title · battery · BLE status
+ * Left  half (central):  layer name · held modifiers · battery · WPM · link
+ * Right half (peripheral): battery · link to central
+ *
+ * A ZMK peripheral has no access to layer or WPM state, so the right half is
+ * limited to what it can actually see about itself.
  */
 
 #include <zephyr/kernel.h>
@@ -22,7 +25,10 @@
 #include <zmk/display.h>
 #include <zmk/event_manager.h>
 #include <zmk/events/layer_state_changed.h>
+#include <zmk/events/keycode_state_changed.h>
+#include <zmk/hid.h>
 #include <zmk/keymap.h>
+#include <dt-bindings/zmk/modifiers.h>
 
 #if IS_ENABLED(CONFIG_ZMK_BATTERY)
 #  include <zmk/battery.h>
@@ -51,16 +57,11 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
-/* ── Layer names ─────────────────────────────────────────────────────────── */
-static const char *const LAYER_NAMES[] = {
-    "DEFAULT", "SYMBOLS", "NUMBERS", "NAV",
-};
-#define N_LAYERS ARRAY_SIZE(LAYER_NAMES)
-
 /* ── Atomic state ─────────────────────────────────────────────────────────── */
 static atomic_t a_layer   = ATOMIC_INIT(0);
 static atomic_t a_battery = ATOMIC_INIT(100);
 static atomic_t a_conn    = ATOMIC_INIT(0);  /* 0=none 1=partial 2=full */
+static atomic_t a_mods    = ATOMIC_INIT(0);  /* zmk_mod_flags_t bitmask */
 #if IS_ENABLED(CONFIG_ZMK_WPM)
 static atomic_t a_wpm     = ATOMIC_INIT(0);
 #endif
@@ -99,9 +100,9 @@ static void draw_display(void) {
     lv_draw_rect_dsc_t  rect;
 
 #ifdef CONFIG_ZMK_SPLIT_ROLE_CENTRAL
-    /* ── Left half: layer name · battery · WPM · connection ─────────── */
+    /* ── Left half: layer · mods · battery · WPM · link ─────────────── */
 
-    /* TOP canvas: layer name (portrait y=0..67) */
+    /* TOP canvas: layer name + held modifiers (portrait y=0..67) */
     lv_canvas_fill_bg(canvas_top, lv_color_black(), LV_OPA_COVER);
 
     lv_draw_label_dsc_init(&lbl);
@@ -109,16 +110,33 @@ static void draw_display(void) {
     lbl.font  = &lv_font_montserrat_14;
     lbl.align = LV_TEXT_ALIGN_CENTER;
 
-    int idx = (int)atomic_get(&a_layer);
-    const char *layer_name = (idx >= 0 && idx < (int)N_LAYERS)
-                             ? LAYER_NAMES[idx] : "???";
-    lv_canvas_draw_text(canvas_top, 0, 8, CS, &lbl, layer_name);
+    /* Name comes straight from the keymap's display-name, so adding a layer
+     * needs no change here. */
+    zmk_keymap_layer_id_t id =
+        zmk_keymap_layer_index_to_id((zmk_keymap_layer_index_t)atomic_get(&a_layer));
+    const char *layer_name = zmk_keymap_layer_name(id);
+    lv_canvas_draw_text(canvas_top, 0, 6, CS, &lbl, layer_name ? layer_name : "?");
 
     /* Separator */
     lv_draw_rect_dsc_init(&rect);
     rect.bg_color = lv_color_white();
     rect.radius   = 0;
-    lv_canvas_draw_rect(canvas_top, 4, 30, CS - 8, 1, &rect);
+    lv_canvas_draw_rect(canvas_top, 4, 28, CS - 8, 1, &rect);
+
+    /* Held modifiers, active ones only: G=gui A=alt C=ctrl S=shift.
+     * Drawn as one centred string so it needs no portrait mirroring. */
+    uint8_t mods = (uint8_t)atomic_get(&a_mods);
+    if (mods) {
+        static char mod_str[10];
+        int n = 0;
+        if (mods & (MOD_LGUI | MOD_RGUI)) { mod_str[n++] = 'G'; mod_str[n++] = ' '; }
+        if (mods & (MOD_LALT | MOD_RALT)) { mod_str[n++] = 'A'; mod_str[n++] = ' '; }
+        if (mods & (MOD_LCTL | MOD_RCTL)) { mod_str[n++] = 'C'; mod_str[n++] = ' '; }
+        if (mods & (MOD_LSFT | MOD_RSFT)) { mod_str[n++] = 'S'; mod_str[n++] = ' '; }
+        if (n) { mod_str[n - 1] = 0; }   /* drop the trailing space */
+        lbl.font = &lv_font_montserrat_14;
+        lv_canvas_draw_text(canvas_top, 0, 38, CS, &lbl, mod_str);
+    }
 
     canvas_rotate(canvas_top, cbuf_top);
 
@@ -131,27 +149,37 @@ static void draw_display(void) {
     lv_draw_rect_dsc_init(&rect);
     rect.bg_color = lv_color_white();
     rect.radius   = 0;
-    lv_canvas_draw_rect(canvas_mid, 4, 6, CS - 8, 12, &rect);
+    lv_canvas_draw_rect(canvas_mid, 4, 4, CS - 8, 12, &rect);
     /* Inner background */
     rect.bg_color = lv_color_black();
-    lv_canvas_draw_rect(canvas_mid, 5, 7, CS - 10, 10, &rect);
+    lv_canvas_draw_rect(canvas_mid, 5, 5, CS - 10, 10, &rect);
     /* Fill from right so it reads left→right in portrait */
     int fill = ((CS - 10) * bat) / 100;
     if (fill > 0) {
         rect.bg_color = lv_color_white();
-        lv_canvas_draw_rect(canvas_mid, CS - 5 - fill, 7, fill, 10, &rect);
+        lv_canvas_draw_rect(canvas_mid, CS - 5 - fill, 5, fill, 10, &rect);
     }
 
     /* Battery % */
     static char bat_str[8];
     snprintf(bat_str, sizeof(bat_str), "%d%%", bat);
     lbl.font = &lv_font_montserrat_10;
-    lv_canvas_draw_text(canvas_mid, 0, 22, CS, &lbl, bat_str);
+    lv_canvas_draw_text(canvas_mid, 0, 17, CS, &lbl, bat_str);
 
 #  if IS_ENABLED(CONFIG_ZMK_WPM)
+    /* WPM as a bar as well as a number — the bar is what you can read at a
+     * glance. Full scale is 100 wpm; faster than that just pins it. */
+    int wpm = (int)atomic_get(&a_wpm);
+    int wfill = ((CS - 10) * (wpm > 100 ? 100 : wpm)) / 100;
+    rect.bg_color = lv_color_white();
+    lv_canvas_draw_rect(canvas_mid, 4, 31, CS - 8, 1, &rect);   /* baseline */
+    if (wfill > 0) {
+        lv_canvas_draw_rect(canvas_mid, CS - 5 - wfill, 32, wfill, 6, &rect);
+    }
+
     static char wpm_str[12];
-    snprintf(wpm_str, sizeof(wpm_str), "%d wpm", (int)atomic_get(&a_wpm));
-    lv_canvas_draw_text(canvas_mid, 0, 36, CS, &lbl, wpm_str);
+    snprintf(wpm_str, sizeof(wpm_str), "%d wpm", wpm);
+    lv_canvas_draw_text(canvas_mid, 0, 40, CS, &lbl, wpm_str);
 #  endif
 
     /* Connection type — only show when there's an actual input connection */
@@ -166,74 +194,73 @@ static void draw_display(void) {
     }
     if (conn_str) {
 #  if IS_ENABLED(CONFIG_ZMK_WPM)
-        lv_canvas_draw_text(canvas_mid, 0, 50, CS, &lbl, conn_str);
+        lv_canvas_draw_text(canvas_mid, 0, 53, CS, &lbl, conn_str);
 #  else
-        lv_canvas_draw_text(canvas_mid, 0, 36, CS, &lbl, conn_str);
+        lv_canvas_draw_text(canvas_mid, 0, 31, CS, &lbl, conn_str);
 #  endif
     }
 
     canvas_rotate(canvas_mid, cbuf_mid);
 
 #else  /* peripheral */
-    /* ── Right half: LILY58 title · battery · BLE status ────────────── */
+    /* ── Right half: battery · link to central ──────────────────────── */
+    /* A peripheral sees neither layer nor WPM state, so there is nothing
+     * else honest to put here. Battery gets the space instead of a title. */
 
-    /* TOP canvas: title + battery (portrait y=0..67) */
+    /* TOP canvas: battery, large (portrait y=0..67) */
     lv_canvas_fill_bg(canvas_top, lv_color_black(), LV_OPA_COVER);
 
     lv_draw_label_dsc_init(&lbl);
     lbl.color = lv_color_white();
-    lbl.font  = &lv_font_montserrat_14;
     lbl.align = LV_TEXT_ALIGN_CENTER;
-    lv_canvas_draw_text(canvas_top, 0, 5, CS, &lbl, "LILY58");
 
-    /* Separator */
     lv_draw_rect_dsc_init(&rect);
     rect.bg_color = lv_color_white();
     rect.radius   = 0;
-    lv_canvas_draw_rect(canvas_top, 4, 24, CS - 8, 1, &rect);
 
-    /* Battery outline */
-    lv_canvas_draw_rect(canvas_top, 4, 28, CS - 8, 12, &rect);
+    int bat = (int)atomic_get(&a_battery);
+
+    /* Outline */
+    lv_canvas_draw_rect(canvas_top, 4, 8, CS - 8, 16, &rect);
     /* Inner background */
     rect.bg_color = lv_color_black();
-    lv_canvas_draw_rect(canvas_top, 5, 29, CS - 10, 10, &rect);
-    /* Fill */
-    int bat = (int)atomic_get(&a_battery);
+    lv_canvas_draw_rect(canvas_top, 5, 9, CS - 10, 14, &rect);
+    /* Fill from right so it reads left→right in portrait */
     int fill = ((CS - 10) * bat) / 100;
     if (fill > 0) {
         rect.bg_color = lv_color_white();
-        lv_canvas_draw_rect(canvas_top, CS - 5 - fill, 29, fill, 10, &rect);
+        lv_canvas_draw_rect(canvas_top, CS - 5 - fill, 9, fill, 14, &rect);
     }
 
-    /* Battery % */
     static char bat_str[8];
     snprintf(bat_str, sizeof(bat_str), "%d%%", bat);
+    lbl.font = &lv_font_montserrat_14;
+    lv_canvas_draw_text(canvas_top, 0, 28, CS, &lbl, bat_str);
+
     lbl.font = &lv_font_montserrat_10;
-    lv_canvas_draw_text(canvas_top, 0, 44, CS, &lbl, bat_str);
+    lv_canvas_draw_text(canvas_top, 0, 48, CS, &lbl, "RIGHT");
 
     canvas_rotate(canvas_top, cbuf_top);
 
-    /* MID canvas: BLE status (portrait y=68..135) */
+    /* MID canvas: link to the central half (portrait y=68..135) */
     lv_canvas_fill_bg(canvas_mid, lv_color_black(), LV_OPA_COVER);
 
     int conn = (int)atomic_get(&a_conn);
+    bool linked = (conn == 2);
 
-    lbl.font  = &lv_font_montserrat_14;
-    lv_canvas_draw_text(canvas_mid, 0, 8, CS, &lbl, "BLE");
-
-    /* Status dot */
+    /* A filled bar reads as "joined", a broken one as "split". */
     lv_draw_rect_dsc_init(&rect);
-    rect.radius       = LV_RADIUS_CIRCLE;
-    rect.border_color = lv_color_white();
-    rect.border_width = 1;
-    rect.border_opa   = LV_OPA_COVER;
-    rect.bg_color     = (conn == 2) ? lv_color_white() : lv_color_black();
-    rect.bg_opa       = LV_OPA_COVER;
-    lv_canvas_draw_rect(canvas_mid, (CS - 10) / 2, 30, 10, 10, &rect);
+    rect.bg_color = lv_color_white();
+    rect.radius   = 0;
+    if (linked) {
+        lv_canvas_draw_rect(canvas_mid, 8, 16, CS - 16, 4, &rect);
+    } else {
+        lv_canvas_draw_rect(canvas_mid, 8, 16, 18, 4, &rect);
+        lv_canvas_draw_rect(canvas_mid, CS - 26, 16, 18, 4, &rect);
+    }
 
     lbl.font = &lv_font_montserrat_10;
-    lv_canvas_draw_text(canvas_mid, 0, 46, CS, &lbl,
-                        (conn == 2) ? "Connected" : "No signal");
+    lv_canvas_draw_text(canvas_mid, 0, 28, CS, &lbl, linked ? "linked" : "no link");
 
     canvas_rotate(canvas_mid, cbuf_mid);
 #endif
@@ -274,15 +301,25 @@ static void update_cb(lv_timer_t *t) {
 
 #ifdef CONFIG_ZMK_SPLIT_ROLE_CENTRAL
 static int on_layer_changed(const zmk_event_t *eh) {
-    uint8_t top = 0;
-    for (int i = (int)N_LAYERS - 1; i >= 1; i--)
-        if (zmk_keymap_layer_active(i)) { top = (uint8_t)i; break; }
-    atomic_set(&a_layer, top);
+    atomic_set(&a_layer, (atomic_val_t)zmk_keymap_highest_layer_active());
     mark_dirty();
     return ZMK_EV_EVENT_BUBBLE;
 }
 ZMK_LISTENER(css_layer, on_layer_changed);
 ZMK_SUBSCRIPTION(css_layer, zmk_layer_state_changed);
+
+/* Modifiers are read off the HID report on every keycode event rather than
+ * polled, so the indicator tracks the key rather than lagging the timer. */
+static int on_keycode_changed(const zmk_event_t *eh) {
+    atomic_val_t mods = (atomic_val_t)zmk_hid_get_explicit_mods();
+    if (atomic_get(&a_mods) != mods) {
+        atomic_set(&a_mods, mods);
+        mark_dirty();
+    }
+    return ZMK_EV_EVENT_BUBBLE;
+}
+ZMK_LISTENER(css_mods, on_keycode_changed);
+ZMK_SUBSCRIPTION(css_mods, zmk_keycode_state_changed);
 #endif
 
 #if IS_ENABLED(CONFIG_ZMK_BATTERY)

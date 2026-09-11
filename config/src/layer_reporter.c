@@ -7,7 +7,7 @@
  *
  * Packet format (32 bytes):
  *   [0]    = 0x01  (MSG_TYPE_LAYER)
- *   [1]    = layer index  (0 = default, 1 = symbols, 2 = numbers, 3 = nav)
+ *   [1]    = layer index  (0 = base, and up in keymap order)
  *   [2-31] = 0x00  (reserved)
  */
 
@@ -27,15 +27,9 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 #define REPORT_LEN     32
 
 static int layer_state_changed_handler(const zmk_event_t *eh) {
-    /* Walk layers 3 → 1; report the highest currently active one.
-     * Layer 0 (default) is always active, so it's the fallback. */
-    uint8_t layer = 0;
-    for (int i = 3; i >= 1; i--) {
-        if (zmk_keymap_layer_active(i)) {
-            layer = (uint8_t)i;
-            break;
-        }
-    }
+    /* ZMK's own helper, so adding a layer needs no change here. The previous
+     * hardcoded 3 → 1 walk silently stopped reporting anything above layer 3. */
+    uint8_t layer = (uint8_t)zmk_keymap_highest_layer_active();
 
     LOG_DBG("layer_reporter: active layer %d", layer);
 
