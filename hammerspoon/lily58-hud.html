@@ -18,6 +18,7 @@
   --l1c:     #f06292;
   --l2c:     #aed581;
   --l3c:     #ffb74d;
+  --l4c:     #ba9cf0;
   --mod-gui: #4fc3f7;
   --mod-alt: #ce93d8;
   --mod-ctl: #81c784;
@@ -414,11 +415,15 @@ const EXTRA_CSS = `
 document.head.insertAdjacentHTML('beforeend', '<style>' + EXTRA_CSS + '</style>');
 
 // ─── Layer info ───────────────────────────────────────────────────────────────
+// Index matches the layer index reported by layer_reporter.c, which now uses
+// zmk_keymap_highest_layer_active() — so this list must cover every layer in
+// the keymap. A missing entry renders an empty HUD, not an error.
 const LAYER_META = [
-  {name:"L0 · DEFAULT", color:"var(--l0c)", strip:"L0 · Default",  hint:"Hold A–F for mods"},
-  {name:"L1 · SYMBOLS",  color:"var(--l1c)", strip:"L1 · Symbols",  hint:"! @ # [ { ( < > ) } ] /"},
-  {name:"L2 · NUM + FN", color:"var(--l2c)", strip:"L2 · Numbers+Fn", hint:"F-keys on home row"},
-  {name:"L3 · NAV",      color:"var(--l3c)", strip:"L3 · Navigation", hint:"HJKL=arrows  YUIO=pg"},
+  {name:"L0 · BASE",     color:"var(--l0c)", strip:"L0 · Base",    hint:"⏎ SPC on the home thumbs"},
+  {name:"L1 · SYMBOLS",  color:"var(--l1c)", strip:"L1 · Symbols", hint:"! @ # [ { ( < > ) } ] /"},
+  {name:"L2 · NUM + FN", color:"var(--l2c)", strip:"L2 · Numbers", hint:"both thumbs · BT + reset"},
+  {name:"L3 · NAV",      color:"var(--l3c)", strip:"L3 · Nav",     hint:"HJKL=arrows  YUIO=pg"},
+  {name:"L4 · MOUSE",    color:"var(--l4c)", strip:"L4 · Mouse",   hint:"HJKL=move  thumbs=click"},
 ];
 
 // ─── DOM cache ────────────────────────────────────────────────────────────────
