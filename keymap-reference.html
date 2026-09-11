@@ -331,8 +331,8 @@
         <p>Raise <code>CONFIG_ZMK_KSCAN_DEBOUNCE_RELEASE_MS</code> from 10 toward 12–15 in <code>config/lily58.conf</code>. Release debounce is the one that governs doubled letters. If it is only one or two specific keys, that is a worn switch or a cold solder joint and no config value will fix it.</p>
       </div>
       <div class="knob">
-        <div class="kt">The outer thumbs are a stretch</div>
-        <p>⌘ and ⌃ sit one position out from home on the right. Give it three days — thumb maps feel wrong before they feel fast. If they are still a reach after that, swapping them inward is a one-line change.</p>
+        <div class="kt">A modifier thumb is a stretch</div>
+        <p>⌘ is on the left thumb and ⌃ on the right outer thumb, so neither competes with ⏎ or ⌫ for a home position. Give it three days — thumb maps feel wrong before they feel fast.</p>
       </div>
       <div class="knob">
         <div class="kt">You miss having mods on the home row</div>
@@ -352,20 +352,20 @@
   var LAYERS = [
     {
       n: "L0", name: "Base", how: "always on",
-      note: "Every letter is a plain key — nothing here waits on a tapping term. Ctrl appears twice (left pinky, right thumb) so you can always use the hand that is not typing the letter.",
+      note: "Every letter is a plain key — nothing here waits on a tapping term. ⏎ and SPC are paired across the gap on the two home thumbs. ⌘ sends Left GUI from the left thumb, since macOS software assumes the left modifiers; Ctrl appears twice, left pinky and right thumb.",
       left: [
         ["ESC","1","2","3","4","5"],
         ["TAB","Q","W","E","R","T"],
         ["⇧","A","S","D","F","G"],
         ["⌃","Z","X","C","V","B","ESC"],
-        ["⌥","⏎","L:NAV","SPC"]
+        ["⌥","⌘","L:NAV","SPC"]
       ],
       right: [
         ["6","7","8","9","0","`"],
         ["Y","U","I","O","P","-"],
         ["H","J","K","L",";","'"],
         ["L:NUM","N","M",",",".","/","⇧"],
-        ["⌫","L:SYM","⌘","⌃"]
+        ["⏎","⌫","L:SYM","⌃"]
       ]
     },
     {
@@ -376,14 +376,14 @@
         ["t:TAB","!","@","#","$","%"],
         ["CAPS","`","[","{","(","<"],
         ["t:⌃","~","|","_","-",":","t:ESC"],
-        ["t:⌥","t:⏎","L:NAV","t:SPC"]
+        ["t:⌥","t:⌘","L:NAV","t:SPC"]
       ],
       right: [
         ["t:6","t:7","t:8","t:9","t:0","t:`"],
         ["^","&","*","+","=","~"],
         [">",")","}","]","/","\\"],
         ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
-        ["t:⌫","H:SYM","t:⌘","t:⌃"]
+        ["t:⏎","t:⌫","H:SYM","t:⌃"]
       ]
     },
     {
@@ -401,7 +401,7 @@
         ["6","7","8","9","0","t:-"],
         ["F7","F8","F9","F10","F11","F12"],
         ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
-        ["t:⌫","H:SYM","t:⌘","t:⌃"]
+        ["t:⏎","t:⌫","H:SYM","t:⌃"]
       ]
     },
     {
@@ -419,7 +419,7 @@
         ["HOME","PGDN","PGUP","END","t:P","t:-"],
         ["←","↓","↑","→","t:;","t:'"],
         ["L:NUM","⌘←","⌥←","⌥→","⌘→","t:/","t:⇧"],
-        ["⌥⌫","L:SYM","DEL","t:⌃"]
+        ["t:⏎","⌥⌫","L:SYM","DEL"]
       ]
     }
   ];

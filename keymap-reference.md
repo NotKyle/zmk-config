@@ -23,7 +23,7 @@
 | # | Name | Access |
 |---|------|--------|
 | 0 | Default | Always active |
-| 1 | Symbols | Hold right-inner thumb `[SYM]` |
+| 1 | Symbols | Hold third right thumb key `[SYM]` |
 | 2 | Numbers + Fn | Hold **both** thumb layer keys, or inner-right `[NUM]` |
 | 3 | Navigation | Hold left-inner thumb `[NAV]` |
 
@@ -44,7 +44,7 @@ thumbs is unambiguous and has no timeout.
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
 │ CTRL │  Z  │  X  │  C  │  V  │  B  │ ESC  │   │[NUM] │  N  │  M  │  ,  │  .  │  /  │ RSFT │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
-                       │ ALT │ RET │[NAV]│ SPC │   │ BSP │[SYM]│ ⌘   │ ⌃   │
+                       │ ALT │  ⌘  │[NAV]│ SPC │   │ RET │ BSP │[SYM]│ ⌃   │
                        └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 ```
 
@@ -53,20 +53,21 @@ thumbs is unambiguous and has no timeout.
 | Key | Reason |
 |-----|--------|
 | `SPC` (left home thumb) | Doom's leader. Plain key — nothing intercepts it. |
+| `RET` (right home thumb) | Paired with `SPC` across the gap, where your hands already expect it. |
+| `BSP` (right, one out) | Next to Enter, so the two editing keys sit together. |
 | `[NAV]` (left, one in) | Held by the left thumb so the right hand does the arrows. |
-| `BSP` (right home thumb) | Promoted from the outer position it used to sit in. |
-| `[SYM]` (right, one in) | Held by the right thumb so the left hand types the symbols. |
-| `⌘` / `⌃` (right outer) | Thumb + same-hand fingers is fine, so these reach every letter. |
+| `[SYM]` (right, two out) | Held by the right thumb so the left hand types the symbols. |
+| `⌘` (left thumb) | Sends **Left** GUI — macOS software assumes the left modifiers, and right-Command trips up some apps. Off the right half entirely. |
 | `ESC` (left inner index) | Second Escape, off the pinky corner. For `jk`-free normal mode. |
 
-Ctrl is available twice: left pinky (`CTRL`, bottom outer) and right thumb.
-Use whichever hand isn't typing the letter.
+Ctrl is available twice: left pinky (`CTRL`, bottom outer) and right outer thumb.
+Use whichever hand isn't typing the letter. Both send **Left** Ctrl.
 
 ---
 
 ## Layer 1 — Symbols
 
-*Access: hold right-inner thumb `[SYM]`*
+*Access: hold the third right thumb key `[SYM]`*
 
 Brackets are **paired by finger position** — opening on the left hand, closing
 on the right hand at the same finger.
@@ -81,7 +82,7 @@ on the right hand at the same finger.
 ├───────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
 │       │  ~  │  |  │  _  │  -  │  :  │      │   │      │     │     │     │     │     │      │
 └───────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
-                        │     │     │     │     │   │     │ held│     │     │
+                        │     │     │     │     │   │     │     │ held│     │
                         └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 ```
 
@@ -117,7 +118,7 @@ that can ruin your day.
 ├───────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼───────┼───────┤
 │ BTCLR │     │     │     │     │     │      │   │      │     │     │     │     │       │       │
 └───────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴───────┴───────┘
-                        │     │     │ held│     │   │     │ held│     │     │
+                        │     │     │ held│     │   │     │     │ held│     │
                         └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 ```
 
@@ -143,7 +144,7 @@ that can ruin your day.
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │      │   │      │  ⌘←  │  ⌥←  │  ⌥→  │  ⌘→  │     │      │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴──────┴─────┴──────┘
-                       │     │     │ held│     │   │ ⌥BSP│     │ DEL │     │
+                       │     │     │ held│     │   │     │ ⌥BSP│     │ DEL │
                        └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 ```
 
@@ -154,7 +155,7 @@ H = ←       J = ↓        K = ↑        L = →       ← same fingers as Vi
 N = ⌘←      M = ⌥←       , = ⌥→       . = ⌘→      ← line start/end, word left/right
 ```
 
-Thumb extras while `[NAV]` is held: `⌥BSP` (delete word back) under Backspace,
+Thumb extras while `[NAV]` is held: `⌥BSP` (delete word back) sitting on Backspace,
 and `DEL` on the right outer thumb.
 
 ---
@@ -171,14 +172,14 @@ Layer 2 is a conditional layer instead.
 
 ```
 DEFAULT THUMB CLUSTER
-┌─────┬─────┬───────┬─────┐   ┌─────┬───────┬─────┬─────┐
-│ ALT │ RET │ [NAV] │ SPC │   │ BSP │ [SYM] │  ⌘  │  ⌃  │
-└─────┴─────┴───────┴─────┘   └─────┴───────┴─────┴─────┘
-                  └──────── both held = [NUM] ────────┘
+┌─────┬─────┬───────┬─────┐   ┌─────┬─────┬───────┬─────┐
+│ ALT │  ⌘  │ [NAV] │ SPC │   │ RET │ BSP │ [SYM] │  ⌃  │
+└─────┴─────┴───────┴─────┘   └─────┴─────┴───────┴─────┘
+                  └────────── both held = [NUM] ──────────┘
 
 WANT                        PRESS
 ──────────────────────────────────────────────────────────
-Symbols / brackets          hold [SYM] (right thumb)
+Symbols / brackets          hold [SYM] (right thumb, two out)
 Arrows, paging, word jumps  hold [NAV] (left thumb)
 Numbers, F-keys             hold both thumbs
 Bluetooth / reset           hold both thumbs, top row
