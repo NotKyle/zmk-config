@@ -37,7 +37,7 @@
 };
 
 / {
-  // Hold both thumb layer keys (52 + 56) -> Numbers/Fn. No timing, no combo.
+  // Hold SYM (thumb 52) + NAV (index 42) -> Numbers/Fn. No timing, no combo.
   conditional_layers {
     compatible = "zmk,conditional-layers";
     tri_layer {
@@ -53,19 +53,19 @@
       display-name = "Base";
 
       // ---------------------------------------------------------------------------------------------------------------
-      // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
+      // |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   =   |
       // |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
       // | LSHFT |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-      // | CTRL  |  Z  |  X  |  C   |  V   |  B   | ESC  |  NUM      |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-      //                           | ALT  | GUI  | NAV  | SPACE |   | RET  | BSPC | SYM | CTRL |
+      // | CTRL  |  Z  |  X  |  C   |  V   |  B   | NAV  |  NUM      |  N   |  M    |  ,    |  .   |   /   | SHIFT |
+      //                           | ALT  | GUI  | SYM  | SPACE |   | RET  | BSPC | ESC | CTRL |
       // ---------------------------------------------------------------------------------------------------------------
 
       bindings = <
-&kp ESC    &kp N1  &kp N2  &kp N3  &kp N4  &kp N5                     &kp N6    &kp N7  &kp N8     &kp N9   &kp N0    &kp GRAVE
+&kp ESC    &kp N1  &kp N2  &kp N3  &kp N4  &kp N5                     &kp N6    &kp N7  &kp N8     &kp N9   &kp N0    &kp EQUAL
 &kp TAB    &kp Q   &kp W   &kp E   &kp R   &kp T                      &kp Y     &kp U   &kp I      &kp O    &kp P     &kp MINUS
 &kp LSHFT  &kp A   &kp S   &kp D   &kp F   &kp G                      &kp H     &kp J   &kp K      &kp L    &kp SEMI  &kp SQT
-&kp LCTRL  &kp Z   &kp X   &kp C   &kp V   &kp B  &kp ESC    &mo 2    &kp N     &kp M   &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
-                       &kp LALT  &kp LGUI  &mo 3  &kp SPACE  &kp RET   &kp BSPC  &mo 1   &kp LCTRL
+&kp LCTRL  &kp Z   &kp X   &kp C   &kp V   &kp B  &mo 3      &mo 2    &kp N     &kp M   &kp COMMA  &kp DOT  &kp FSLH  &kp RSHFT
+                       &kp LALT  &kp LGUI  &mo 1  &kp SPACE  &kp RET   &kp BSPC  &kp ESC &kp LCTRL
       >;
 
       sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -74,7 +74,7 @@
     lower_layer {
       display-name = "Symbols";
 
-      // Held by the RIGHT thumb (56) -> most symbols sit on the left hand.
+      // Held by the LEFT thumb (52) -> the whole right hand stays free.
       // Brackets paired by finger: same finger position, opening on left, closing on right.
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |      |      |      |                   |      |       |       |      |       |       |
@@ -97,7 +97,7 @@
     raise_layer {
       display-name = "Numbers";
 
-      // Reached by holding BOTH thumb layer keys (52 + 56), or &mo 2 at position 43.
+      // Reached by holding SYM (52) + NAV (42), or &mo 2 at position 43.
       // ---------------------------------------------------------------------------------------------------------------
       // |  BT0  | BT1 | BT2 | BT3 | BT4 |     |                   |      |      |      |      | RESET| BOOTL |
       // |   `   |  1  |  2  |  3  |  4  |  5  |                   |  6   |  7   |  8   |  9   |  0   |       |
@@ -123,7 +123,7 @@
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |     |     |     |                   |      |       |       |      |      |       |
       // |       |     |     |     |     |     |                   | HOME | PG_DN | PG_UP | END  |      |       |
-      // |       |     |     |     |MOUSE|     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
+      // |       |     |     |MOUSE|     |     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
       // |       |     |     |     |     |     |      |            | ^LFT | ~LFT  | ~RGT  | ^RGT |      |       |
       //                           |      |      |      |      |   |      | ~BSP |      | DEL   |
       // ---------------------------------------------------------------------------------------------------------------
@@ -131,7 +131,7 @@
       bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans                      &trans        &trans         &trans         &trans          &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans                      &kp HOME      &kp PG_DN      &kp PG_UP      &kp END         &trans  &trans
-&trans  &trans  &trans  &trans  &mo 4   &trans                      &kp LEFT      &kp DOWN       &kp UP         &kp RIGHT       &trans  &trans
+&trans  &trans  &trans  &mo 4   &trans  &trans                      &kp LEFT      &kp DOWN       &kp UP         &kp RIGHT       &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &kp LG(LEFT)  &kp LA(LEFT)   &kp LA(RIGHT)  &kp LG(RIGHT)   &trans  &trans
                         &trans  &trans  &trans  &trans   &trans        &kp LA(BSPC)  &trans      &kp DEL
       >;
@@ -142,7 +142,7 @@
     mouse_layer {
       display-name = "Mouse";
 
-      // Reached from Nav: hold NAV (left thumb 52) then left index home (28).
+      // Reached from Nav: hold NAV (left index 42) then left middle home (27).
       // Speed rides on the left half's own Shift (faster) and Ctrl (slower).
       // The left hand holds, so the whole right hand is free — fingers move and
       // scroll, thumbs click. Position 28 stays transparent here so it keeps

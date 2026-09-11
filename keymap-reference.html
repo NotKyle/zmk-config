@@ -352,48 +352,48 @@
   var LAYERS = [
     {
       n: "L0", name: "Base", how: "always on",
-      note: "Every letter is a plain key — nothing here waits on a tapping term. ⏎ and SPC are paired across the gap on the two home thumbs. ⌘ sends Left GUI from the left thumb, since macOS software assumes the left modifiers; Ctrl appears twice, left pinky and right thumb.",
+      note: "Every letter is a plain key — nothing here waits on a tapping term. ⏎ and SPC are paired across the gap on the two home thumbs. = sits on the base layer, so = and + (shifted) need no layer at all — along with : < > ? \" _ from shift, that covers most of what code needs. ⌘ sends Left GUI from the left thumb; Ctrl appears twice, left pinky and right thumb.",
       left: [
         ["ESC","1","2","3","4","5"],
         ["TAB","Q","W","E","R","T"],
         ["⇧","A","S","D","F","G"],
-        ["⌃","Z","X","C","V","B","ESC"],
-        ["⌥","⌘","L:NAV","SPC"]
+        ["⌃","Z","X","C","V","B","L:NAV"],
+        ["⌥","⌘","L:SYM","SPC"]
       ],
       right: [
-        ["6","7","8","9","0","`"],
+        ["6","7","8","9","0","="],
         ["Y","U","I","O","P","-"],
         ["H","J","K","L",";","'"],
         ["L:NUM","N","M",",",".","/","⇧"],
-        ["⏎","⌫","L:SYM","⌃"]
+        ["⏎","⌫","ESC","⌃"]
       ]
     },
     {
-      n: "L1", name: "Sym", how: "hold right thumb",
-      note: "Brackets pair by finger — opening on the left hand, closing on the right at the same position. F↔J are the parens, D↔K the braces, S↔L the square brackets.",
+      n: "L1", name: "Sym", how: "left inner index",
+      note: "Held by the LEFT thumb, so the whole right hand is free — no reaching across a hand that is also holding the layer. Brackets pair by finger: opening left, closing right at the same position. F↔J parens, D↔K braces, S↔L square brackets. = and + also live on the base layer now, so the common ones never need this layer.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","!","@","#","$","%"],
         ["CAPS","`","[","{","(","<"],
-        ["t:⌃","~","|","_","-",":","t:ESC"],
-        ["t:⌥","t:⌘","L:NAV","t:SPC"]
+        ["t:⌃","~","|","_","-",":","L:NAV"],
+        ["t:⌥","t:⌘","H:SYM","t:SPC"]
       ],
       right: [
-        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:6","t:7","t:8","t:9","t:0","t:="],
         ["^","&","*","+","=","~"],
         [">",")","}","]","/","\\"],
         ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
-        ["t:⏎","t:⌫","H:SYM","t:⌃"]
+        ["t:⏎","t:⌫","t:ESC","t:⌃"]
       ]
     },
     {
-      n: "L2", name: "Num", how: "hold both thumbs",
+      n: "L2", name: "Num", how: "SYM + NAV",
       note: "Everything that can ruin your day lives behind two thumbs. BT CLR unpairs the current host — it sits alone in the bottom-left corner, as far from the profile keys as the board allows.",
       left: [
         ["W:BT0","W:BT1","W:BT2","W:BT3","W:BT4","t:5"],
         ["`","1","2","3","4","5"],
         ["F1","F2","F3","F4","F5","F6"],
-        ["W:BTCLR","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["W:BTCLR","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⏎","H:NAV","t:SPC"]
       ],
       right: [
@@ -401,39 +401,39 @@
         ["6","7","8","9","0","t:-"],
         ["F7","F8","F9","F10","F11","F12"],
         ["L:NUM","t:N","t:M","t:,","t:.","t:/","t:⇧"],
-        ["t:⏎","t:⌫","H:SYM","t:⌃"]
+        ["t:⏎","t:⌫","t:ESC","t:⌃"]
       ]
     },
     {
       n: "L3", name: "Nav", how: "hold left thumb",
-      note: "The left thumb holds, the right hand moves — same fingers as Vim's hjkl. The row below the arrows is line and word jumps; ⌥⌫ under Backspace deletes a word.",
+      note: "The left inner index holds, the right hand moves — same fingers as Vim's hjkl. The row below the arrows is line and word jumps; ⌥⌫ under Backspace deletes a word.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["t:⇧","t:A","t:S","t:D","L:MOUS","t:G"],
-        ["t:⌃","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
+        ["t:⇧","t:A","t:S","L:MOUS","t:F","t:G"],
+        ["t:⌃","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⏎","H:NAV","t:SPC"]
       ],
       right: [
-        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:6","t:7","t:8","t:9","t:0","t:="],
         ["HOME","PGDN","PGUP","END","t:P","t:-"],
         ["←","↓","↑","→","t:;","t:'"],
         ["L:NUM","⌘←","⌥←","⌥→","⌘→","t:/","t:⇧"],
-        ["t:⏎","⌥⌫","L:SYM","DEL"]
+        ["t:⏎","⌥⌫","t:ESC","DEL"]
       ]
     },
     {
-      n: "L4", name: "Mouse", how: "NAV + left index",
-      note: "Reached from Nav: hold NAV with the left thumb, then the left index home key. The left hand holds, so the whole right hand is free — fingers move and scroll, thumbs click. Fine for a button or a dialog; the trackball still wins for real pointing.",
+      n: "L4", name: "Mouse", how: "NAV + left D",
+      note: "Reached from Nav: hold NAV with the left inner index, then the left middle home key D. The left hand holds, so the whole right hand is free — fingers move and scroll, thumbs click. Fine for a button or a dialog; the trackball still wins for real pointing.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["L:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
-        ["L:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
-        ["t:⌥","t:⌘","H:NAV","t:SPC"]
+        ["L:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["L:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
+        ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],
       right: [
-        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:6","t:7","t:8","t:9","t:0","t:="],
         ["SCR←","SCR↓","SCR↑","SCR→","t:P","t:-"],
         ["MOU←","MOU↓","MOU↑","MOU→","t:;","t:'"],
         ["L:NUM","BACK","FWD","t:,","t:.","t:/","t:⇧"],
@@ -446,12 +446,12 @@
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["t:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
-        ["H:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
-        ["t:⌥","t:⌘","H:NAV","t:SPC"]
+        ["t:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["H:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
+        ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],
       right: [
-        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:6","t:7","t:8","t:9","t:0","t:="],
         ["t:SCR←","t:SCR↓","t:SCR↑","t:SCR→","t:P","t:-"],
         ["t:MOU←","t:MOU↓","t:MOU↑","t:MOU→","t:;","t:'"],
         ["L:NUM","t:BACK","t:FWD","t:,","t:.","t:/","t:⇧"],
@@ -464,12 +464,12 @@
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["H:FAST","t:A","t:S","t:D","H:MOUS","t:G"],
-        ["t:SLOW","t:Z","t:X","t:C","t:V","t:B","t:ESC"],
-        ["t:⌥","t:⌘","H:NAV","t:SPC"]
+        ["H:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["t:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
+        ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],
       right: [
-        ["t:6","t:7","t:8","t:9","t:0","t:`"],
+        ["t:6","t:7","t:8","t:9","t:0","t:="],
         ["t:SCR←","t:SCR↓","t:SCR↑","t:SCR→","t:P","t:-"],
         ["t:MOU←","t:MOU↓","t:MOU↑","t:MOU→","t:;","t:'"],
         ["L:NUM","t:BACK","t:FWD","t:,","t:.","t:/","t:⇧"],

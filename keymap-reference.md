@@ -23,10 +23,10 @@
 | # | Name | Access |
 |---|------|--------|
 | 0 | Default | Always active |
-| 1 | Symbols | Hold third right thumb key `[SYM]` |
-| 2 | Numbers + Fn | Hold **both** thumb layer keys, or inner-right `[NUM]` |
-| 3 | Navigation | Hold left-inner thumb `[NAV]` |
-| 4 | Mouse | Hold `[NAV]`, then left index home `F` |
+| 1 | Symbols | Hold left-inner thumb `[SYM]` |
+| 2 | Numbers + Fn | Hold `[SYM]` + `[NAV]`, or inner-right `[NUM]` |
+| 3 | Navigation | Hold left inner index `[NAV]` |
+| 4 | Mouse | Hold `[NAV]`, then left middle home `D` |
 | 5 | Slow | On Mouse, hold the left `SHIFT` key |
 | 6 | Fast | On Mouse, hold the left `CTRL` key |
 
@@ -39,15 +39,15 @@ thumbs is unambiguous and has no timeout.
 
 ```
 ┌──────┬─────┬─────┬─────┬─────┬─────┐                 ┌─────┬─────┬─────┬─────┬─────┬──────┐
-│ ESC  │  1  │  2  │  3  │  4  │  5  │                 │  6  │  7  │  8  │  9  │  0  │  `   │
+│ ESC  │  1  │  2  │  3  │  4  │  5  │                 │  6  │  7  │  8  │  9  │  0  │  =   │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
 │ TAB  │  Q  │  W  │  E  │  R  │  T  │                 │  Y  │  U  │  I  │  O  │  P  │  -   │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├─────┼─────┼─────┼─────┼─────┼──────┤
 │ LSFT │  A  │  S  │  D  │  F  │  G  │                 │  H  │  J  │  K  │  L  │  ;  │  '   │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼─────┼─────┼─────┼─────┼─────┼──────┤
-│ CTRL │  Z  │  X  │  C  │  V  │  B  │ ESC  │   │[NUM] │  N  │  M  │  ,  │  .  │  /  │ RSFT │
+│ CTRL │  Z  │  X  │  C  │  V  │  B  │[NAV] │   │[NUM] │  N  │  M  │  ,  │  .  │  /  │ RSFT │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴─────┴─────┴──────┘
-                       │ ALT │  ⌘  │[NAV]│ SPC │   │ RET │ BSP │[SYM]│ ⌃   │
+                       │ ALT │  ⌘  │[SYM]│ SPC │   │ RET │ BSP │ ESC │ ⌃   │
                        └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
 ```
 
@@ -58,19 +58,28 @@ thumbs is unambiguous and has no timeout.
 | `SPC` (left home thumb) | Doom's leader. Plain key — nothing intercepts it. |
 | `RET` (right home thumb) | Paired with `SPC` across the gap, where your hands already expect it. |
 | `BSP` (right, one out) | Next to Enter, so the two editing keys sit together. |
-| `[NAV]` (left, one in) | Held by the left thumb so the right hand does the arrows. |
-| `[SYM]` (right, two out) | Held by the right thumb so the left hand types the symbols. |
+| `[SYM]` (left, one in) | Held by the left thumb, so the **whole right hand is free**. Symbols are constant in code; nothing should compete with them. |
+| `[NAV]` (left inner index) | Off the thumbs entirely — the arrows are on the right hand, so this stays cross-hand. |
+| `ESC` (right thumb) | Took the thumb Symbols vacated. Better than the pinky corner for `jk`-free normal mode. |
 | `⌘` (left thumb) | Sends **Left** GUI — macOS software assumes the left modifiers, and right-Command trips up some apps. Off the right half entirely. |
-| `ESC` (left inner index) | Second Escape, off the pinky corner. For `jk`-free normal mode. |
 
 Ctrl is available twice: left pinky (`CTRL`, bottom outer) and right outer thumb.
 Use whichever hand isn't typing the letter. Both send **Left** Ctrl.
 
 ---
 
+## `=` and `+` need no layer
+
+`=` sits on the base layer at the top right, so `+` is just shift. Between
+that and the shifted base keys you already have — `:` `<` `>` `?` `"` `_` —
+most of what code needs never touches a layer at all. `` ` `` keeps its home
+on the Symbols layer.
+
+---
+
 ## Layer 1 — Symbols
 
-*Access: hold the third right thumb key `[SYM]`*
+*Access: hold the left-inner thumb `[SYM]` — the right hand stays entirely free*
 
 Brackets are **paired by finger position** — opening on the left hand, closing
 on the right hand at the same finger.
@@ -135,7 +144,7 @@ that can ruin your day.
 
 ## Layer 3 — Navigation
 
-*Access: hold left-inner thumb `[NAV]` — left hand holds, right hand moves*
+*Access: hold the left inner index `[NAV]` — left hand holds, right hand moves*
 
 ```
 ┌──────┬─────┬─────┬─────┬─────┬─────┐                 ┌──────┬──────┬──────┬──────┬─────┬──────┐
@@ -143,7 +152,7 @@ that can ruin your day.
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │                 │ HOME │ PGDN │ PGUP │ END  │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
-│      │     │     │     │[MOU]│     │                 │  ←   │  ↓   │  ↑   │  →   │     │      │
+│      │     │     │[MOU]│     │     │                 │  ←   │  ↓   │  ↑   │  →   │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │      │   │      │  ⌘←  │  ⌥←  │  ⌥→  │  ⌘→  │     │      │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴──────┴─────┴──────┘
@@ -159,14 +168,14 @@ N = ⌘←      M = ⌥←       , = ⌥→       . = ⌘→      ← line start
 ```
 
 Thumb extras while `[NAV]` is held: `⌥BSP` (delete word back) sitting on Backspace,
-and `DEL` on the right outer thumb. `[MOU]` on the left index home key opens the
+and `DEL` on the right outer thumb. `[MOU]` on the left middle home key opens the
 Mouse layer.
 
 ---
 
 ## Layer 4 — Mouse
 
-*Access: hold `[NAV]` (left thumb), then the left index home key `F`*
+*Access: hold `[NAV]` (left inner index), then the left middle home key `D`*
 
 The left hand holds both, which leaves the whole right hand free: fingers move
 and scroll, thumbs click.
@@ -177,7 +186,7 @@ and scroll, thumbs click.
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │                 │ SCR← │ SCR↓ │ SCR↑ │ SCR→ │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
-│      │     │     │     │held │     │                 │ MOU← │ MOU↓ │ MOU↑ │ MOU→ │     │      │
+│      │     │     │held │     │     │                 │ MOU← │ MOU↓ │ MOU↑ │ MOU→ │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │      │   │      │ BACK │ FWD  │      │      │     │      │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴──────┴─────┴──────┘
@@ -230,20 +239,20 @@ Layer 2 is a conditional layer instead.
 ```
 DEFAULT THUMB CLUSTER
 ┌─────┬─────┬───────┬─────┐   ┌─────┬─────┬───────┬─────┐
-│ ALT │  ⌘  │ [NAV] │ SPC │   │ RET │ BSP │ [SYM] │  ⌃  │
+│ ALT │  ⌘  │ [SYM] │ SPC │   │ RET │ BSP │  ESC  │  ⌃  │
 └─────┴─────┴───────┴─────┘   └─────┴─────┴───────┴─────┘
                   └────────── both held = [NUM] ──────────┘
 
 WANT                        PRESS
 ──────────────────────────────────────────────────────────
-Symbols / brackets          hold [SYM] (right thumb, two out)
+Symbols / brackets          hold [SYM] (left thumb)
 Arrows, paging, word jumps  hold [NAV] (left thumb)
 Numbers, F-keys             hold both thumbs
 Bluetooth / reset           hold both thumbs, top row
 Caps Word                   hold [SYM], left pinky
-Mouse cursor / clicks       hold [NAV] + F, right hand moves
+Mouse cursor / clicks       hold [NAV] + D, right hand moves
 Mouse faster / slower       on Mouse, hold left SHIFT / CTRL
-Escape                      top-left, or inner-left index
+Escape                      right thumb, or top-left
 Delete word back            hold [NAV], Backspace
 ```
 
