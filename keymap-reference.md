@@ -1,7 +1,7 @@
 # Lily58 Keymap Reference
 
 > **Nice Nano v2** — ZMK Firmware
-> 4 layers · no hold-taps on letters · layers on thumbs · tuned for Doom Emacs / Neovim
+> 5 layers · no hold-taps on letters · layers on thumbs · tuned for Doom Emacs / Neovim
 
 ---
 
@@ -26,6 +26,7 @@
 | 1 | Symbols | Hold third right thumb key `[SYM]` |
 | 2 | Numbers + Fn | Hold **both** thumb layer keys, or inner-right `[NUM]` |
 | 3 | Navigation | Hold left-inner thumb `[NAV]` |
+| 4 | Mouse | Hold `[NAV]`, then left index home `F` |
 
 Layer 2 is a **conditional layer** (`1 + 3 → 2`), not a combo. Holding both
 thumbs is unambiguous and has no timeout.
@@ -140,7 +141,7 @@ that can ruin your day.
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │                 │ HOME │ PGDN │ PGUP │ END  │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
-│      │     │     │     │     │     │                 │  ←   │  ↓   │  ↑   │  →   │     │      │
+│      │     │     │     │[MOU]│     │                 │  ←   │  ↓   │  ↑   │  →   │     │      │
 ├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼─────┼──────┤
 │      │     │     │     │     │     │      │   │      │  ⌘←  │  ⌥←  │  ⌥→  │  ⌘→  │     │      │
 └──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴──────┴─────┴──────┘
@@ -156,7 +157,44 @@ N = ⌘←      M = ⌥←       , = ⌥→       . = ⌘→      ← line start
 ```
 
 Thumb extras while `[NAV]` is held: `⌥BSP` (delete word back) sitting on Backspace,
-and `DEL` on the right outer thumb.
+and `DEL` on the right outer thumb. `[MOU]` on the left index home key opens the
+Mouse layer.
+
+---
+
+## Layer 4 — Mouse
+
+*Access: hold `[NAV]` (left thumb), then the left index home key `F`*
+
+The left hand holds both, which leaves the whole right hand free: fingers move
+and scroll, thumbs click.
+
+```
+┌──────┬─────┬─────┬─────┬─────┬─────┐                 ┌──────┬──────┬──────┬──────┬─────┬──────┐
+│      │     │     │     │     │     │                 │      │      │      │      │     │      │
+├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
+│      │     │     │     │     │     │                 │ SCR← │ SCR↓ │ SCR↑ │ SCR→ │     │      │
+├──────┼─────┼─────┼─────┼─────┼─────┤                 ├──────┼──────┼──────┼──────┼─────┼──────┤
+│      │     │     │     │held │     │                 │ MOU← │ MOU↓ │ MOU↑ │ MOU→ │     │      │
+├──────┼─────┼─────┼─────┼─────┼─────┼──────┐   ┌──────┼──────┼──────┼──────┼──────┼─────┼──────┤
+│      │     │     │     │     │     │      │   │      │ BACK │ FWD  │      │      │     │      │
+└──────┴─────┴─────┴──┬──┴──┬──┴──┬──┴──┬───┘   └───┬──┴──┬──┴──┬──┴──┬──┴──────┴─────┴──────┘
+                       │     │     │ held│     │   │LCLK │RCLK │MCLK │     │
+                       └─────┴─────┴─────┴─────┘   └─────┴─────┴─────┴─────┘
+```
+
+```
+Y = scroll ←   U = scroll ↓   I = scroll ↑   O = scroll →
+H = move ←     J = move ↓     K = move ↑     L = move →    ← same fingers as the arrows
+N = back       M = forward                                 ← browser navigation
+Right thumbs   = left / right / middle click
+```
+
+Mouse keys are for clicking a button, dismissing a dialog, or scrolling without
+leaving home position. They are poor at precision pointing — the trackball is
+still the right tool for that. If the cursor crawls or bolts, the knobs are
+`CONFIG_ZMK_POINTING_DEFAULT_MOVE_VAL` (600) and `_SCRL_VAL` (10) in
+`config/lily58.conf`.
 
 ---
 
@@ -184,6 +222,7 @@ Arrows, paging, word jumps  hold [NAV] (left thumb)
 Numbers, F-keys             hold both thumbs
 Bluetooth / reset           hold both thumbs, top row
 Caps Word                   hold [SYM], left pinky
+Mouse cursor / clicks       hold [NAV] + F, right hand moves
 Escape                      top-left, or inner-left index
 Delete word back            hold [NAV], Backspace
 ```

@@ -67,9 +67,12 @@ def main():
             if label == "":
                 problems.append(f"{name} pos {pos}: blank keycap ({legend!r})")
             transparent = binding == "&trans"
-            # &trans is legitimately drawn as a layer key where the base layer
-            # has one at that position — that is what it falls through to.
-            if transparent and marker != "t" and not fw[0][pos].startswith("&mo"):
+            # &trans is legitimately drawn as a layer key where some lower
+            # layer has one at that position — that is what it falls through
+            # to. The Mouse layer's doorway, for instance, resolves to the
+            # &mo 4 sitting on Nav, not on the base layer.
+            falls_to_layer = any(fw[j][pos].startswith("&mo") for j in range(i))
+            if transparent and marker != "t" and not falls_to_layer:
                 problems.append(f"{name} pos {pos}: firmware {binding!r}, sheet {legend!r}")
             if not transparent and marker == "t":
                 problems.append(f"{name} pos {pos}: sheet says transparent, firmware {binding!r}")
