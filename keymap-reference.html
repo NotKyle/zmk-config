@@ -370,7 +370,7 @@
     },
     {
       n: "L1", name: "Sym", how: "left inner index",
-      note: "Held by the LEFT thumb, so the whole right hand is free. ! @ # sit on the bottom row\u2019s three strongest fingers rather than the upper row; $ and % stay up top on index positions, the easiest slots that row has. Brackets pair by finger: opening left, closing right. F↔J parens, D↔K braces, S↔L square brackets.",
+      note: "Held by the LEFT thumb, so the whole right hand is free. ! @ # sit on the bottom row\u2019s three strongest fingers rather than the upper row; $ and % stay up top on index positions, the easiest slots that row has. Brackets pair by finger: opening left, closing right. F↔J parens, D↔K braces, S↔L square brackets. G opens the Mouse layer rather than typing &lt; — that one is Shift-comma on base.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","$","%"],
@@ -410,7 +410,7 @@
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["t:⇧","t:A","t:S","L:MOUS","t:F","t:G"],
+        ["t:⇧","t:A","t:S","t:D","t:F","t:G"],
         ["t:⌃","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⏎","H:NAV","t:SPC"]
       ],
@@ -419,16 +419,16 @@
         ["HOME","PGDN","PGUP","END","t:P","t:-"],
         ["←","↓","↑","→","t:;","t:'"],
         ["L:NUM","⌘←","⌥←","⌥→","⌘→","t:/","t:⇧"],
-        ["t:⏎","⌥⌫","t:ESC","DEL"]
+        ["t:⏎","⌥⌫","DEL","t:⌃"]
       ]
     },
     {
-      n: "L4", name: "Mouse", how: "NAV + left D",
-      note: "Reached from Nav: hold NAV with the left inner index, then the left middle home key D. The left hand holds, so the whole right hand is free — fingers move and scroll, thumbs click. Fine for a button or a dialog; the trackball still wins for real pointing.",
+      n: "L4", name: "Mouse", how: "SYM + G",
+      note: "Opened from Symbols: the left thumb is already holding SYM, so G adds the Mouse layer — thumb plus index, both left. That leaves the right hand to move and scroll and the right thumbs to click. Fine for a button or a dialog; the trackball still wins for real pointing.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["L:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["L:FAST","t:A","t:S","t:D","t:F","t:G"],
         ["L:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],
@@ -441,12 +441,12 @@
       ]
     },
     {
-      n: "L5", name: "Slow", how: "Mouse + ⇧shift key",
-      note: "Quarter speed, for landing on a small target. Every key still comes from the Mouse layer — the speed change is an input processor on the cursor itself, not a rebinding, so this layer is entirely transparent.",
+      n: "L5", name: "Slow", how: "Mouse + shift",
+      note: "Quarter speed, for landing on a small target. Held with the left pinky while the thumb and index stay down. Every key still comes from the Mouse layer — the speed change is an input processor on the cursor itself, not a rebinding, so this layer is entirely transparent.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["t:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["t:FAST","t:A","t:S","t:D","t:F","t:G"],
         ["H:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],
@@ -459,12 +459,12 @@
       ]
     },
     {
-      n: "L6", name: "Fast", how: "Mouse + ⌃ctrl key",
+      n: "L6", name: "Fast", how: "Mouse + ctrl",
       note: "Double speed, for crossing the screen. Transparent for the same reason as Slow. Base cursor speed is 900, up from ZMK's stock 600.",
       left: [
         ["t:ESC","t:1","t:2","t:3","t:4","t:5"],
         ["t:TAB","t:Q","t:W","t:E","t:R","t:T"],
-        ["H:FAST","t:A","t:S","H:MOUS","t:F","t:G"],
+        ["H:FAST","t:A","t:S","t:D","t:F","t:G"],
         ["t:SLOW","t:Z","t:X","t:C","t:V","t:B","H:NAV"],
         ["t:⌥","t:⌘","L:SYM","t:SPC"]
       ],

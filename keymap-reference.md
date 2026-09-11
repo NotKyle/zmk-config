@@ -26,12 +26,12 @@
 | 1 | Symbols | Hold left-inner thumb `[SYM]` |
 | 2 | Numbers + Fn | Hold `[SYM]` + `[NAV]`, or inner-right `[NUM]` |
 | 3 | Navigation | Hold left inner index `[NAV]` |
-| 4 | Mouse | Hold `[NAV]`, then left middle home `D` |
+| 4 | Mouse | Hold `[SYM]` (left thumb), then `G` |
 | 5 | Slow | On Mouse, hold the left `SHIFT` key |
 | 6 | Fast | On Mouse, hold the left `CTRL` key |
 
-Layer 2 is a **conditional layer** (`1 + 3 → 2`), not a combo. Holding both
-thumbs is unambiguous and has no timeout.
+Layer 2 is a **conditional layer** (`1 + 3 → 2`), not a combo. Holding two keys
+is unambiguous and has no timeout.
 
 ---
 
@@ -103,7 +103,8 @@ on the right hand at the same finger.
 Left F → (    Right J → )    ← index finger
 Left D → {    Right K → }    ← middle finger
 Left S → [    Right L → ]    ← ring finger
-Left G → <    Right H → >    ← inner index
+Left G → MOUSE layer         ← `<` is shift-comma on base
+              Right H → >
 Left A → `    Right ; → /
               Right ' → \
 ```
@@ -121,7 +122,7 @@ It lives on the left pinky here instead of on a letter hold.
 
 ## Layer 2 — Numbers + Fn
 
-*Access: hold **both** thumb layer keys (`[NAV]` + `[SYM]`), or the inner-right `[NUM]` key*
+*Access: hold `[SYM]` + `[NAV]`, or the inner-right `[NUM]` key*
 
 Everything here is deliberately behind two thumbs, because it is everything
 that can ruin your day.
@@ -181,10 +182,13 @@ Mouse layer.
 
 ## Layer 4 — Mouse
 
-*Access: hold `[NAV]` (left inner index), then the left middle home key `D`*
+*Access: hold `[SYM]` (left thumb), then `G`*
 
-The left hand holds both, which leaves the whole right hand free: fingers move
-and scroll, thumbs click.
+Thumb plus index, both on the left — which leaves the right hand free to move
+and scroll, and the right thumbs free to click.
+
+The right outer thumb is deliberately unused for holds: it sits under the palm
+and can only be reached by stretching.
 
 ```
 ┌──────┬─────┬─────┬─────┬─────┬─────┐                 ┌──────┬──────┬──────┬──────┬─────┬──────┐
@@ -247,16 +251,16 @@ DEFAULT THUMB CLUSTER
 ┌─────┬─────┬───────┬─────┐   ┌─────┬─────┬───────┬─────┐
 │ ALT │  ⌘  │ [SYM] │ SPC │   │ RET │ BSP │  ESC  │  ⌃  │
 └─────┴─────┴───────┴─────┘   └─────┴─────┴───────┴─────┘
-                  └────────── both held = [NUM] ──────────┘
+                  └────────── [SYM] + [NAV] = [NUM] ──────┘
 
 WANT                        PRESS
 ──────────────────────────────────────────────────────────
 Symbols / brackets          hold [SYM] (left thumb)
 Arrows, paging, word jumps  hold [NAV] (left thumb)
-Numbers, F-keys             hold both thumbs
-Bluetooth / reset           hold both thumbs, top row
+Numbers, F-keys             hold [SYM] + [NAV]
+Bluetooth / reset           [SYM] + [NAV], top row
 Caps Word                   hold [SYM], left pinky
-Mouse cursor / clicks       hold [NAV] + D, right hand moves
+Mouse cursor / clicks       hold [SYM] + G, right thumbs click
 Mouse faster / slower       on Mouse, hold left SHIFT / CTRL
 Escape                      right thumb, or top-left
 Delete word back            hold [NAV], Backspace

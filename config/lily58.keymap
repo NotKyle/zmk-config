@@ -79,14 +79,14 @@
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |      |      |      |                   |      |       |       |      |       |       |
       // |       |     |     |      |  $   |  %   |                   |  ^   |  &    |  *    |  +   |   =   |   ~   |
-      // | CAPSW |  `  |  [  |  {   |  (   |  <   |                   |  >   |  )    |  }    |  ]   |   /   |   \   |
+      // | CAPSW |  `  |  [  |  {   |  (   |MOUSE |                   |  >   |  )    |  }    |  ]   |   /   |   \   |
       // |   ~   |  |  |  !  |  @   |  #   |  _   |      |            |      |       |       |      |       |       |
       // ---------------------------------------------------------------------------------------------------------------
 
       bindings = <
 &trans      &trans       &trans       &trans       &trans       &trans                    &trans     &trans    &trans    &trans    &trans    &trans
 &trans      &trans       &trans       &trans       &kp DOLLAR   &kp PRCNT                 &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
-&caps_word  &kp GRAVE    &kp LBKT     &kp LBRC     &kp LPAR     &kp LT                    &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
+&caps_word  &kp GRAVE    &kp LBKT     &kp LBRC     &kp LPAR     &mo 4                    &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
 &kp TILDE   &kp PIPE     &kp EXCL     &kp AT       &kp HASH     &kp UNDER &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
                                       &trans       &trans       &trans    &trans  &trans  &trans     &trans    &trans
       >;
@@ -123,17 +123,17 @@
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |     |     |     |                   |      |       |       |      |      |       |
       // |       |     |     |     |     |     |                   | HOME | PG_DN | PG_UP | END  |      |       |
-      // |       |     |     |MOUSE|     |     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
+      // |       |     |     |     |     |     |                   | LEFT | DOWN  |  UP   |RIGHT |      |       |
       // |       |     |     |     |     |     |      |            | ^LFT | ~LFT  | ~RGT  | ^RGT |      |       |
-      //                           |      |      |      |      |   |      | ~BSP |      | DEL   |
+      //                           |      |      |      |      |   |      | ~BSP | DEL  | held  |
       // ---------------------------------------------------------------------------------------------------------------
 
       bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans                      &trans        &trans         &trans         &trans          &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans                      &kp HOME      &kp PG_DN      &kp PG_UP      &kp END         &trans  &trans
-&trans  &trans  &trans  &mo 4   &trans  &trans                      &kp LEFT      &kp DOWN       &kp UP         &kp RIGHT       &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                      &kp LEFT      &kp DOWN       &kp UP         &kp RIGHT       &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans  &trans   &trans     &kp LG(LEFT)  &kp LA(LEFT)   &kp LA(RIGHT)  &kp LG(RIGHT)   &trans  &trans
-                        &trans  &trans  &trans  &trans   &trans        &kp LA(BSPC)  &trans      &kp DEL
+                        &trans  &trans  &trans  &trans   &trans        &kp LA(BSPC)  &kp DEL     &trans
       >;
 
       sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
@@ -142,7 +142,9 @@
     mouse_layer {
       display-name = "Mouse";
 
-      // Reached from Nav: hold NAV (left index 42) then left middle home (27).
+      // Opened from Symbols: the left thumb already holds SYM, so G adds the
+      // Mouse layer. Thumb plus index, both left, leaving the right hand to move
+      // and the right thumbs to click.
       // Speed rides on the left half's own Shift (faster) and Ctrl (slower).
       // The left hand holds, so the whole right hand is free — fingers move and
       // scroll, thumbs click. Position 28 stays transparent here so it keeps
@@ -150,7 +152,7 @@
       // ---------------------------------------------------------------------------------------------------------------
       // |       |     |     |     |     |     |                   |      |      |      |      |      |       |
       // |       |     |     |     |     |     |                   | SCR← | SCR↓ | SCR↑ | SCR→ |      |       |
-      // | FAST  |     |     |     |held |     |                   | MOU← | MOU↓ | MOU↑ | MOU→ |      |       |
+      // | FAST  |     |     |     |     |held |                   | MOU← | MOU↓ | MOU↑ | MOU→ |      |       |
       // | SLOW  |     |     |     |     |     |      |            | BACK | FWD  |      |      |      |       |
       //                           |      |      |      |      |   | LCLK | RCLK | MCLK |       |
       // ---------------------------------------------------------------------------------------------------------------
