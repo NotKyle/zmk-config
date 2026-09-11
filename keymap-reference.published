@@ -1,0 +1,5 @@
+# Written by scripts/check-keymap-reference.py --record, straight after
+# republishing the artifact. A mismatch against keymap-reference.html
+# means the published page is behind the repo.
+url    https://claude.ai/code/artifact/552bcaaf-8b03-45fd-9fdc-02be89c4ae69
+sha256 62055aad5bbb68b63e0c171afcba507eeafbc8cc70469357a468308fa1880c3a

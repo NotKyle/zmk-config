@@ -5,8 +5,9 @@ jobs:
   build:
     uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@v0.3
 
-  # keymap-reference.html restates the keymap by hand. The previous one drifted
-  # into documenting home row mods that had been removed two commits earlier.
+  # keymap-reference.html restates the keymap by hand, and the published
+  # artifact is a third copy of it. Both drifted in practice — the first into
+  # documenting removed home row mods, the second into missing a whole layer.
   reference:
     name: Keymap reference in sync
     runs-on: ubuntu-latest

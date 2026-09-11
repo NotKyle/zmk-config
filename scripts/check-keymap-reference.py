@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
-"""Fail if keymap-reference.html has drifted from config/lily58.keymap.
+"""Fail if keymap-reference.html has drifted from config/lily58.keymap, or if
+the published artifact has drifted from keymap-reference.html.
 
 The reference duplicates the keymap by hand, which is how the previous one
 ended up documenting home row mods that had been removed two commits earlier.
-This compares them position by position (0-57) for all four layers.
+This compares them position by position (0-57) across every layer.
+
+The published artifact is a third copy, and it went stale the same way. CI
+cannot fetch it — it is private and needs a Claude login — so instead the hash
+of what was last published is recorded in keymap-reference.published and
+compared against the file on disk. That catches the repo moving on without a
+republish, which is the failure that actually happened. It does not see edits
+made to the artifact from elsewhere.
+
+    python3 scripts/check-keymap-reference.py            # check
+    python3 scripts/check-keymap-reference.py --record   # after republishing
 """
+import hashlib
 import re
 import sys
 
 KEYMAP = "config/lily58.keymap"
 SHEET = "keymap-reference.html"
+PUBLISHED = "keymap-reference.published"
 ROWS = [12, 12, 12, 14, 8]  # bindings per row; 58 total
 
 
@@ -43,7 +56,59 @@ def sheet():
     return names, rows
 
 
+def sheet_hash():
+    return hashlib.sha256(open(SHEET, "rb").read()).hexdigest()
+
+
+def read_published():
+    """-> (url, sha256), or (None, None) if the record is missing."""
+    try:
+        text = open(PUBLISHED).read()
+    except FileNotFoundError:
+        return None, None
+    fields = dict(
+        line.split(None, 1) for line in text.splitlines()
+        if line.strip() and not line.startswith("#")
+    )
+    return fields.get("url", "").strip() or None, fields.get("sha256", "").strip() or None
+
+
+def record():
+    url, _ = read_published()
+    if not url:
+        sys.exit(
+            f"{PUBLISHED}: no url recorded. Add one before --record, so the file\n"
+            f"says which artifact the hash belongs to."
+        )
+    with open(PUBLISHED, "w") as f:
+        f.write(
+            "# Written by scripts/check-keymap-reference.py --record, straight after\n"
+            "# republishing the artifact. A mismatch against keymap-reference.html\n"
+            "# means the published page is behind the repo.\n"
+            f"url    {url}\n"
+            f"sha256 {sheet_hash()}\n"
+        )
+    print(f"{PUBLISHED}: recorded {sheet_hash()[:12]}… for {url}")
+
+
+def check_published():
+    url, recorded = read_published()
+    if not recorded:
+        return [f"{PUBLISHED} is missing or has no hash — run --record after publishing"]
+    if recorded != sheet_hash():
+        return [
+            f"{SHEET} has changed since it was last published.",
+            f"  recorded {recorded[:12]}…  on disk {sheet_hash()[:12]}…",
+            f"  republish {url}, then run: python3 {sys.argv[0]} --record",
+        ]
+    return []
+
+
 def main():
+    if "--record" in sys.argv[1:]:
+        record()
+        return
+
     fw, (names, rows) = firmware(), sheet()
     if len(rows) != 2 * len(fw):
         sys.exit(f"{SHEET}: {len(rows)} halves for {len(fw)} layers")
@@ -83,6 +148,14 @@ def main():
             print(f"  {p}")
         sys.exit(1)
     print(f"{SHEET}: {len(fw)} layers x 58 keys match {KEYMAP}")
+
+    stale = check_published()
+    if stale:
+        print()
+        for line in stale:
+            print(line)
+        sys.exit(1)
+    print(f"{PUBLISHED}: published artifact matches {SHEET}")
 
 
 if __name__ == "__main__":
