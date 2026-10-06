@@ -73,6 +73,8 @@
 
     lower_layer {
       display-name = "Symbols";
+      /* # is F18: macOS is on the British layout, where shift-3 is £ and # is
+       * alt-3, which AeroSpace owns. Hammerspoon turns F18 into a typed "#". */
 
       // Held by the LEFT thumb (52) -> the whole right hand stays free.
       // Brackets paired by finger: same finger position, opening on left, closing on right.
@@ -87,7 +89,7 @@
 &trans      &trans       &trans       &trans       &trans       &trans                    &trans     &trans    &trans    &trans    &trans    &trans
 &trans      &trans       &trans       &trans       &kp DOLLAR   &kp PRCNT                 &kp CARET  &kp AMPS  &kp ASTRK &kp PLUS  &kp EQUAL &kp TILDE
 &caps_word  &kp GRAVE    &kp LBKT     &kp LBRC     &kp LPAR     &mo 4                    &kp GT     &kp RPAR  &kp RBRC  &kp RBKT  &kp FSLH  &kp BSLH
-&kp TILDE   &kp PIPE     &kp EXCL     &kp AT       &kp HASH     &kp UNDER &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
+&kp TILDE   &kp PIPE     &kp EXCL     &kp AT       &kp F18      &kp UNDER &trans  &trans  &trans     &trans    &trans    &trans    &trans    &trans
                                       &trans       &trans       &trans    &trans  &trans  &trans     &trans    &trans
       >;
 
