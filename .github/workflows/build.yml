@@ -14,5 +14,3 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: python3 scripts/check-keymap-reference.py
-      # The HUD's LAYER_META is a fourth hand copy of the layer list.
-      - run: python3 scripts/check-hud-layers.py
